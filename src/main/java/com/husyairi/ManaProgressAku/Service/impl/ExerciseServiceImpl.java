@@ -4,6 +4,7 @@ import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
+import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -31,6 +34,10 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         Exercise newExercise = new Exercise(req.getExerciseName(), req.getGeneralInfo());
 
+        if(req.getExerciseName() == null){
+            throw new BadRequestException(400, "Please fill in all details", new HashMap<>());
+        }
+
         try {
             Exercise savedExercise = exerciseRepository.save(newExercise);
             return new InsertExerciseResponse(
@@ -38,7 +45,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                     savedExercise.getGeneralInfo()
             );
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException(400, e.getMessage(), new HashMap<>());
         }
     }
 
@@ -52,13 +59,11 @@ public class ExerciseServiceImpl implements ExerciseService {
                 Exercise exercise = fetchExercise.get();
                 return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo());
             }else{
-                throw new EntityNotFoundException("Exercise with ID " + exerciseID + " not found.");
+                throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
             }
-        }catch (EntityNotFoundException e) {
-            throw e; // Rethrow the specific exception if exercise is not found
         } catch (Exception e) {
             // Log the exception if needed and rethrow a more specific or general error
-            throw new RuntimeException("Error fetching exercise: " + e.getMessage(), e);
+            throw new BadRequestException(500, "Error fetching exercise: " + e.getMessage(), new HashMap<>());
         }
 
     }

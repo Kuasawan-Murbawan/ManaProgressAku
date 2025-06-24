@@ -1,6 +1,7 @@
 
 # General
 [/] Create mysql database
+[/] Exception Handling
 
 # Exercise CRUD
 [/] insert
@@ -22,3 +23,4 @@
 [/] implement automatic generate string session ID
 [/] implement create session
 [/] implement get exercise
+[/] implemented general exception handling and api response

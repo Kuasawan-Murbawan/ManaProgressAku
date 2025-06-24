@@ -3,6 +3,7 @@ package com.husyairi.ManaProgressAku.DTO;
 public class InsertSessionResponse {
     private String status;
 
+
     private String message;
 
     public InsertSessionResponse(String status, String message) {

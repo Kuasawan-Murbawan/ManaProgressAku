@@ -1,18 +1,31 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
+import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertSessionRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertSessionResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
+import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
+import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Repository.SessionRepository;
+import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
+
+    @Autowired
+    private ExerciseService exerciseService;
+
+    @Autowired
+    private ExerciseRepository exerciseRepository;
 
     private String generateSessionID(){
         Session latestSession = sessionRepository.findTopByOrderBySessionIDDesc();
@@ -36,7 +49,24 @@ public class SessionServiceImpl implements SessionService {
         return newSessionID;
     }
 
+    private Boolean exerciseExist(Integer exerciseID){
+        try{
+            GetExerciseResponse res = exerciseService.getExercise(exerciseID);
+            return res != null;
+
+        }catch(Exception e){
+           return false;
+        }
+    }
+
     public InsertSessionResponse createSession(InsertSessionRequest request){
+
+
+        if(!exerciseRepository.existsById(request.getExerciseID())){
+            throw new BadRequestException(404, "Exercise ID does not exist", new HashMap<>());
+
+        }
+
         Session newSession = new Session(
                 request.getExerciseID(),
                 request.getDate(),
@@ -48,11 +78,12 @@ public class SessionServiceImpl implements SessionService {
         // generate new Session ID
         newSession.setSessionID(generateSessionID());
 
+
         try {
             Session savedSession = sessionRepository.save(newSession);
             return new InsertSessionResponse("SUCCESS", "Session saved with ID: " + savedSession.getSessionID());
         } catch (Exception e) {
-            return new InsertSessionResponse("FAILED", "Error saving session: " + e.getMessage());
+            throw new BadRequestException(400, "Error saving session: " + e.getMessage(), new HashMap<>());
         }
 
     }
