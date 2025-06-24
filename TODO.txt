@@ -3,7 +3,7 @@
 [/] Create mysql database
 
 # Exercise CRUD
-[] insert
+[/] insert
 [] view
 [] update
 [] delete

@@ -18,6 +18,11 @@ public class Exercise {
     public Exercise() {
     }
 
+    public Exercise(String exerciseName, String generalInfo) {
+        this.exerciseName = exerciseName;
+        this.generalInfo = generalInfo;
+    }
+
     public String getExerciseName() {
         return exerciseName;
     }
