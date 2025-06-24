@@ -4,14 +4,14 @@
 
 # Exercise CRUD
 [/] insert
-[] view
+[/] get
 [] update
 [] delete
 
 # Session CRUD
 
 [/] insert
-[] view
+[] get
 [] update
 [] delete
 
@@ -21,3 +21,4 @@
 [/] complete rangka all DTO
 [/] implement automatic generate string session ID
 [/] implement create session
+[/] implement get exercise
