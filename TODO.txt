@@ -1,0 +1,15 @@
+
+# General
+[/] Create mysql database
+
+# Exercise CRUD
+[] insert
+[] view
+[] update
+[] delete
+
+# Session CRUD
+[] insert
+[] view
+[] update
+[] delete
