@@ -29,9 +29,15 @@ public class Session {
 
     private String rep;
 
-    public Session(String sessionID, LocalDate date) {
-        this.sessionID = sessionID;
+    public Session() {
+    }
+
+    public Session(Integer exerciseID, LocalDate date, Integer sets, String weight, String rep) {
+        this.exerciseID = exerciseID;
         this.date = date;
+        this.sets = sets;
+        this.weight = weight;
+        this.rep = rep;
     }
 
     public Session(String sessionID, Integer exerciseID, LocalDate date, Integer sets, String weight, String rep) {

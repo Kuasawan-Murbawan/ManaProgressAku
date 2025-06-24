@@ -9,7 +9,15 @@
 [] delete
 
 # Session CRUD
-[] insert
+
+[/] insert
 [] view
 [] update
 [] delete
+
+# Logs
+~24 June 2025~
+[/] implemented insert Exercise
+[/] complete rangka all DTO
+[/] implement automatic generate string session ID
+[/] implement create session

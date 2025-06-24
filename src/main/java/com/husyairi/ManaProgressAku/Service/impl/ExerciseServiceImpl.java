@@ -27,13 +27,15 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         Exercise newExercise = new Exercise(req.getExerciseName(), req.getGeneralInfo());
 
-        Exercise savedExercise = exerciseRepository.save(newExercise);
+        try {
+            Exercise savedExercise = exerciseRepository.save(newExercise);
+            return new InsertExerciseResponse(
+                    savedExercise.getExerciseName(),
+                    savedExercise.getGeneralInfo()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-//        log.info("in newExercise: " + newExercise.getExerciseName() + newExercise.getGeneralInfo());
-
-        return new InsertExerciseResponse(
-                savedExercise.getExerciseName(),
-                savedExercise.getGeneralInfo()
-        );
     }
 }

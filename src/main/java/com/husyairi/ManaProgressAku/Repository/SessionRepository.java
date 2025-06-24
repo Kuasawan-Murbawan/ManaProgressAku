@@ -6,4 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SessionRepository extends JpaRepository<Session, String> {
+
+    /*
+    findTopBy - Get only the first record
+    OrderBySessionIDDesc - Order by sessionID descending (biggest one first)
+     */
+    Session findTopByOrderBySessionIDDesc();
 }
