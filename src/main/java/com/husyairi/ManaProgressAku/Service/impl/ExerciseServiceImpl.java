@@ -3,6 +3,7 @@ package com.husyairi.ManaProgressAku.Service.impl;
 import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
@@ -51,21 +52,55 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public GetExerciseResponse getExercise(Integer exerciseID){
+        Optional<Exercise> fetchExercise = exerciseRepository.findById(exerciseID);
 
-        try {
-            Optional<Exercise> fetchExercise = exerciseRepository.findById(exerciseID);
-
-            if(fetchExercise.isPresent()){
-                Exercise exercise = fetchExercise.get();
-                return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo());
-            }else{
-                throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
-            }
-        } catch (Exception e) {
-            // Log the exception if needed and rethrow a more specific or general error
-            throw new BadRequestException(500, "Error fetching exercise: " + e.getMessage(), new HashMap<>());
+        if(fetchExercise.isPresent()){
+            Exercise exercise = fetchExercise.get();
+            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo());
+        }else{
+            throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
         }
-
     }
 
+    @Override
+    public InsertExerciseResponse updateExercise(UpdateExerciseRequest req){
+
+        // Check if ID exist
+        Optional<Exercise> isExist = exerciseRepository.findById(req.getExerciseID());
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Exercise with ID " + req.getExerciseID() + " not found.", new HashMap<>());
+        }
+
+        Exercise updatedExercise = isExist.get();
+        updatedExercise.setExerciseName(req.getExerciseName());
+        updatedExercise.setGeneralInfo(req.getGeneralInfo());
+        try {
+            // Save inside database
+            exerciseRepository.save(updatedExercise);
+        }catch (Exception e){
+            throw new BadRequestException(500, "", new HashMap<>());
+        }
+
+        return new InsertExerciseResponse(
+                updatedExercise.getExerciseName(),
+                updatedExercise.getGeneralInfo()
+        );
+    }
+
+    @Override
+    public void deleteExercise (Integer exerciseID){
+        Optional<Exercise> isExist = exerciseRepository.findById(exerciseID);
+
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Exercise ID " + exerciseID + " not found.", new HashMap<>());
+        }
+
+        try{
+            exerciseRepository.deleteById(exerciseID);
+        }catch (Exception e){
+            throw new BadRequestException(500,
+                    "An error occurred while deleting Exercise ID " + exerciseID,
+                    Map.of("error", e.getMessage()));
+        }
+    }
 }

@@ -17,6 +17,9 @@
 [] delete
 
 # Logs
+~25 June 2025~
+[]
+
 ~24 June 2025~
 [/] implemented insert Exercise
 [/] complete rangka all DTO

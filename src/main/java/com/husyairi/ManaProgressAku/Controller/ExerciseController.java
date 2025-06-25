@@ -3,6 +3,8 @@ package com.husyairi.ManaProgressAku.Controller;
 import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiErrorResponse;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
@@ -51,4 +53,26 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("/updateExercise")
+    public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> updateExercise(@RequestBody UpdateExerciseRequest request){
+
+        // We use InsertExerciseResponse, and not Exercise as to not exposed sensitive data (ID)
+        InsertExerciseResponse data = exerciseService.updateExercise(request);
+        // Reuse insertResponse as to not make new response dto specifically for update
+        ApiSuccessResponse<InsertExerciseResponse> response = new ApiSuccessResponse<>(
+                "Exercise updated successfully",
+                data
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteExercise/{exerciseID}")
+    public ResponseEntity<ApiSuccessResponse<String>> deleteExercise(@PathVariable Integer exerciseID){
+
+        exerciseService.deleteExercise(exerciseID);
+
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>("Exercise deleted successfully", "Deleted ID: " + exerciseID)
+        );
+    }
 }

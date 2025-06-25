@@ -7,20 +7,31 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadRequestException(Exception exception){
+    public ResponseEntity<ApiErrorResponse> handleBadRequestException(Exception exception) {
         BadRequestException raisedException = (BadRequestException) exception;
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse<>(
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
                 raisedException.getErrorId(),
                 raisedException.getErrorMessage(),
                 raisedException.getErrorDetails()
         );
 
-        if(errorResponse.getErrorCode() == 500){
-            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        // Dynamically map error ID to correct HTTP status
+        HttpStatus status;
+
+        switch (raisedException.getErrorId()) {
+            case 400 -> status = HttpStatus.BAD_REQUEST;
+            case 404 -> status = HttpStatus.NOT_FOUND;
+            case 403 -> status = HttpStatus.FORBIDDEN;
+            case 401 -> status = HttpStatus.UNAUTHORIZED;
+            case 409 -> status = HttpStatus.CONFLICT;
+            case 500 -> status = HttpStatus.INTERNAL_SERVER_ERROR;
+            default -> status = HttpStatus.BAD_REQUEST; // fallback
         }
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, status);
     }
 }
+
