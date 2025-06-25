@@ -1,6 +1,7 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
 import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.GetSessionResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertSessionRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertSessionResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
@@ -28,6 +29,12 @@ public class SessionServiceImpl implements SessionService {
     private ExerciseRepository exerciseRepository;
 
     private String generateSessionID(){
+        /*
+        TODO
+        - currently we have numbering as session id to signify urutan
+        - but do we need it? why not just generate random string
+        - for the urutan, why not just use the date?
+         */
         Session latestSession = sessionRepository.findTopByOrderBySessionIDDesc();
         // example returned data: Session{ sessionID = "SESS003", sessionName = "Evening Workout" }
 
@@ -49,22 +56,10 @@ public class SessionServiceImpl implements SessionService {
         return newSessionID;
     }
 
-    private Boolean exerciseExist(Integer exerciseID){
-        try{
-            GetExerciseResponse res = exerciseService.getExercise(exerciseID);
-            return res != null;
-
-        }catch(Exception e){
-           return false;
-        }
-    }
-
     public InsertSessionResponse createSession(InsertSessionRequest request){
-
 
         if(!exerciseRepository.existsById(request.getExerciseID())){
             throw new BadRequestException(404, "Exercise ID does not exist", new HashMap<>());
-
         }
 
         Session newSession = new Session(
@@ -86,5 +81,31 @@ public class SessionServiceImpl implements SessionService {
             throw new BadRequestException(400, "Error saving session: " + e.getMessage(), new HashMap<>());
         }
 
+    }
+
+    @Override
+    public GetSessionResponse getSession (String sessionID) {
+
+        Optional<Session> retrievedSession;
+        try {
+            retrievedSession = sessionRepository.findById(sessionID);
+        } catch (Exception e) {
+            throw new BadRequestException(500, e.getMessage() , new HashMap<>());
+        }
+
+        if (retrievedSession.isEmpty()) {
+            throw new BadRequestException(404, "Session ID not found.", new HashMap<>());
+        }
+
+        Session session = retrievedSession.get();
+
+        return new GetSessionResponse(
+                session.getSessionID(),
+                session.getExerciseID(),
+                session.getDate(),
+                session.getSets(),
+                session.getWeight(),
+                session.getRep()
+        );
     }
 }

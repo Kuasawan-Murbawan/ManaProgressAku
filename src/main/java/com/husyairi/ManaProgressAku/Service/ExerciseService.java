@@ -4,6 +4,9 @@ import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
+
+import java.util.List;
 
 public interface ExerciseService {
 
@@ -14,4 +17,6 @@ public interface ExerciseService {
     InsertExerciseResponse updateExercise(UpdateExerciseRequest req);
 
     void deleteExercise(Integer exerciseID);
+
+    List<Exercise> getAllExercise();
 }

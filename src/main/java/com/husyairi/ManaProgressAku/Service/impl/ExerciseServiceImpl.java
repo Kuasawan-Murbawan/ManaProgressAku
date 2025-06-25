@@ -5,6 +5,7 @@ import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
 import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
+import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
@@ -12,9 +13,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,6 +66,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
+    // TODO: decide whether to create UpdateResponse
     public InsertExerciseResponse updateExercise(UpdateExerciseRequest req){
 
         // Check if ID exist
@@ -102,5 +106,11 @@ public class ExerciseServiceImpl implements ExerciseService {
                     "An error occurred while deleting Exercise ID " + exerciseID,
                     Map.of("error", e.getMessage()));
         }
+    }
+
+    @Override
+    public List<Exercise> getAllExercise(){
+
+        return exerciseRepository.findAll();
     }
 }

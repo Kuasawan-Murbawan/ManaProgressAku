@@ -23,6 +23,20 @@ public class Exercise {
         this.generalInfo = generalInfo;
     }
 
+    public Exercise(Integer exerciseID, String exerciseName, String generalInfo) {
+        this.exerciseID = exerciseID;
+        this.exerciseName = exerciseName;
+        this.generalInfo = generalInfo;
+    }
+
+    public Integer getExerciseID() {
+        return exerciseID;
+    }
+
+    public void setExerciseID(Integer exerciseID) {
+        this.exerciseID = exerciseID;
+    }
+
     public String getExerciseName() {
         return exerciseName;
     }

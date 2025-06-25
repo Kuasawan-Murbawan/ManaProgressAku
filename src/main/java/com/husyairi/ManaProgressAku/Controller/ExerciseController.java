@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 
 // define base path
@@ -73,6 +75,17 @@ public class ExerciseController {
 
         return ResponseEntity.ok(
                 new ApiSuccessResponse<>("Exercise deleted successfully", "Deleted ID: " + exerciseID)
+        );
+    }
+
+    @GetMapping("/admin/getAllExercises")
+    public ResponseEntity<ApiSuccessResponse<List<Exercise>>> getAllExercise(){
+
+        List<Exercise> allExercises = exerciseService.getAllExercise();
+
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>("All exercises fetched successfully",
+                        allExercises)
         );
     }
 }

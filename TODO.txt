@@ -6,19 +6,24 @@
 # Exercise CRUD
 [/] insert
 [/] get
-[] update
-[] delete
+[/] update
+[/] delete
+[] Get All
 
 # Session CRUD
 
 [/] insert
-[] get
+[/] get
 [] update
 [] delete
+[] Get All
 
 # Logs
 ~25 June 2025~
-[]
+[/] implemented delete & update exercise
+[/] update class diagram
+[/] implement get session
+[/] implement get all exercises
 
 ~24 June 2025~
 [/] implemented insert Exercise
