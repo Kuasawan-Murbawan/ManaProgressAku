@@ -2,6 +2,7 @@
 # General
 [/] Create mysql database
 [/] Exception Handling
+[] Update Class Diagram
 
 # Exercise CRUD
 [/] insert
@@ -14,9 +15,12 @@
 
 [/] insert
 [/] get
-[] update
-[] delete
-[] Get All
+[/] update
+[/] delete
+[/] Get All
+
+~26 June 2025~
+[/] implemented update, delete and get all sessions
 
 # Logs
 ~25 June 2025~

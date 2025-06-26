@@ -1,9 +1,6 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
-import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.GetSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.InsertSessionRequest;
-import com.husyairi.ManaProgressAku.DTO.InsertSessionResponse;
+import com.husyairi.ManaProgressAku.DTO.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
@@ -14,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -107,5 +106,51 @@ public class SessionServiceImpl implements SessionService {
                 session.getWeight(),
                 session.getRep()
         );
+    }
+
+    @Override
+    public Session updateSession (UpdateSessionRequest request){
+
+        Optional<Session> isExist = sessionRepository.findById(request.getSessionID());
+
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        }
+
+        Session updatedSession = isExist.get();
+        updatedSession.setExerciseID(request.getExerciseID());
+        updatedSession.setDate(request.getDate());
+        updatedSession.setSets(request.getSets());
+        updatedSession.setWeight(request.getWeight());
+        updatedSession.setRep(request.getRep());
+
+        try{
+            sessionRepository.save(updatedSession);
+        }catch (Exception e){
+            throw new BadRequestException(500, "", new HashMap<>());
+        }
+
+        return updatedSession;
+    }
+
+    @Override
+    public void deleteSession (String sessionID){
+
+        Boolean isExist = sessionRepository.existsById(sessionID);
+
+        if(!isExist){
+            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        }
+
+        try {
+            sessionRepository.deleteById(sessionID);
+        }catch (Exception e){
+            throw new BadRequestException(500, e.getMessage() ,new HashMap<>());
+        }
+    }
+
+    @Override
+    public List<Session> getAllSessions(){
+        return sessionRepository.findAll();
     }
 }
