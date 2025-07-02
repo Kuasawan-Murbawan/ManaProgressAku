@@ -1,6 +1,6 @@
 
 # Exercise
-[] - Exercises List (getAllExercise)
+[/] - Exercises List (getAllExercise)
 [] - Display Exercise
 [] - Insert Exercise
 [] - Delete
@@ -13,5 +13,8 @@
 [] - Delete
 [] - Create Session
 
-~30 June 2001~
+~30 June 2025~
+[/] connect with backend
 
+~2 July 2025~
+[/] implemented modal for exercise details
