@@ -1,0 +1,17 @@
+
+# Exercise
+[] - Exercises List (getAllExercise)
+[] - Display Exercise
+[] - Insert Exercise
+[] - Delete
+[] - Update
+
+# Session
+[] - Sessions List
+[] - Display Session
+[] - Update 
+[] - Delete
+[] - Create Session
+
+~30 June 2001~
+

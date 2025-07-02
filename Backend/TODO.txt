@@ -1,0 +1,38 @@
+
+# General
+[/] Create mysql database
+[/] Exception Handling
+[] Update Class Diagram
+
+# Exercise CRUD
+[/] insert
+[/] get
+[/] update
+[/] delete
+[] Get All
+
+# Session CRUD
+
+[/] insert
+[/] get
+[/] update
+[/] delete
+[/] Get All
+
+~26 June 2025~
+[/] implemented update, delete and get all sessions
+
+# Logs
+~25 June 2025~
+[/] implemented delete & update exercise
+[/] update class diagram
+[/] implement get session
+[/] implement get all exercises
+
+~24 June 2025~
+[/] implemented insert Exercise
+[/] complete rangka all DTO
+[/] implement automatic generate string session ID
+[/] implement create session
+[/] implement get exercise
+[/] implemented general exception handling and api response
