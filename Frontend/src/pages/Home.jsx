@@ -16,7 +16,12 @@ const Home = () => {
       </Container>
 
       <VStack spacing={"24px"} py={"20px"} bg={"blue.300"}>
-        <Container bg={"gray.200"} borderRadius={"2xl"} py={"20px"}>
+        <Container
+          bg={"gray.200"}
+          borderRadius={"2xl"}
+          py={"20px"}
+          onClick={() => navigate("/createSession")}
+        >
           <Center>
             <Text
               alignItems={"center"}

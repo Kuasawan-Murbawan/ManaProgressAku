@@ -18,3 +18,5 @@
 
 ~2 July 2025~
 [/] implemented modal for exercise details
+
+~3 July 2025~
