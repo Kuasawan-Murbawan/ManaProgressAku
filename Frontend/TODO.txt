@@ -13,6 +13,10 @@
 [] - Delete
 [] - Create Session
 
+## Misc
+[] - update backend to include exercisetype
+
+
 ~30 June 2025~
 [/] connect with backend
 
@@ -20,3 +24,6 @@
 [/] implemented modal for exercise details
 
 ~3 July 2025~
+[/] exercises for new session
+
+TODO: we configure the table to add activity, we left off at CurrentExercisePage

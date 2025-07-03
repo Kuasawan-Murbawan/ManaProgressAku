@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const ArmExercises = ({ isOpenArm, onCloseArm }) => {
   /*
@@ -25,11 +26,14 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
     */
 
   const dummyData = [
-    { exerciseID: 6, exerciseName: "Bench Press" },
-    { exerciseID: 7, exerciseName: "Preacher Curl" },
-    { exerciseID: 8, exerciseName: "Hammer Curl" },
-    { exerciseID: 9, exerciseName: "Push Up" },
+    { exerciseID: 1, exerciseName: "Bicep Curl" },
+    { exerciseID: 2, exerciseName: "Push Up" },
+    { exerciseID: 3, exerciseName: "Bench Press" },
   ];
+
+  const navigate = useNavigate();
+
+  const handleClick = (exercise) => {};
 
   return (
     <Modal isOpen={isOpenArm} onClose={onCloseArm}>
@@ -40,7 +44,13 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
         <ModalBody>
           <VStack spacing={5} align="start">
             {dummyData.map((dummy) => (
-              <Box key={dummy.exerciseID} h={"12"} bg={"yellow.300"} w={"full"}>
+              <Box
+                key={dummy.exerciseID}
+                h={"12"}
+                bg={"yellow.300"}
+                w={"full"}
+                onClick={handleClick}
+              >
                 <Text textAlign={"center"}>
                   {dummy.exerciseID}. {dummy.exerciseName}
                 </Text>

@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import ExerciseListPage from "./pages/ExerciseListPage";
 import NewSessionHomePage from "./pages/NewSessionHomePage";
 import NewExercisePage from "./pages/NewExercisePage";
+import CurrentExercisePage from "./pages/CurrentExercisePage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/exerciseList" element={<ExerciseListPage />} />
         <Route path="/createSession" element={<NewSessionHomePage />} />
         <Route path="/newExercise" element={<NewExercisePage />} />
+        <Route path="/currentExercisePage" element={<CurrentExercisePage />} />
       </Routes>
     </Box>
   );
