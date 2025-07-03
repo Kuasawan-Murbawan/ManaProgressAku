@@ -36,3 +36,5 @@
 [/] implement create session
 [/] implement get exercise
 [/] implemented general exception handling and api response
+
+TODO: see class diagram, do exactly as that, test postman, win
