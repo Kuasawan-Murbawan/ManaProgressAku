@@ -38,3 +38,7 @@
 [/] implemented general exception handling and api response
 
 TODO: see class diagram, do exactly as that, test postman, win
+
+~7 July 2025~
+[/] finished alter exercise
+[/] finished alter session

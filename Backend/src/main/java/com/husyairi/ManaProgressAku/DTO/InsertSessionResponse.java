@@ -3,12 +3,14 @@ package com.husyairi.ManaProgressAku.DTO;
 public class InsertSessionResponse {
     private String status;
 
+    private String sessionID ;
 
     private String message;
 
-    public InsertSessionResponse(String status, String message) {
+    public InsertSessionResponse(String status, String message, String sessionID) {
         this.status = status;
         this.message = message;
+        this.sessionID = sessionID;
     }
 
     public String getStatus() {
@@ -25,5 +27,13 @@ public class InsertSessionResponse {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 }

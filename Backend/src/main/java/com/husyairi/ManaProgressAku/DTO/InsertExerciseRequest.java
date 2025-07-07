@@ -3,10 +3,12 @@ package com.husyairi.ManaProgressAku.DTO;
 public class InsertExerciseRequest {
     private String exerciseName;
     private String generalInfo;
+    private String exerciseType;
 
-    public InsertExerciseRequest(String exerciseName, String generalInfo) {
+    public InsertExerciseRequest(String exerciseName, String generalInfo, String exerciseType) {
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
+        this.exerciseType = exerciseType;
     }
 
     public String getExerciseName() {
@@ -23,5 +25,13 @@ public class InsertExerciseRequest {
 
     public void setGeneralInfo(String generalInfo) {
         this.generalInfo = generalInfo;
+    }
+
+    public String getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(String exerciseType) {
+        this.exerciseType = exerciseType;
     }
 }

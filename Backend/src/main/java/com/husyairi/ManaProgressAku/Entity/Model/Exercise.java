@@ -13,6 +13,10 @@ public class Exercise {
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private String exerciseName;
 
+    @Column(columnDefinition = "VARCHAR(15)")
+    private String exerciseType;
+
+    @Column
     private String generalInfo;
 
     public Exercise() {

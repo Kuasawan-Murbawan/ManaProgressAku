@@ -57,16 +57,9 @@ public class SessionServiceImpl implements SessionService {
 
     public InsertSessionResponse createSession(InsertSessionRequest request){
 
-        if(!exerciseRepository.existsById(request.getExerciseID())){
-            throw new BadRequestException(404, "Exercise ID does not exist", new HashMap<>());
-        }
-
         Session newSession = new Session(
-                request.getExerciseID(),
                 request.getDate(),
-                request.getSets(),
-                request.getWeight(),
-                request.getRep()
+                request.getTime()
         );
 
         // generate new Session ID
@@ -75,7 +68,7 @@ public class SessionServiceImpl implements SessionService {
 
         try {
             Session savedSession = sessionRepository.save(newSession);
-            return new InsertSessionResponse("SUCCESS", "Session saved with ID: " + savedSession.getSessionID());
+            return new InsertSessionResponse("SUCCESS", "Session saved with ID: " + savedSession.getSessionID(), savedSession.getSessionID());
         } catch (Exception e) {
             throw new BadRequestException(400, "Error saving session: " + e.getMessage(), new HashMap<>());
         }
@@ -100,11 +93,8 @@ public class SessionServiceImpl implements SessionService {
 
         return new GetSessionResponse(
                 session.getSessionID(),
-                session.getExerciseID(),
-                session.getDate(),
-                session.getSets(),
-                session.getWeight(),
-                session.getRep()
+                session.getTime(),
+                session.getDate()
         );
     }
 
@@ -118,11 +108,8 @@ public class SessionServiceImpl implements SessionService {
         }
 
         Session updatedSession = isExist.get();
-        updatedSession.setExerciseID(request.getExerciseID());
+        updatedSession.setTime(request.getTime());
         updatedSession.setDate(request.getDate());
-        updatedSession.setSets(request.getSets());
-        updatedSession.setWeight(request.getWeight());
-        updatedSession.setRep(request.getRep());
 
         try{
             sessionRepository.save(updatedSession);

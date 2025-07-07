@@ -1,30 +1,23 @@
 package com.husyairi.ManaProgressAku.DTO;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class GetSessionResponse {
     private String sessionID;
 
-    private Integer exerciseID;
+    private LocalTime time;
 
     private LocalDate date;
 
-    private Integer sets;
-
-    private String weight;
-
-    private String rep;
 
     public GetSessionResponse() {
     }
 
-    public GetSessionResponse(String sessionID, Integer exerciseID, LocalDate date, Integer sets, String weight, String rep) {
+    public GetSessionResponse(String sessionID, LocalTime time, LocalDate date) {
         this.sessionID = sessionID;
-        this.exerciseID = exerciseID;
+        this.time = time;
         this.date = date;
-        this.sets = sets;
-        this.weight = weight;
-        this.rep = rep;
     }
 
     public String getSessionID() {
@@ -35,12 +28,12 @@ public class GetSessionResponse {
         this.sessionID = sessionID;
     }
 
-    public Integer getExerciseID() {
-        return exerciseID;
+    public LocalTime getTime() {
+        return time;
     }
 
-    public void setExerciseID(Integer exerciseID) {
-        this.exerciseID = exerciseID;
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 
     public LocalDate getDate() {
@@ -51,27 +44,4 @@ public class GetSessionResponse {
         this.date = date;
     }
 
-    public Integer getSets() {
-        return sets;
-    }
-
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
-    }
 }
