@@ -8,7 +8,6 @@ import com.husyairi.ManaProgressAku.Entity.Model.Activity;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,6 @@ import java.util.List;
 public class ActivityController {
 
     private ActivityService activityService;
-
 
     @Autowired
     public ActivityController(ActivityService activityService) {

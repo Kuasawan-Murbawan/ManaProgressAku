@@ -19,6 +19,15 @@
 [/] delete
 [/] Get All
 
+# Activity CRUD
+
+[/] insert
+[/] get
+[/] update
+[/] delete
+[/] get session activities
+[/] Get All
+
 ~26 June 2025~
 [/] implemented update, delete and get all sessions
 
@@ -37,8 +46,9 @@
 [/] implement get exercise
 [/] implemented general exception handling and api response
 
-TODO: see class diagram, do exactly as that, test postman, win
-
 ~7 July 2025~
 [/] finished alter exercise
 [/] finished alter session
+
+~10 July 2025~
+[/] implemented all Activity functionality
