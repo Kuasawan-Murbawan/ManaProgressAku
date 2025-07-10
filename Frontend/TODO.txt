@@ -14,8 +14,7 @@
 [] - Create Session
 
 ## Misc
-[] - update backend to include exercisetype
-
+[/] - update backend to include exercisetype
 
 ~30 June 2025~
 [/] connect with backend
@@ -27,3 +26,7 @@
 [/] exercises for new session
 
 TODO: we configure the table to add activity, we left off at CurrentExercisePage
+TODO: figure out how to send multiple Activities to backend, in FE, we can bundle the data
+        until the user hit Finish, but how do we save it
+        1. Call multiple "Insert Activity"
+        2. Create new API that handle multiple Activities entries
