@@ -13,6 +13,9 @@ public class Activity {
     @Column(columnDefinition = "VARCHAR(20)", nullable = false)
     private String sessionID;
 
+    @Column(nullable = false)
+    private Integer exerciseID;
+
     @Column
     private Integer sets;
 
@@ -24,9 +27,10 @@ public class Activity {
 
     public Activity(){}
 
-    public Activity(String activityID, String sessionID, Integer sets, String rep, String weight) {
+    public Activity(String activityID, String sessionID, Integer exerciseID, Integer sets, String rep, String weight) {
         this.activityID = activityID;
         this.sessionID = sessionID;
+        this.exerciseID = exerciseID;
         this.sets = sets;
         this.rep = rep;
         this.weight = weight;
@@ -46,6 +50,14 @@ public class Activity {
 
     public void setSessionID(String sessionID) {
         this.sessionID = sessionID;
+    }
+
+    public Integer getExerciseID() {
+        return exerciseID;
+    }
+
+    public void setExerciseID(Integer exerciseID) {
+        this.exerciseID = exerciseID;
     }
 
     public Integer getSets() {
