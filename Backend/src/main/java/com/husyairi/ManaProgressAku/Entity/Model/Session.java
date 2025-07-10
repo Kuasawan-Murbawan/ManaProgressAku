@@ -8,8 +8,6 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-// TODO: can we generate ID consist of string and integer
-
 @Entity
 @Table(name = "session")
 public class Session {

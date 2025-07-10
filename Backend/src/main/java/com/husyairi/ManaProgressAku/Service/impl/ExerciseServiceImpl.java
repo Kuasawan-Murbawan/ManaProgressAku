@@ -1,19 +1,16 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
-import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
-import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.GetExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.Exercise.UpdateExerciseRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
-import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
-import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

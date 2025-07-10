@@ -1,14 +1,12 @@
 package com.husyairi.ManaProgressAku.Controller;
 
-import com.husyairi.ManaProgressAku.DTO.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.InsertExerciseRequest;
-import com.husyairi.ManaProgressAku.DTO.InsertExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.GetExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.Exercise.UpdateExerciseRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
-import com.husyairi.ManaProgressAku.ExceptionHandling.ApiErrorResponse;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,20 +1,20 @@
-package com.husyairi.ManaProgressAku.DTO;
+package com.husyairi.ManaProgressAku.DTO.Session;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class UpdateSessionRequest {
-
+public class GetSessionResponse {
     private String sessionID;
 
     private LocalTime time;
 
     private LocalDate date;
 
-    public UpdateSessionRequest() {
+
+    public GetSessionResponse() {
     }
 
-    public UpdateSessionRequest(String sessionID, LocalTime time, LocalDate date) {
+    public GetSessionResponse(String sessionID, LocalTime time, LocalDate date) {
         this.sessionID = sessionID;
         this.time = time;
         this.date = date;

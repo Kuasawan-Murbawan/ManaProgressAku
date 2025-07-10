@@ -1,4 +1,4 @@
-package com.husyairi.ManaProgressAku.DTO;
+package com.husyairi.ManaProgressAku.DTO.Session;
 
 public class InsertSessionResponse {
     private String status;

@@ -1,4 +1,4 @@
-package com.husyairi.ManaProgressAku.DTO;
+package com.husyairi.ManaProgressAku.DTO.Exercise;
 
 public class GetExerciseResponse {
     private String exerciseName;

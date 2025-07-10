@@ -1,9 +1,9 @@
 package com.husyairi.ManaProgressAku.Service;
 
-import com.husyairi.ManaProgressAku.DTO.GetSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.InsertSessionRequest;
-import com.husyairi.ManaProgressAku.DTO.InsertSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.UpdateSessionRequest;
+import com.husyairi.ManaProgressAku.DTO.Session.GetSessionResponse;
+import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionRequest;
+import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionResponse;
+import com.husyairi.ManaProgressAku.DTO.Session.UpdateSessionRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 
 import java.util.List;

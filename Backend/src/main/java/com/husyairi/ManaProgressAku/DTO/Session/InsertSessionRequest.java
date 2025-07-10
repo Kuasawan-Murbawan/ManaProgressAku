@@ -1,4 +1,4 @@
-package com.husyairi.ManaProgressAku.DTO;
+package com.husyairi.ManaProgressAku.DTO.Session;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
