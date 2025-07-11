@@ -1,9 +1,24 @@
-import { Center, Container, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Center,
+  Container,
+  HStack,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import StartSessionDialog from "../components/StartSessionDialog";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  // Create Session
+  const {
+    isOpen: confirmSessionIsOpen,
+    onOpen: confirmSessionOnOpen,
+    onClose: confirmSessionOnClose,
+  } = useDisclosure();
 
   return (
     <Container maxW={"full"} bg={"green.200"}>
@@ -21,7 +36,7 @@ const Home = () => {
           borderRadius={"2xl"}
           py={"20px"}
           _hover={{ bg: "gray.100" }}
-          onClick={() => navigate("/createSession")}
+          onClick={confirmSessionOnOpen}
         >
           <Center>
             <Text
@@ -53,6 +68,11 @@ const Home = () => {
           </Center>
         </Container>
       </VStack>
+
+      <StartSessionDialog
+        isOpen={confirmSessionIsOpen}
+        onClose={confirmSessionOnClose}
+      />
     </Container>
   );
 };

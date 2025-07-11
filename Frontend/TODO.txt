@@ -1,17 +1,16 @@
 
 # Exercise
 [/] - Exercises List (getAllExercise)
-[] - Display Exercise
+[/] - Display Exercise
 [] - Insert Exercise
 [] - Delete
 [] - Update
 
 # Session
+[] - Handle create & delete session
 [] - Sessions List
 [] - Display Session
 [] - Update 
-[] - Delete
-[] - Create Session
 
 ## Misc
 [/] - update backend to include exercisetype
@@ -30,3 +29,6 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
         until the user hit Finish, but how do we save it
         1. Call multiple "Insert Activity"
         2. Create new API that handle multiple Activities entries
+
+~11 July 2025~
+[/] - Handle create & delete session
