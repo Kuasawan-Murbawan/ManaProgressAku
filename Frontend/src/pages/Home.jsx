@@ -20,6 +20,7 @@ const Home = () => {
           bg={"gray.200"}
           borderRadius={"2xl"}
           py={"20px"}
+          _hover={{ bg: "gray.100" }}
           onClick={() => navigate("/createSession")}
         >
           <Center>

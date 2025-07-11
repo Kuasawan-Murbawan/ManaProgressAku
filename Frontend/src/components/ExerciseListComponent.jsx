@@ -13,6 +13,7 @@ const ExerciseListComponent = () => {
 
   const handleClick = (exercise) => {
     setSelectedExercise(exercise);
+    console.log(exercise.exerciseType);
     onOpen();
   };
 
