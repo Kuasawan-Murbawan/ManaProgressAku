@@ -67,10 +67,9 @@ public class SessionServiceImpl implements SessionService {
         // generate new Session ID
         newSession.setSessionID(generateSessionID());
 
-
         try {
             Session savedSession = sessionRepository.save(newSession);
-            return new InsertSessionResponse("SUCCESS", "Session saved with ID: " + savedSession.getSessionID(), savedSession.getSessionID());
+            return new InsertSessionResponse( savedSession.getSessionID());
         } catch (Exception e) {
             throw new BadRequestException(400, "Error saving session: " + e.getMessage(), new HashMap<>());
         }

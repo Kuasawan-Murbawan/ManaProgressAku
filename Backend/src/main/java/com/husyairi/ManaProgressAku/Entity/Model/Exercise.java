@@ -27,10 +27,11 @@ public class Exercise {
         this.generalInfo = generalInfo;
     }
 
-    public Exercise(Integer exerciseID, String exerciseName, String generalInfo) {
+    public Exercise(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType) {
         this.exerciseID = exerciseID;
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
+        this.exerciseType = exerciseType;
     }
 
     public Integer getExerciseID() {
@@ -55,5 +56,13 @@ public class Exercise {
 
     public void setGeneralInfo(String generalInfo) {
         this.generalInfo = generalInfo;
+    }
+
+    public String getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(String exerciseType) {
+        this.exerciseType = exerciseType;
     }
 }

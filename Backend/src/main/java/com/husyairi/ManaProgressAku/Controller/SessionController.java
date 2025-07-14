@@ -1,12 +1,11 @@
 package com.husyairi.ManaProgressAku.Controller;
 
-import com.husyairi.ManaProgressAku.DTO.Session.GetSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionRequest;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.Session.UpdateSessionRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.DeleteExerciseResponse;
+import com.husyairi.ManaProgressAku.DTO.Session.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.SessionService;
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,19 +66,23 @@ public class SessionController {
     }
 
     @DeleteMapping("/deleteSession/{sessionID}")
-    public ResponseEntity<ApiSuccessResponse<String>> deleteSession(@PathVariable String sessionID){
+    public ResponseEntity<ApiSuccessResponse<DeleteSessionResponse>> deleteSession(@PathVariable String sessionID){
         sessionService.deleteSession(sessionID);
 
-        ApiSuccessResponse<String> response = new ApiSuccessResponse<>(
-                "Session deleted!",
-                null
-        );
+        DeleteSessionResponse response = new DeleteSessionResponse(sessionID);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>("Session deleted successfully", response)
+        );
     }
 
     @GetMapping("/getAllSessions")
-    public List<Session> getAllSession(){
-        return sessionService.getAllSessions();
+    public ResponseEntity<ApiSuccessResponse<List<Session>>> getAllSession(){
+
+        List<Session> allSessions = sessionService.getAllSessions();
+
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>("All sessions fetched successfully!", allSessions)
+        );
     }
 }

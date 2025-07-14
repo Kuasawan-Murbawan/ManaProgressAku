@@ -1,9 +1,7 @@
 package com.husyairi.ManaProgressAku.Controller;
 
-import com.husyairi.ManaProgressAku.DTO.Activity.GetActivityResponse;
-import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityRequest;
-import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityResponse;
-import com.husyairi.ManaProgressAku.DTO.Activity.UpdateActivityRequest;
+import com.husyairi.ManaProgressAku.DTO.Activity.*;
+import com.husyairi.ManaProgressAku.DTO.Session.DeleteSessionResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
@@ -19,7 +17,7 @@ import java.util.List;
 @RequestMapping("/mana-progress-aku")
 public class ActivityController {
 
-    private ActivityService activityService;
+    private final ActivityService activityService;
 
     @Autowired
     public ActivityController(ActivityService activityService) {
@@ -68,15 +66,18 @@ public class ActivityController {
 
 
     @DeleteMapping("/deleteActivity/{activityID}")
-    public ResponseEntity<ApiSuccessResponse<String>> deleteActivity(@PathVariable String activityID){
+    public ResponseEntity<ApiSuccessResponse<DeleteActivityResponse>> deleteActivity(@PathVariable String activityID){
+
         activityService.deleteActivity(activityID);
 
-        ApiSuccessResponse<String> response = new ApiSuccessResponse<>(
-                "Session Deleted",
-                activityID
-        );
+        DeleteActivityResponse response = new DeleteActivityResponse(activityID);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>(
+                        "Activity deleted successfully!",
+                        response
+                )
+        );
     }
 
 

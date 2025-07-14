@@ -1,9 +1,6 @@
 package com.husyairi.ManaProgressAku.Controller;
 
-import com.husyairi.ManaProgressAku.DTO.Exercise.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseRequest;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
@@ -21,7 +18,7 @@ import java.util.List;
 @RequestMapping("/mana-progress-aku")
 public class ExerciseController {
 
-    private ExerciseService exerciseService;
+    private final ExerciseService exerciseService;
 
     @Autowired
     public ExerciseController(ExerciseService exerciseService){
@@ -68,12 +65,14 @@ public class ExerciseController {
     }
 
     @DeleteMapping("/deleteExercise/{exerciseID}")
-    public ResponseEntity<ApiSuccessResponse<String>> deleteExercise(@PathVariable Integer exerciseID){
+    public ResponseEntity<ApiSuccessResponse<DeleteExerciseResponse>> deleteExercise(@PathVariable Integer exerciseID){
 
         exerciseService.deleteExercise(exerciseID);
 
+        DeleteExerciseResponse response = new DeleteExerciseResponse(exerciseID);
+
         return ResponseEntity.ok(
-                new ApiSuccessResponse<>("Exercise deleted successfully", "Deleted ID: " + exerciseID)
+                new ApiSuccessResponse<>("Exercise deleted successfully", response)
         );
     }
 

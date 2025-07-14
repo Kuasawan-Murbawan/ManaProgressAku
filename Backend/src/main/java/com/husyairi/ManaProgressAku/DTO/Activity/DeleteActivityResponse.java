@@ -1,11 +1,9 @@
 package com.husyairi.ManaProgressAku.DTO.Activity;
 
-public class InsertActivityResponse {
+public class DeleteActivityResponse {
+    private  String activityID;
 
-    private String activityID;
-
-    public InsertActivityResponse( String activityID) {
-
+    public DeleteActivityResponse(String activityID) {
         this.activityID = activityID;
     }
 

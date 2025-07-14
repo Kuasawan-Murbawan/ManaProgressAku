@@ -5,6 +5,7 @@ import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityRequest;
 import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityResponse;
 import com.husyairi.ManaProgressAku.DTO.Activity.UpdateActivityRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
+import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
@@ -21,11 +22,27 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
+    private String generateSessionID(){
+
+        Activity latestActivity = activityRepository.findTopByOrderByActivityIDDesc();
+
+        String newActivityID;
+
+        if(latestActivity == null){
+            newActivityID = "ACT001";
+        }else{
+            String lastID = latestActivity.getActivityID(); // eg. "ACT005"
+            int num = Integer.parseInt(lastID.substring(4)); // get 005
+            newActivityID = String.format("ACT%03d", num + 1);
+        }
+
+        return newActivityID;
+    }
 
     @Override
     public InsertActivityResponse createActivity(InsertActivityRequest request){
         Activity newActivity = new Activity(
-                request.getActivityID(),
+                generateSessionID(),
                 request.getSessionID(),
                 request.getExerciseID(),
                 request.getSets(),
@@ -35,7 +52,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         try{
             Activity savedActivity = activityRepository.save(newActivity);
-            return new InsertActivityResponse("SUCCESS", "Activity saved successfully", savedActivity.getActivityID());
+            return new InsertActivityResponse(savedActivity.getActivityID());
         }catch (Exception e){
             throw new BadRequestException(400, "Error saving activity: " + e.getMessage(), new HashMap<>());
 
@@ -97,7 +114,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void deleteActivity(String activityID){
-        Boolean isExist = activityRepository.existsById(activityID);
+        boolean isExist = activityRepository.existsById(activityID);
 
         if(!isExist){
             throw new BadRequestException(404, "Session ID : " + activityID + " not found", new HashMap<>());

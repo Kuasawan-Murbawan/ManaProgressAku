@@ -1,10 +1,10 @@
 package com.husyairi.ManaProgressAku.DTO.Session;
 
-public class InsertSessionResponse {
+public class DeleteSessionResponse {
 
-    private String sessionID ;
+    private String sessionID;
 
-    public InsertSessionResponse( String sessionID) {
+    public DeleteSessionResponse(String sessionID) {
         this.sessionID = sessionID;
     }
 

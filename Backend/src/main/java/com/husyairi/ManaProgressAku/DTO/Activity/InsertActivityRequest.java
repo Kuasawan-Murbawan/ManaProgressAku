@@ -2,28 +2,18 @@ package com.husyairi.ManaProgressAku.DTO.Activity;
 
 public class InsertActivityRequest {
 
-    private String activityID;
     private String sessionID;
     private Integer exerciseID;
     private Integer sets;
     private String weight;
     private String rep;
 
-    public InsertActivityRequest(String activityID, String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {
-        this.activityID = activityID;
+    public InsertActivityRequest( String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {
         this.sessionID = sessionID;
         this.exerciseID = exerciseID;
         this.sets = sets;
         this.weight = weight;
         this.rep = rep;
-    }
-
-    public String getActivityID() {
-        return activityID;
-    }
-
-    public void setActivityID(String activityID) {
-        this.activityID = activityID;
     }
 
     public String getSessionID() {
