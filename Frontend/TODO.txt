@@ -7,10 +7,16 @@
 [] - Update
 
 # Session
-[] - Handle create & delete session
+[/] - Handle create & delete session
 [] - Sessions List
 [] - Display Session
 [] - Update 
+
+# Activity
+[] - Create 
+[] - Delete
+[] - Update
+[] - Get all
 
 ## Misc
 [/] - update backend to include exercisetype
@@ -32,3 +38,6 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
 
 ~11 July 2025~
 [/] - Handle create & delete session
+
+~14 July 2025~
+[] - create and save activity when click save

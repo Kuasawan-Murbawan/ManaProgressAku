@@ -30,7 +30,14 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
 
   const navigate = useNavigate();
 
-  const handleClick = (exercise) => {};
+  const handleClick = (exercise) => {
+    onCloseArm();
+    navigate("/currentActivity", {
+      state: {
+        exercise: exercise,
+      },
+    });
+  };
 
   return (
     <Modal isOpen={isOpenArm} onClose={onCloseArm}>
@@ -46,7 +53,7 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
                 h={"12"}
                 bg={"yellow.300"}
                 w={"full"}
-                onClick={handleClick}
+                onClick={() => handleClick(exer)}
               >
                 <Text textAlign={"center"}>
                   {exer.exerciseID}. {exer.exerciseName}

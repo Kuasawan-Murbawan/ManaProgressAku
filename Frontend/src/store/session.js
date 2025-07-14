@@ -17,7 +17,8 @@ export const useSessionStore = create((set) => ({
 
     if (newSessionID) {
       set({ sessionID: newSessionID });
-      console.log(responseData.data.message);
+      console.log("Session created: ", responseData.data.sessionID);
+
       return { success: true, message: "Session created!" };
     } else {
       return { success: false, message: "Failed to create session" };
@@ -33,6 +34,8 @@ export const useSessionStore = create((set) => ({
     const responseData = await res.json();
 
     if (res.ok && responseData.status === "SUCCESS") {
+      console.log("Session deleted: ", sessionID);
+
       set({ sessionID: "" });
       return { success: true, message: responseData.message };
     } else {

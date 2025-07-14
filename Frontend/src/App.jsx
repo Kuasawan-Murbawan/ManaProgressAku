@@ -7,6 +7,7 @@ import ExerciseListPage from "./pages/ExerciseListPage";
 import NewSessionHomePage from "./pages/NewSessionHomePage";
 import NewExercisePage from "./pages/NewExercisePage";
 import CurrentExercisePage from "./pages/CurrentExercisePage";
+import CurrentActivityPage from "./pages/CurrentActivityPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/createSession" element={<NewSessionHomePage />} />
         <Route path="/newExercise" element={<NewExercisePage />} />
         <Route path="/currentExercisePage" element={<CurrentExercisePage />} />
+        <Route path="/currentActivity" element={<CurrentActivityPage />} />
       </Routes>
     </Box>
   );
