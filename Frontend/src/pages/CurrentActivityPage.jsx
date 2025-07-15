@@ -84,7 +84,6 @@ const CurrentActivityPage = () => {
         duration: 3000,
         isClosable: true,
       });
-      console.log("navigating to create session..");
       navigate("/createSession");
     } else {
       toast({

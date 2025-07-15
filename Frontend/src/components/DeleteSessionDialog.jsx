@@ -12,9 +12,11 @@ import { useRef } from "react";
 
 import { useSessionStore } from "../store/session";
 import { useNavigate } from "react-router-dom";
+import { useActivityStore } from "../store/activity";
 
 const DeleteSessionDialog = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
+  const { deleteAllActivities } = useActivityStore();
 
   const navigate = useNavigate();
   const { deleteSession } = useSessionStore();
@@ -23,6 +25,12 @@ const DeleteSessionDialog = ({ isOpen, onClose }) => {
     const res = await deleteSession();
 
     if (res.success) {
+      const result = await deleteAllActivities();
+      if (result.success) {
+        console.log("All activities deleted successfully");
+      } else {
+        console.log(result.message);
+      }
       navigate("/");
     } else {
       alert("Failed to delete session");

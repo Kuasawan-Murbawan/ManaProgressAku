@@ -44,3 +44,4 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
 
 ~15 July 2025~
 [/] - create summary exercise
+[/] - implemented delete all activity and finish session

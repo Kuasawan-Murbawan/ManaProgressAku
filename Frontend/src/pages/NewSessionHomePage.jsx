@@ -11,6 +11,7 @@ import {
   Th,
   Td,
   TableContainer,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,12 +20,16 @@ import { useActivityStore } from "../store/activity";
 import { useExerciseStore } from "../store/exercise";
 
 import ExerciseSummaryCard from "../components/ExerciseSummaryCard";
+import { useSessionStore } from "../store/session";
 
 const NewSessionHomePage = () => {
   const navigate = useNavigate();
 
-  const { activities } = useActivityStore();
+  const { activities, clearActivities } = useActivityStore();
   const { exercise } = useExerciseStore();
+  const { sessionID, clearSession } = useSessionStore();
+
+  const toast = useToast();
 
   const {
     isOpen: deleteSessionIsOpen,
@@ -35,6 +40,22 @@ const NewSessionHomePage = () => {
   const getExerciseName = (id) => {
     const found = exercise.find((e) => e.exerciseID === id);
     return found ? found.exerciseName : "Unknown Exercise : " + id;
+  };
+
+  const handleFinishSession = async () => {
+    clearActivities();
+    clearSession();
+
+    console.log("Session " + sessionID + " has finished.");
+
+    toast({
+      title: "Session finished",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+
+    navigate("/");
   };
 
   return (
@@ -61,6 +82,7 @@ const NewSessionHomePage = () => {
 
       <VStack>
         <Button onClick={() => navigate("/newExercise")}>Add Exercise</Button>
+        <Button onClick={handleFinishSession}>Finish Session</Button>
         <Button onClick={deleteSessionOnOpen}>Delete Session</Button>
       </VStack>
 

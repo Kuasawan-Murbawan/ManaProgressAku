@@ -47,5 +47,12 @@ export const useSessionStore = create(
         };
       }
     },
+    clearSession: () => {
+      set({ sessionID: "" });
+    },
   }))
 );
+
+if (typeof window !== "undefined") {
+  window.useSessionStore = useSessionStore;
+}
