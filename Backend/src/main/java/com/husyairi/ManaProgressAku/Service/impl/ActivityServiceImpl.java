@@ -52,7 +52,14 @@ public class ActivityServiceImpl implements ActivityService {
 
         try{
             Activity savedActivity = activityRepository.save(newActivity);
-            return new InsertActivityResponse(savedActivity.getActivityID());
+            return new InsertActivityResponse(
+                    savedActivity.getActivityID(),
+                    savedActivity.getSessionID(),
+                    savedActivity.getExerciseID(),
+                    savedActivity.getSets(),
+                    savedActivity.getRep(),
+                    savedActivity.getWeight()
+            );
         }catch (Exception e){
             throw new BadRequestException(400, "Error saving activity: " + e.getMessage(), new HashMap<>());
 
