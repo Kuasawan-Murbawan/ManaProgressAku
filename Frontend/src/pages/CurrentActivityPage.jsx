@@ -74,7 +74,6 @@ const CurrentActivityPage = () => {
       weight: sets.map((s) => s.weight).join(","),
     };
 
-    console.log("activityPayLoad", activityPayLoad);
     const result = await addActivity(activityPayLoad);
 
     if (result.success) {
