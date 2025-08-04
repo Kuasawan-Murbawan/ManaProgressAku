@@ -13,13 +13,14 @@
 [] - Update 
 
 # Activity
-[] - Create 
+[/] - Create 
 [] - Delete
 [] - Update
 [] - Get all
 
 ## Misc
 [/] - update backend to include exercisetype
+[] - block user from changing pages when session has started
 
 ~30 June 2025~
 [/] connect with backend
@@ -45,3 +46,17 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
 ~15 July 2025~
 [/] - create summary exercise
 [/] - implemented delete all activity and finish session
+[] - delete/update individual activity
+
+~2 August 2025~
+## Display past sessions
+[/] Create past sessions page
+[/] Create home button
+[/] Call API
+[/] Display list of sessions (Time, Date)
+
+## Display past activities
+[/] create API call for activity Sessions
+[] create activitydetails page
+[] display activities when clicked
+

@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 export const useSessionStore = create(
   persist((set) => ({
     sessionID: "",
+    sessions: [],
     createSession: async (newSession) => {
       const res = await fetch(`/api/insertSession`, {
         method: "POST",
@@ -49,6 +50,16 @@ export const useSessionStore = create(
     },
     clearSession: () => {
       set({ sessionID: "" });
+    },
+    fetchAllSessions: async () => {
+      try {
+        const res = await fetch("/api/getAllSessions");
+        const responseData = await res.json();
+        set({ sessions: responseData.data || [] });
+      } catch (error) {
+        console.error("Failed to fetch sessions", error);
+        set({ sessions: [] });
+      }
     },
   }))
 );

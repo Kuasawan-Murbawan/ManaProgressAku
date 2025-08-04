@@ -37,6 +37,7 @@ export const useActivityStore = create(
         };
       }
     },
+
     deleteAllActivities: async (activityID) => {
       const { activities } = useActivityStore.getState();
       let allSuccess = true;
@@ -79,8 +80,32 @@ export const useActivityStore = create(
         message: messages.join("\n"),
       };
     },
+
     clearActivities: () => {
       set({ activities: [] });
+    },
+
+    updateActivity: async (updatedActivity) => {},
+
+    fetchActivityBySession: async (sessionID) => {
+      try {
+        const res = await fetch(`/api/sessionActivities/${sessionID}`);
+        const responseData = await res.json();
+
+        if (res.ok) {
+          if (responseData.data.length === 0) {
+            console.log("No activities found for this session.");
+            set({ activities: [] });
+          } else {
+            set({ activities: responseData.data });
+            console.log("Fetched activities:", responseData.data);
+          }
+        } else {
+          console.error("Failed to fetch activities:", responseData.message);
+        }
+      } catch (error) {
+        console.error("Error fetching activities:", error);
+      }
     },
   }))
 );

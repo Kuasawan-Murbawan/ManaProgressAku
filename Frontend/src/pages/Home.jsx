@@ -35,7 +35,7 @@ const Home = () => {
           bg={"gray.200"}
           borderRadius={"2xl"}
           py={"20px"}
-          _hover={{ bg: "gray.100" }}
+          _hover={{ bg: "gray.300" }}
           onClick={confirmSessionOnOpen}
         >
           <Center>
@@ -46,6 +46,24 @@ const Home = () => {
               fontWeight={"bold"}
             >
               Start New Session
+            </Text>
+          </Center>
+        </Container>
+        <Container
+          bg={"gray.200"}
+          borderRadius={"2xl"}
+          py={"20px"}
+          _hover={{ bg: "gray.300" }}
+        >
+          <Center>
+            <Text
+              alignItems={"center"}
+              alignContent={"center"}
+              fontSize={"3xl"}
+              fontWeight={"bold"}
+              onClick={() => navigate("/pastSessions")}
+            >
+              Past Sessions
             </Text>
           </Center>
         </Container>
