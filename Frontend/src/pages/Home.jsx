@@ -6,12 +6,21 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import StartSessionDialog from "../components/StartSessionDialog";
+import { useExerciseStore } from "../store/exercise";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  const { exercise, fetchAllExercises } = useExerciseStore();
+
+  useEffect(() => {
+    if (exercise.length === 0) {
+      fetchAllExercises();
+    }
+  }, [exercise, fetchAllExercises]);
 
   // Create Session
   const {

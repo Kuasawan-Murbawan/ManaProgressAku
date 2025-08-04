@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 export const useActivityStore = create(
   persist((set, get) => ({
     activities: [],
-
+    sessionActivities: [],
     addActivity: async (newActivity) => {
       try {
         const res = await fetch("/api/insertActivity", {
@@ -95,10 +95,9 @@ export const useActivityStore = create(
         if (res.ok) {
           if (responseData.data.length === 0) {
             console.log("No activities found for this session.");
-            set({ activities: [] });
+            set({ sessionActivities: [] });
           } else {
-            set({ activities: responseData.data });
-            console.log("Fetched activities:", responseData.data);
+            set({ sessionActivities: responseData.data });
           }
         } else {
           console.error("Failed to fetch activities:", responseData.message);

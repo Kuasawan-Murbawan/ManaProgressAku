@@ -9,6 +9,7 @@ import NewExercisePage from "./pages/NewExercisePage";
 import CurrentExercisePage from "./pages/CurrentExercisePage";
 import CurrentActivityPage from "./pages/CurrentActivityPage";
 import PastSessionsPage from "./pages/PastSessionsPage";
+import SessionActivitiesDetails from "./components/SessionActivitiesDetails";
 
 function App() {
   return (
@@ -21,6 +22,10 @@ function App() {
         <Route path="/currentExercisePage" element={<CurrentExercisePage />} />
         <Route path="/currentActivity" element={<CurrentActivityPage />} />
         <Route path="/pastSessions" element={<PastSessionsPage />} />
+        <Route
+          path="/session/:sessionID"
+          element={<SessionActivitiesDetails />}
+        />
       </Routes>
     </Box>
   );

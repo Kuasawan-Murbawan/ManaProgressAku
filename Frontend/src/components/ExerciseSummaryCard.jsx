@@ -29,7 +29,7 @@ const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
         <Table variant="simple" size="sm" border="1px solid black">
           <Thead>
             <Tr>
-              <Th border="1px solid black">Head</Th>
+              <Th border="1px solid black">Sets</Th>
               {weights.map((_, index) => (
                 <Th key={index} border="1px solid black">
                   Set {index + 1}

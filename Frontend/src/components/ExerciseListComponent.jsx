@@ -8,12 +8,13 @@ const ExerciseListComponent = () => {
   const [selectedExercise, setSelectedExercise] = useState(null);
 
   useEffect(() => {
-    fetchAllExercises();
+    if (exercise.length === 0) {
+      fetchAllExercises();
+    }
   }, [fetchAllExercises]);
 
   const handleClick = (exercise) => {
     setSelectedExercise(exercise);
-    console.log(exercise.exerciseType);
     onOpen();
   };
 

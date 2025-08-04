@@ -8,8 +8,8 @@
 
 # Session
 [/] - Handle create & delete session
-[] - Sessions List
-[] - Display Session
+[/] - Sessions List
+[/] - Display Session
 [] - Update 
 
 # Activity
@@ -21,6 +21,8 @@
 ## Misc
 [/] - update backend to include exercisetype
 [] - block user from changing pages when session has started
+[] - edit activities when in session
+[] - sort past session by decreasing date
 
 ~30 June 2025~
 [/] connect with backend
@@ -55,8 +57,11 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
 [/] Call API
 [/] Display list of sessions (Time, Date)
 
+~4 August 2025~
 ## Display past activities
 [/] create API call for activity Sessions
-[] create activitydetails page
-[] display activities when clicked
+[/] create activitydetails page
+[/] display activities when clicked
+
+
 

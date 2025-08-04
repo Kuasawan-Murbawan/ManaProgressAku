@@ -14,5 +14,10 @@ export const useExerciseStore = create(
         set({ exercise: [] });
       }
     },
+    getExerciseName: (id) => {
+      const { exercise } = useExerciseStore.getState();
+      const found = exercise.find((e) => e.exerciseID === id);
+      return found ? found.exerciseName : `Unknown Exercise: ${id}`;
+    },
   }))
 );
