@@ -8,8 +8,6 @@ import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +18,6 @@ import java.util.Optional;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
-
-    private static final Logger log = LoggerFactory.getLogger(ExerciseServiceImpl.class);
 
     private final ExerciseRepository exerciseRepository;
 

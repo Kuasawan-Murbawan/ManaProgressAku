@@ -5,7 +5,6 @@ import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityRequest;
 import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityResponse;
 import com.husyairi.ManaProgressAku.DTO.Activity.UpdateActivityRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
-import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
@@ -64,7 +63,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new BadRequestException(400, "Error saving activity: " + e.getMessage(), new HashMap<>());
 
         }
-    };
+    }
 
     @Override
     public GetActivityResponse getActivity(String activityID){
@@ -91,7 +90,7 @@ public class ActivityServiceImpl implements ActivityService {
                 activity.getWeight(),
                 activity.getRep()
         );
-    };
+    }
 
     @Override
     public Activity updateActivity(UpdateActivityRequest request){
@@ -117,7 +116,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         return updatedActivity;
 
-    };
+    }
 
     @Override
     public void deleteActivity(String activityID){
@@ -132,18 +131,16 @@ public class ActivityServiceImpl implements ActivityService {
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage(), new HashMap<>());
         }
-    };
+    }
 
     @Override
     public List<Activity> getSessionActivities(String sessionID){
-        // If there are no data, we dont throw error here because we want to send empty array to be handled
-        // thru FE
         return activityRepository.findBySessionID(sessionID);
     }
 
     @Override
     public List<Activity> getAllActivities(){
         return activityRepository.findAll();
-    };
+    }
 
 }

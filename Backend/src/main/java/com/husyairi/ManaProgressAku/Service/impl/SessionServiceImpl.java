@@ -30,12 +30,7 @@ public class SessionServiceImpl implements SessionService {
     private ExerciseRepository exerciseRepository;
 
     private String generateSessionID(){
-        /*
-        TODO
-        - currently we have numbering as session id to signify urutan
-        - but do we need it? why not just generate random string
-        - for the urutan, why not just use the date?
-         */
+
         Session latestSession = sessionRepository.findTopByOrderBySessionIDDesc();
         // example returned data: Session{ sessionID = "SESS003", sessionName = "Evening Workout" }
 
@@ -124,7 +119,7 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteSession (String sessionID){
 
-        Boolean isExist = sessionRepository.existsById(sessionID);
+        boolean isExist = sessionRepository.existsById(sessionID);
 
         if(!isExist){
             throw new BadRequestException(404, "Session ID not found", new HashMap<>());
