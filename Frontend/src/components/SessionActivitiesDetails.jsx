@@ -1,14 +1,17 @@
-import { Text } from "@chakra-ui/react";
+import { Button, Text, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ExerciseSummaryCard from "./ExerciseSummaryCard";
 import { useActivityStore } from "../store/activity";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useExerciseStore } from "../store/exercise";
+import DeleteSessionDialog from "./DeleteSessionDialog";
 
 const SessionActivitiesDetails = () => {
   const { sessionID } = useParams();
   const { getExerciseName } = useExerciseStore();
-  const { sessionActivities, fetchActivityBySession } = useActivityStore();
+  const { sessionActivities, fetchActivityBySession, clearSessionActivities } =
+    useActivityStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (sessionID) {
@@ -16,11 +19,33 @@ const SessionActivitiesDetails = () => {
     }
   }, [sessionID]);
 
+  const handleBackClick = () => {
+    clearSessionActivities();
+    navigate("/pastSessions");
+  };
+
+  const {
+    isOpen: deleteSessionIsOpen,
+    onOpen: deleteSessionOnOpen,
+    onClose: deleteSessionOnClose,
+  } = useDisclosure();
+
   return (
     <div>
       <Text fontSize="2xl" fontWeight="bold" mb={4}>
         Activities for Session {sessionID}
       </Text>
+      <Button bg={"gray.500"} onClick={handleBackClick}>
+        Back
+      </Button>
+      <Button
+        ml={"10"}
+        bg={"red"}
+        textColor={"white"}
+        onClick={deleteSessionOnOpen}
+      >
+        Delete Session
+      </Button>
 
       {sessionActivities.length > 0 ? (
         sessionActivities.map((activity, index) => {
@@ -42,6 +67,12 @@ const SessionActivitiesDetails = () => {
           No activities added yet.
         </Text>
       )}
+
+      <DeleteSessionDialog
+        isOpen={deleteSessionIsOpen}
+        onClose={deleteSessionOnClose}
+        sessionID={sessionID}
+      />
     </div>
   );
 };

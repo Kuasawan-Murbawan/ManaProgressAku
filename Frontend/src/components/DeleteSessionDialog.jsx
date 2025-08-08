@@ -14,7 +14,7 @@ import { useSessionStore } from "../store/session";
 import { useNavigate } from "react-router-dom";
 import { useActivityStore } from "../store/activity";
 
-const DeleteSessionDialog = ({ isOpen, onClose }) => {
+const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
   const cancelRef = useRef();
   const { deleteAllActivities } = useActivityStore();
 
@@ -22,7 +22,7 @@ const DeleteSessionDialog = ({ isOpen, onClose }) => {
   const { deleteSession } = useSessionStore();
 
   const handleConfirm = async () => {
-    const res = await deleteSession();
+    const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
 
     if (res.success) {
       const result = await deleteAllActivities();

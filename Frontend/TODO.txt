@@ -63,5 +63,10 @@ TODO: figure out how to send multiple Activities to backend, in FE, we can bundl
 [/] create activitydetails page
 [/] display activities when clicked
 
+~8 August 2025~
+[] delete session
+[] delete Actvities by session ID - backend
+        - currently when we delete session, the activities will be deleted one by one using the activity ID and activities in the activity store
+        - but, if we delete session in Past Sessions page, there are actvities in sessionActivities, so can do it, but still not efficient
 
-
+Q: why do we separate activities and sessionActivities in Activity Store? if it is the same, it is easier to delete

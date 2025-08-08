@@ -89,6 +89,7 @@ const NewSessionHomePage = () => {
       <DeleteSessionDialog
         isOpen={deleteSessionIsOpen}
         onClose={deleteSessionOnClose}
+        sessionID={sessionID}
       />
     </div>
   );

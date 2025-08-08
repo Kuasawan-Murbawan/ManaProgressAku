@@ -27,9 +27,7 @@ export const useSessionStore = create(
         return { success: false, message: "Failed to create session" };
       }
     },
-    deleteSession: async () => {
-      const { sessionID } = useSessionStore.getState();
-
+    deleteSession: async (sessionID) => {
       const res = await fetch(`/api/deleteSession/${sessionID}`, {
         method: "DELETE",
       });

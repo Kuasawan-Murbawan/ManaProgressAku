@@ -106,5 +106,9 @@ export const useActivityStore = create(
         console.error("Error fetching activities:", error);
       }
     },
+
+    clearSessionActivities: () => {
+      set({ sessionActivities: [] });
+    },
   }))
 );
