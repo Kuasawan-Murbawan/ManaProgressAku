@@ -10,6 +10,7 @@
 [/] - Handle create & delete session
 [/] - Sessions List
 [/] - Display Session
+[/] - Delete past session
 [] - Update 
 
 # Activity
@@ -73,4 +74,4 @@ Q: why do we separate activities and sessionActivities in Activity Store? if it 
 
 ~9 August 2025~
 [/] implemented deleteActivitiesByID for current session
-[]
+[/] prevent the user from refresh or go to another url when session is running

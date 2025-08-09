@@ -9,7 +9,7 @@ import DeleteSessionDialog from "./DeleteSessionDialog";
 const SessionActivitiesDetails = () => {
   const { sessionID } = useParams();
   const { getExerciseName } = useExerciseStore();
-  const { sessionActivities, fetchActivityBySession, clearSessionActivities } =
+  const { activities, fetchActivityBySession, clearActivities } =
     useActivityStore();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ const SessionActivitiesDetails = () => {
   }, [sessionID]);
 
   const handleBackClick = () => {
-    clearSessionActivities();
+    clearActivities();
     navigate("/pastSessions");
   };
 
@@ -47,8 +47,8 @@ const SessionActivitiesDetails = () => {
         Delete Session
       </Button>
 
-      {sessionActivities.length > 0 ? (
-        sessionActivities.map((activity, index) => {
+      {activities.length > 0 ? (
+        activities.map((activity, index) => {
           const reps = activity.rep.split(",");
           const weights = activity.weight.split(",");
           const minLength = Math.min(reps.length, weights.length);

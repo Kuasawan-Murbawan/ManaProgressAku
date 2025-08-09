@@ -16,7 +16,7 @@ import { useActivityStore } from "../store/activity";
 
 const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
   const cancelRef = useRef();
-  const { deleteActivitiesBySession } = useActivityStore();
+  const { deleteActivitiesBySession, clearActivities } = useActivityStore();
 
   const navigate = useNavigate();
   const { deleteSession } = useSessionStore();
@@ -26,7 +26,8 @@ const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
 
     if (res.success) {
       const result = await deleteActivitiesBySession(sessionID);
-
+      clearActivities();
+      // TODO: if from Past Session page, this will also brought to home
       navigate("/");
     } else {
       alert("Failed to delete session");
