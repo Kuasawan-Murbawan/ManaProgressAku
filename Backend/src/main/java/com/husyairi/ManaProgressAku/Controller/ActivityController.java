@@ -80,6 +80,19 @@ public class ActivityController {
         );
     }
 
+    @DeleteMapping("/deleteActivitiesBySessionID/{sessionID}")
+    public ResponseEntity<ApiSuccessResponse<DeleteActivitiesBySessionResponse>> deleteActivitiesBySessionID(@PathVariable String sessionID){
+        int deletedCount = activityService.deleteActivitiesBySession(sessionID);
+
+        DeleteActivitiesBySessionResponse response = new DeleteActivitiesBySessionResponse(sessionID, deletedCount);
+
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>(
+                        "Activities deleted successfully!",
+                        response
+                )
+        );
+    }
 
     @GetMapping("/sessionActivities/{sessionID}")
     public ResponseEntity<ApiSuccessResponse<List<Activity>>> getSessionActivities(@PathVariable String sessionID){

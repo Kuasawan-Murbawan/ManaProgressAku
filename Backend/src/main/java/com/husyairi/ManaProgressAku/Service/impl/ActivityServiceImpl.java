@@ -123,11 +123,27 @@ public class ActivityServiceImpl implements ActivityService {
         boolean isExist = activityRepository.existsById(activityID);
 
         if(!isExist){
-            throw new BadRequestException(404, "Session ID : " + activityID + " not found", new HashMap<>());
+            throw new BadRequestException(404, "Activity ID : " + activityID + " not found", new HashMap<>());
         }
 
         try{
             activityRepository.deleteById(activityID);
+        }catch (Exception e){
+            throw new BadRequestException(500, e.getMessage(), new HashMap<>());
+        }
+    }
+
+    @Override
+    public int deleteActivitiesBySession(String sessionID){
+        List<Activity> activities = activityRepository.findBySessionID(sessionID);
+
+        if(activities.isEmpty()){
+            throw new BadRequestException(404, "No activities found for session ID: " + sessionID, new HashMap<>());
+        }
+
+        try{
+            activityRepository.deleteAll(activities);
+            return activities.size();
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage(), new HashMap<>());
         }

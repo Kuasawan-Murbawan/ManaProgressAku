@@ -18,6 +18,8 @@ public interface ActivityService {
 
     public void deleteActivity(String activityID);
 
+    public int deleteActivitiesBySession(String sessionID);
+
     public List<Activity> getSessionActivities(String sessionID);
 
     public List<Activity> getAllActivities();
