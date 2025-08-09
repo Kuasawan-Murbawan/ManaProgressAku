@@ -16,7 +16,7 @@ import { useActivityStore } from "../store/activity";
 
 const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
   const cancelRef = useRef();
-  const { deleteAllActivities } = useActivityStore();
+  const { deleteActivitiesBySession } = useActivityStore();
 
   const navigate = useNavigate();
   const { deleteSession } = useSessionStore();
@@ -25,12 +25,8 @@ const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
     const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
 
     if (res.success) {
-      const result = await deleteAllActivities();
-      if (result.success) {
-        console.log("All activities deleted successfully");
-      } else {
-        console.log(result.message);
-      }
+      const result = await deleteActivitiesBySession(sessionID);
+
       navigate("/");
     } else {
       alert("Failed to delete session");

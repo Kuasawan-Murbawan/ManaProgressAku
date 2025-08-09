@@ -38,47 +38,80 @@ export const useActivityStore = create(
       }
     },
 
-    deleteAllActivities: async (activityID) => {
-      const { activities } = useActivityStore.getState();
-      let allSuccess = true;
-      let messages = [];
+    // deleteAllActivities: async (activityID) => {
+    //   const { activities } = useActivityStore.getState();
+    //   let allSuccess = true;
+    //   let messages = [];
 
-      for (const activity of activities) {
-        try {
-          const res = await fetch(
-            `/api/deleteActivity/${activity.activityID}`,
-            {
-              method: "DELETE",
-            }
-          );
+    //   for (const activity of activities) {
+    //     try {
+    //       const res = await fetch(
+    //         `/api/deleteActivity/${activity.activityID}`,
+    //         {
+    //           method: "DELETE",
+    //         }
+    //       );
 
-          const responseData = await res.json();
+    //       const responseData = await res.json();
 
-          if (res.ok && responseData.status === "SUCCESS") {
-            console.log("Activity deleted: ", activity.activityID);
-            messages.push(`Deleted: ${activity.activityID}`);
-          } else {
-            allSuccess = false;
-            messages.push(
-              responseData.errorMessage ||
-                `Failed to delete activity ${activity.activityID}`
-            );
+    //       if (res.ok && responseData.status === "SUCCESS") {
+    //         console.log("Activity deleted: ", activity.activityID);
+    //         messages.push(`Deleted: ${activity.activityID}`);
+    //       } else {
+    //         allSuccess = false;
+    //         messages.push(
+    //           responseData.errorMessage ||
+    //             `Failed to delete activity ${activity.activityID}`
+    //         );
+    //       }
+    //     } catch (err) {
+    //       allSuccess = false;
+    //       messages.push(`Error deleting activity ${activity.activityID}`);
+    //     }
+    //   }
+
+    //   // Optionally clear local store
+    //   if (allSuccess) {
+    //     useActivityStore.setState({ activities: [] });
+    //   }
+
+    //   return {
+    //     success: allSuccess,
+    //     message: messages.join("\n"),
+    //   };
+    // },
+
+    deleteActivitiesBySession: async (sessionID) => {
+      try {
+        const res = await fetch(
+          `/api/deleteActivitiesBySessionID/${sessionID}`,
+          {
+            method: "DELETE",
           }
-        } catch (err) {
-          allSuccess = false;
-          messages.push(`Error deleting activity ${activity.activityID}`);
+        );
+
+        const responseData = await res.json();
+
+        if (res.ok && responseData.status === "SUCCESS") {
+          console.log("All activities deleted for session:", sessionID);
+
+          set({ activities: [] });
+          set({ sessionActivities: [] });
+
+          return {
+            success: true,
+            message: responseData.message || "Deleted all activities",
+          };
+        } else {
+          return {
+            success: false,
+            message: responseData.errorMessage || "Failed to delete activities",
+          };
         }
+      } catch (error) {
+        console.error("Error deleting activities:", error);
+        return { success: false, message: error.message };
       }
-
-      // Optionally clear local store
-      if (allSuccess) {
-        useActivityStore.setState({ activities: [] });
-      }
-
-      return {
-        success: allSuccess,
-        message: messages.join("\n"),
-      };
     },
 
     clearActivities: () => {
