@@ -138,7 +138,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<Activity> activities = activityRepository.findBySessionID(sessionID);
 
         if(activities.isEmpty()){
-            // we put 0 intead of throwing Exception bc it is not an error
+            // we put 0 instead of throwing Exception bc it is not an error
             // it is possible for session to have 0 activities (if the cancel)
             return 0;
         }
