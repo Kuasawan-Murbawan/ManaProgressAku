@@ -39,6 +39,7 @@ public class ExerciseServiceImpl implements ExerciseService {
             Exercise savedExercise = exerciseRepository.save(newExercise);
             return new InsertExerciseResponse(
                     savedExercise.getExerciseName(),
+                    savedExercise.getExerciseType(),
                     savedExercise.getGeneralInfo()
             );
         } catch (Exception e) {
@@ -81,6 +82,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         return new InsertExerciseResponse(
                 updatedExercise.getExerciseName(),
+                updatedExercise.getExerciseType(),
                 updatedExercise.getGeneralInfo()
         );
     }

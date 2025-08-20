@@ -21,7 +21,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
-    private String generateSessionID(){
+    private String generateActivityID(){
 
         Activity latestActivity = activityRepository.findTopByOrderByActivityIDDesc();
 
@@ -41,7 +41,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public InsertActivityResponse createActivity(InsertActivityRequest request){
         Activity newActivity = new Activity(
-                generateSessionID(),
+                generateActivityID(),
                 request.getSessionID(),
                 request.getExerciseID(),
                 request.getSets(),
