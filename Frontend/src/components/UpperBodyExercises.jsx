@@ -13,25 +13,25 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useExerciseStore } from "../store/exercise";
 
-const ArmExercises = ({ isOpenArm, onCloseArm }) => {
+const UpperBodyExercises = ({ isOpenUpperBody, onCloseUpperBody }) => {
   const { exercise, fetchAllExercises } = useExerciseStore();
 
   useEffect(() => {
-    if (exercise.length === 0) {
+    if (exercise.length <= 10) {
       fetchAllExercises();
     }
   }, [exercise, fetchAllExercises]);
 
-  function armFilter(exercises) {
+  function upperBodyFilter(exercises) {
     return exercises.filter((item) => item.exerciseType === "1");
   }
 
-  const ArmExercises = armFilter(exercise);
+  const UpperBodyExercises = upperBodyFilter(exercise);
 
   const navigate = useNavigate();
 
   const handleClick = (exercise) => {
-    onCloseArm();
+    onCloseUpperBody();
     navigate("/currentActivity", {
       state: {
         exercise: exercise,
@@ -40,14 +40,14 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
   };
 
   return (
-    <Modal isOpen={isOpenArm} onClose={onCloseArm}>
+    <Modal isOpen={isOpenUpperBody} onClose={onCloseUpperBody}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Arm Exercises</ModalHeader>
+        <ModalHeader>Uper Body Exercises</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <VStack spacing={5} align="start">
-            {ArmExercises.map((exer) => (
+            {UpperBodyExercises.map((exer) => (
               <Box
                 key={exer.exerciseID}
                 h={"12"}
@@ -67,4 +67,4 @@ const ArmExercises = ({ isOpenArm, onCloseArm }) => {
   );
 };
 
-export default ArmExercises;
+export default UpperBodyExercises;

@@ -8,9 +8,11 @@ const ExerciseListPage = () => {
 
   return (
     <div>
-      Exercise List Page
+      <Button textColor={"white"} bg={"gray.500"} onClick={() => navigate("/")}>
+        Home
+      </Button>
+
       <ExerciseListComponent />
-      <Button onClick={() => navigate("/")}>Home</Button>
     </div>
   );
 };

@@ -1,35 +1,54 @@
 import { Container, VStack, Box, Text, useDisclosure } from "@chakra-ui/react";
 import React from "react";
-import ArmExercises from "../components/ArmExercises";
+import UpperBodyExercises from "../components/UpperBodyExercises";
+import LowerBodyExercises from "../components/LowerBodyExercises";
 
 const NewExercisePage = () => {
   const {
-    isOpen: isOpenArm,
-    onOpen: onOpenArm,
-    onClose: onCloseArm,
+    isOpen: isOpenUpperBody,
+    onOpen: onOpenUpperBody,
+    onClose: onCloseUpperBody,
   } = useDisclosure();
 
-  const handleArm = () => {
-    onOpenArm();
+  const handleUpperBody = () => {
+    onOpenUpperBody();
+  };
+
+  const {
+    isOpen: isOpenLowerBody,
+    onOpen: onOpenLowerBody,
+    onClose: onCloseLowerBody,
+  } = useDisclosure();
+
+  const handleLowerBody = () => {
+    onOpenLowerBody();
   };
 
   return (
     <div>
       <Container>
         <VStack>
-          <Box bg={"red.100"} onClick={handleArm} cursor="pointer">
-            <Text fontSize={"2xl"}>Arm</Text>
+          <Box bg={"red.100"} onClick={handleUpperBody} cursor="pointer">
+            <Text fontSize={"2xl"}>UpperBody</Text>
           </Box>
-          <Box bg={"blue.100"}>
-            <Text fontSize={"2xl"}>Body</Text>
+          <Box bg={"blue.100"} onClick={handleLowerBody}>
+            <Text fontSize={"2xl"}>Lower Body</Text>
           </Box>
           <Box bg={"yellow.100"}>
-            <Text fontSize={"2xl"}>Leg</Text>
+            <Text fontSize={"2xl"}>Coming Soon</Text>
           </Box>
         </VStack>
       </Container>
 
-      <ArmExercises isOpenArm={isOpenArm} onCloseArm={onCloseArm} />
+      <UpperBodyExercises
+        isOpenUpperBody={isOpenUpperBody}
+        onCloseUpperBody={onCloseUpperBody}
+      />
+
+      <LowerBodyExercises
+        isOpenLowerBody={isOpenLowerBody}
+        onCloseLowerBody={onCloseLowerBody}
+      />
     </div>
   );
 };

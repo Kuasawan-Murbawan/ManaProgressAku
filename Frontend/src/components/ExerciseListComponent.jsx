@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useExerciseStore } from "../store/exercise";
-import { Box, Text, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  useDisclosure,
+  SimpleGrid,
+  Heading,
+  Badge,
+  Card,
+  CardBody,
+  VStack,
+  Divider,
+} from "@chakra-ui/react";
 import ExerciseDetailModal from "./ExerciseDetailModal";
+
 const ExerciseListComponent = () => {
   const { fetchAllExercises, exercise } = useExerciseStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedExercise, setSelectedExercise] = useState(null);
 
   useEffect(() => {
-    if (exercise.length === 0) {
-      fetchAllExercises();
-    }
+    fetchAllExercises();
   }, [fetchAllExercises]);
 
   const handleClick = (exercise) => {
@@ -18,32 +28,79 @@ const ExerciseListComponent = () => {
     onOpen();
   };
 
-  return (
-    <div>
-      <h2>Exercise List</h2>
+  // Split exercises by type
+  const upperBodyExercises = exercise.filter((ex) => ex.exerciseType === "1");
+  const lowerBodyExercises = exercise.filter((ex) => ex.exerciseType === "2");
 
-      {exercise.map((exercise, index) => (
-        <Box
-          key={exercise.exerciseID}
-          p={4}
-          bg="gray.100"
-          mb={2}
-          borderRadius="md"
-          cursor="pointer"
-          onClick={() => handleClick(exercise)}
-        >
-          <Text>
-            {exercise.exerciseID}: {exercise.exerciseName}
-          </Text>
-        </Box>
-      ))}
+  // A reusable grid
+  const ExerciseGrid = ({ title, items, color }) => (
+    <Box mb={10}>
+      <Heading mb={4} fontSize="xl" color={color}>
+        {title}
+      </Heading>
+      <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+        {items.map((exercise) => (
+          <Card
+            key={exercise.exerciseID}
+            borderRadius="2xl"
+            shadow="sm"
+            bg={`${color}.50`}
+            _hover={{
+              shadow: "xl",
+              transform: "scale(1.04)",
+              transition: "0.2s ease-in-out",
+              bg: `${color}.100`,
+            }}
+            cursor="pointer"
+            onClick={() => handleClick(exercise)}
+          >
+            <CardBody>
+              <VStack align="start" spacing={2}>
+                <Text
+                  fontSize="lg"
+                  fontWeight="semibold"
+                  color={`${color}.700`}
+                >
+                  {exercise.exerciseName}
+                </Text>
+
+                <Text fontSize="sm" color="gray.600">
+                  {exercise.generalInfo}
+                </Text>
+              </VStack>
+            </CardBody>
+          </Card>
+        ))}
+      </SimpleGrid>
+    </Box>
+  );
+
+  return (
+    <Box p={6} bg={"gray.300"}>
+      <Heading mb={8} fontSize="2xl" textAlign="center">
+        Exercise Library
+      </Heading>
+
+      {/* Upper Body Section */}
+      <ExerciseGrid
+        title="Upper Body"
+        items={upperBodyExercises}
+        color="blue"
+      />
+
+      {/* Lower Body Section */}
+      <ExerciseGrid
+        title="Lower Body"
+        items={lowerBodyExercises}
+        color="teal"
+      />
 
       <ExerciseDetailModal
         isOpen={isOpen}
         onClose={onClose}
         currentExercise={selectedExercise}
       />
-    </div>
+    </Box>
   );
 };
 

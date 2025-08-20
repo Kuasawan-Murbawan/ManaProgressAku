@@ -1,7 +1,7 @@
 import {
+  Box,
   Center,
   Container,
-  HStack,
   Text,
   useDisclosure,
   VStack,
@@ -19,7 +19,7 @@ const Home = () => {
   const { clearActivities } = useActivityStore();
 
   useEffect(() => {
-    clearActivities(); // clearing activities after finish session
+    clearActivities(); // clear activities after finishing session
     if (exercise.length === 0) {
       fetchAllExercises();
     }
@@ -32,78 +32,77 @@ const Home = () => {
     onClose: confirmSessionOnClose,
   } = useDisclosure();
 
+  // Reusable Menu Card
+  const MenuCard = ({ text, bg, hoverBg, onClick }) => (
+    <Box
+      w="full"
+      maxW="md"
+      bg={bg}
+      borderRadius="2xl"
+      py={6}
+      px={4}
+      shadow="md"
+      cursor="pointer"
+      transition="all 0.2s"
+      _hover={{
+        transform: "scale(1.05)",
+        bg: hoverBg,
+        shadow: "xl",
+      }}
+      onClick={onClick}
+    >
+      <Center>
+        <Text fontSize="2xl" fontWeight="bold" color="gray.700">
+          {text}
+        </Text>
+      </Center>
+    </Box>
+  );
+
   return (
-    <Container maxW={"full"} bg={"green.200"}>
-      <Container bg={"blue.100"}>
+    <Box minH="100vh" bgGradient="linear(to-b, green.100, blue.50)">
+      {/* Header */}
+      <Container maxW="full" py={10}>
         <Center>
-          <Text fontSize={"6xl"} fontWeight={"bold"}>
-            Home
+          <Text
+            fontSize="5xl"
+            fontWeight="extrabold"
+            color="teal.700"
+            textShadow="1px 1px 2px rgba(0,0,0,0.1)"
+          >
+            🏋️ Mana Progress Aku
           </Text>
         </Center>
       </Container>
 
-      <VStack spacing={"24px"} py={"20px"} bg={"blue.300"}>
-        <Container
-          bg={"gray.200"}
-          borderRadius={"2xl"}
-          py={"20px"}
-          _hover={{ bg: "gray.300" }}
+      {/* Menu Options */}
+      <VStack spacing={8} py={10}>
+        <MenuCard
+          text="✨ Start New Session"
+          bg="pink.100"
+          hoverBg="pink.200"
           onClick={confirmSessionOnOpen}
-        >
-          <Center>
-            <Text
-              alignItems={"center"}
-              alignContent={"center"}
-              fontSize={"3xl"}
-              fontWeight={"bold"}
-            >
-              Start New Session
-            </Text>
-          </Center>
-        </Container>
-        <Container
-          bg={"gray.200"}
-          borderRadius={"2xl"}
-          py={"20px"}
-          _hover={{ bg: "gray.300" }}
-        >
-          <Center>
-            <Text
-              alignItems={"center"}
-              alignContent={"center"}
-              fontSize={"3xl"}
-              fontWeight={"bold"}
-              onClick={() => navigate("/pastSessions")}
-            >
-              Past Sessions
-            </Text>
-          </Center>
-        </Container>
-        <Container
-          bg={"gray.300"}
-          borderRadius={"2xl"}
-          py={"20px"}
-          _hover={{ bg: "gray.100" }}
+        />
+        <MenuCard
+          text="📖 Past Sessions"
+          bg="purple.100"
+          hoverBg="purple.200"
+          onClick={() => navigate("/pastSessions")}
+        />
+        <MenuCard
+          text="📋 Exercise List"
+          bg="teal.100"
+          hoverBg="teal.200"
           onClick={() => navigate("/exerciseList")}
-        >
-          <Center>
-            <Text
-              alignItems={"center"}
-              alignContent={"center"}
-              fontSize={"3xl"}
-              fontWeight={"bold"}
-            >
-              Exercise List
-            </Text>
-          </Center>
-        </Container>
+        />
       </VStack>
 
+      {/* Start Session Dialog */}
       <StartSessionDialog
         isOpen={confirmSessionIsOpen}
         onClose={confirmSessionOnClose}
       />
-    </Container>
+    </Box>
   );
 };
 
