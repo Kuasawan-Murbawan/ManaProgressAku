@@ -25,6 +25,11 @@
 [] - edit activities when in session
 [] - sort past session by decreasing date
 
+## Cosmetics
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
 ~30 June 2025~
 [/] connect with backend
 
@@ -77,4 +82,5 @@ Q: why do we separate activities and sessionActivities in Activity Store? if it 
 [/] prevent the user from refresh or go to another url when session is running
 
 ~20 August 2025~
-[] add support for lower body exercises
+[/] add support for lower body exercises
+[/] added style for home, exerciselist, pastsessions, essentially all pages

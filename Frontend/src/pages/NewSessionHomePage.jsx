@@ -4,21 +4,15 @@ import {
   Text,
   useDisclosure,
   VStack,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
   useToast,
+  Flex,
+  Divider,
 } from "@chakra-ui/react";
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteSessionDialog from "../components/DeleteSessionDialog";
 import { useActivityStore } from "../store/activity";
 import { useExerciseStore } from "../store/exercise";
-
 import ExerciseSummaryCard from "../components/ExerciseSummaryCard";
 import { useSessionStore } from "../store/session";
 import useNavigationBlocker from "../hook/useNavigationBlocker.js";
@@ -31,9 +25,8 @@ const NewSessionHomePage = () => {
   const { sessionID, clearSession } = useSessionStore();
 
   const [isBlocking, setIsBlocking] = useState(true);
-
-  // Enable/disable blocking
   useNavigationBlocker(isBlocking);
+
   const toast = useToast();
 
   const {
@@ -47,14 +40,12 @@ const NewSessionHomePage = () => {
     return found ? found.exerciseName : "Unknown Exercise : " + id;
   };
 
-  const handleAddActivity = async () => {
+  const handleAddActivity = () => {
     setIsBlocking(false);
-    setTimeout(() => {
-      navigate("/newExercise");
-    }, 100);
+    setTimeout(() => navigate("/newExercise"), 100);
   };
 
-  const handleFinishSession = async () => {
+  const handleFinishSession = () => {
     setIsBlocking(false);
     clearActivities();
     clearSession();
@@ -62,7 +53,8 @@ const NewSessionHomePage = () => {
     console.log("Session " + sessionID + " has finished.");
 
     toast({
-      title: "Session finished",
+      title: "Session finished 🎉",
+      description: "Great job completing your workout!",
       status: "success",
       duration: 3000,
       isClosable: true,
@@ -71,18 +63,29 @@ const NewSessionHomePage = () => {
     navigate("/");
   };
 
-  const handleDeleteSession = async () => {
+  const handleDeleteSession = () => {
     setIsBlocking(false);
     deleteSessionOnOpen();
   };
 
   return (
-    <div>
-      <Text fontSize={"4xl"} fontWeight={"bold"}>
-        Hello Din
-      </Text>
-      <Text>What do you want to do</Text>
+    <Box
+      minH="100vh"
+      bgGradient="linear(to-br, teal.50, purple.50)"
+      py={8}
+      px={6}
+    >
+      {/* Header */}
+      <Box textAlign="center" mb={8}>
+        <Text fontSize="4xl" fontWeight="bold" color="purple.700">
+          Hello Din 👋
+        </Text>
+        <Text fontSize="lg" color="gray.600">
+          What do you want to do today?
+        </Text>
+      </Box>
 
+      {/* Exercises List */}
       {activities.length > 0 ? (
         activities.map((activity, index) => (
           <ExerciseSummaryCard
@@ -93,23 +96,54 @@ const NewSessionHomePage = () => {
           />
         ))
       ) : (
-        <Text fontStyle="italic" mb={6}>
+        <Text fontStyle="italic" color="gray.500" mb={6} textAlign="center">
           No activities added yet.
         </Text>
       )}
 
-      <VStack>
-        <Button onClick={handleAddActivity}>Add Exercise</Button>
-        <Button onClick={handleFinishSession}>Finish Session</Button>
-        <Button onClick={handleDeleteSession}>Delete Session</Button>
-      </VStack>
+      <Divider my={6} />
 
+      {/* Buttons */}
+      <Flex justify="center" gap={4} wrap="wrap">
+        <Button
+          onClick={handleAddActivity}
+          colorScheme="teal"
+          variant="solid"
+          borderRadius="xl"
+          px={6}
+          py={4}
+        >
+          ➕ Add Exercise
+        </Button>
+        <Button
+          onClick={handleFinishSession}
+          colorScheme="purple"
+          variant="solid"
+          borderRadius="xl"
+          px={6}
+          py={4}
+        >
+          ✅ Finish Session
+        </Button>
+        <Button
+          onClick={handleDeleteSession}
+          colorScheme="red"
+          variant="outline"
+          borderRadius="xl"
+          px={6}
+          py={4}
+        >
+          🗑️ Delete Session
+        </Button>
+      </Flex>
+
+      {/* Delete dialog */}
       <DeleteSessionDialog
         isOpen={deleteSessionIsOpen}
         onClose={deleteSessionOnClose}
         sessionID={sessionID}
       />
-    </div>
+    </Box>
   );
 };
 

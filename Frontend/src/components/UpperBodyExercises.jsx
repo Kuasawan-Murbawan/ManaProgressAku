@@ -40,23 +40,38 @@ const UpperBodyExercises = ({ isOpenUpperBody, onCloseUpperBody }) => {
   };
 
   return (
-    <Modal isOpen={isOpenUpperBody} onClose={onCloseUpperBody}>
+    <Modal
+      isOpen={isOpenUpperBody}
+      onClose={onCloseUpperBody}
+      size="md"
+      isCentered
+    >
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Uper Body Exercises</ModalHeader>
+      <ModalContent rounded="xl" shadow="xl">
+        <ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">
+          Upper Body Exercises
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <VStack spacing={5} align="start">
-            {UpperBodyExercises.map((exer) => (
+          <VStack spacing={4} w="full" pb={4}>
+            {UpperBodyExercises.map((exer, index) => (
               <Box
                 key={exer.exerciseID}
-                h={"12"}
-                bg={"yellow.300"}
-                w={"full"}
+                w="full"
+                p={4}
+                rounded="lg"
+                shadow="sm"
+                bg={index % 2 === 0 ? "green.100" : "teal.100"} // alternating pastel
+                cursor="pointer"
+                _hover={{
+                  bg: index % 2 === 0 ? "green.200" : "teal.200",
+                  transform: "scale(1.02)",
+                }}
+                transition="all 0.2s"
                 onClick={() => handleClick(exer)}
               >
-                <Text textAlign={"center"}>
-                  {exer.exerciseID}. {exer.exerciseName}
+                <Text textAlign="center" fontWeight="medium" fontSize="lg">
+                  {exer.exerciseName}
                 </Text>
               </Box>
             ))}

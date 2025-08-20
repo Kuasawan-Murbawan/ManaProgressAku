@@ -1,4 +1,4 @@
-import { Button, Text, useDisclosure } from "@chakra-ui/react";
+import { Button, Text, useDisclosure, HStack, Box } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ExerciseSummaryCard from "./ExerciseSummaryCard";
 import { useActivityStore } from "../store/activity";
@@ -17,7 +17,8 @@ const SessionActivitiesDetails = () => {
     if (sessionID) {
       fetchActivityBySession(sessionID);
     }
-  }, [sessionID]);
+    return () => clearActivities(); // cleanup on unmount
+  }, [sessionID, fetchActivityBySession, clearActivities]);
 
   const handleBackClick = () => {
     clearActivities();
@@ -32,25 +33,39 @@ const SessionActivitiesDetails = () => {
 
   return (
     <div>
-      <Text fontSize="2xl" fontWeight="bold" mb={4}>
-        Activities for Session {sessionID}
-      </Text>
-      <Button bg={"gray.500"} onClick={handleBackClick}>
-        Back
-      </Button>
-      <Button
-        ml={"10"}
-        bg={"red"}
-        textColor={"white"}
-        onClick={deleteSessionOnOpen}
-      >
-        Delete Session
-      </Button>
+      <Box bg="pink.50" borderRadius="2xl" p={6} mb={6} boxShadow="md">
+        <Text fontSize="2xl" fontWeight="bold" mb={4} color="pink.600">
+          Activities for Session {sessionID}
+        </Text>
+
+        <HStack spacing={4}>
+          <Button
+            bg="blue.100"
+            _hover={{ bg: "blue.200" }}
+            color="blue.800"
+            borderRadius="xl"
+            px={6}
+            onClick={handleBackClick}
+          >
+            Back
+          </Button>
+          <Button
+            bg="red.100"
+            _hover={{ bg: "red.200" }}
+            color="red.800"
+            borderRadius="xl"
+            px={6}
+            onClick={deleteSessionOnOpen}
+          >
+            Delete Session
+          </Button>
+        </HStack>
+      </Box>
 
       {activities.length > 0 ? (
         activities.map((activity, index) => {
-          const reps = activity.rep.split(",");
-          const weights = activity.weight.split(",");
+          const reps = activity.rep ? activity.rep.split(",") : [];
+          const weights = activity.weight ? activity.weight.split(",") : [];
           const minLength = Math.min(reps.length, weights.length);
 
           return (

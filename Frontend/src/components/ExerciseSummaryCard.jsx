@@ -13,25 +13,40 @@ import {
 const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
   return (
     <Box
-      bg="gray.300"
+      bgGradient="linear(to-r, teal.100, green.100)"
       p={6}
-      borderRadius="xl"
-      boxShadow="md"
-      w="80%"
+      borderRadius="2xl"
+      boxShadow="lg"
+      w="90%"
       mx="auto"
-      my={"7"}
+      my={8}
+      transition="all 0.2s ease-in-out"
+      _hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
     >
-      <Text fontSize="3xl" fontWeight="bold" mb={4}>
+      <Text
+        fontSize="2xl"
+        fontWeight="extrabold"
+        mb={4}
+        textAlign="center"
+        color="green.700"
+      >
         {exerciseName}
       </Text>
 
-      <TableContainer>
-        <Table variant="simple" size="sm" border="1px solid black">
-          <Thead>
+      <TableContainer borderRadius="lg" overflow="hidden" boxShadow="sm">
+        <Table variant="striped" colorScheme="green" size="md">
+          <Thead bg="green.200">
             <Tr>
-              <Th border="1px solid black">Sets</Th>
+              <Th color="green.900" fontWeight="bold" textAlign="center">
+                Sets
+              </Th>
               {weights.map((_, index) => (
-                <Th key={index} border="1px solid black">
+                <Th
+                  key={index}
+                  color="green.900"
+                  fontWeight="bold"
+                  textAlign="center"
+                >
                   Set {index + 1}
                 </Th>
               ))}
@@ -39,21 +54,21 @@ const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
           </Thead>
           <Tbody>
             <Tr>
-              <Td border="1px solid black" fontWeight="semibold">
+              <Td fontWeight="semibold" textAlign="center" color="teal.800">
                 Weight (kg)
               </Td>
               {weights.map((w, index) => (
-                <Td key={index} border="1px solid black">
+                <Td key={index} textAlign="center">
                   {w}
                 </Td>
               ))}
             </Tr>
             <Tr>
-              <Td border="1px solid black" fontWeight="semibold">
+              <Td fontWeight="semibold" textAlign="center" color="teal.800">
                 Reps
               </Td>
               {reps.map((r, index) => (
-                <Td key={index} border="1px solid black">
+                <Td key={index} textAlign="center">
                   {r}
                 </Td>
               ))}

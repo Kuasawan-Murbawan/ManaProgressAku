@@ -1,13 +1,4 @@
-import {
-  Button,
-  VStack,
-  Text,
-  Box,
-  NumberInput,
-  NumberInputField,
-  HStack,
-  useToast,
-} from "@chakra-ui/react";
+import { Button, VStack, Text, Box, useToast, Spinner } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SetComponent from "../components/SetComponent";
@@ -22,14 +13,13 @@ const CurrentActivityPage = () => {
   const { sessionID } = useSessionStore();
 
   const { exercise } = location.state || {};
-
   const [started, setStarted] = useState(false);
-
   const [sets, setSets] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const isAllFieldsFilled = () => {
-    return sets.every((set) => set.weight !== "" && set.reps !== "");
-  };
+  // Validation: weight + reps must be filled
+  const isAllFieldsFilled = () =>
+    sets.every((set) => set.weight !== "" && set.reps !== "");
 
   const handleBegin = () => {
     setStarted(true);
@@ -48,7 +38,6 @@ const CurrentActivityPage = () => {
       });
       return;
     }
-
     setSets([...sets, { weight: "", reps: "" }]);
   };
 
@@ -56,8 +45,7 @@ const CurrentActivityPage = () => {
     if (!isAllFieldsFilled()) {
       toast({
         title: "Incomplete Set",
-        description:
-          "Please fill in weight and reps before finishing the exercise.",
+        description: "Please fill in weight and reps before finishing.",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -65,9 +53,10 @@ const CurrentActivityPage = () => {
       return;
     }
 
-    // Proceed to save all sets (API call here)
+    setIsSaving(true);
+
     const activityPayLoad = {
-      sessionID: sessionID,
+      sessionID,
       exerciseID: exercise.exerciseID,
       sets: sets.length,
       rep: sets.map((s) => s.reps).join(","),
@@ -75,6 +64,7 @@ const CurrentActivityPage = () => {
     };
 
     const result = await addActivity(activityPayLoad);
+    setIsSaving(false);
 
     if (result.success) {
       toast({
@@ -102,21 +92,37 @@ const CurrentActivityPage = () => {
     setSets(newSets);
   };
 
+  if (!exercise) {
+    navigate("/createSession"); // safeguard
+    return null;
+  }
+
   return (
-    <div>
-      <VStack>
-        <Box>
-          <Text fontSize="2xl" fontWeight="bold">
-            {exercise?.exerciseName || "Unknown Exercise"}
+    <Box
+      maxW="600px"
+      mx="auto"
+      mt={10}
+      p={6}
+      rounded="xl"
+      shadow="md"
+      bg="blue.50"
+    >
+      <VStack spacing={6} align="stretch">
+        {/* Exercise Header */}
+        <Box textAlign="center">
+          <Text fontSize="3xl" fontWeight="bold" color="blue.800">
+            {exercise.exerciseName}
           </Text>
         </Box>
 
+        {/* Before starting */}
         {!started && (
-          <Button colorScheme="blue" onClick={handleBegin}>
-            Begin
+          <Button colorScheme="blue" size="lg" onClick={handleBegin}>
+            Begin Exercise
           </Button>
         )}
 
+        {/* After starting */}
         {started &&
           sets.map((set, index) => (
             <SetComponent
@@ -129,11 +135,12 @@ const CurrentActivityPage = () => {
           ))}
 
         {started && (
-          <>
+          <VStack spacing={4}>
             <Button
               colorScheme="teal"
               onClick={handleAddSet}
               isDisabled={!isAllFieldsFilled()}
+              w="full"
             >
               + Add Set
             </Button>
@@ -142,13 +149,15 @@ const CurrentActivityPage = () => {
               colorScheme="green"
               onClick={handleSave}
               isDisabled={sets.length === 0 || !isAllFieldsFilled()}
+              isLoading={isSaving}
+              w="full"
             >
               Finish Exercise
             </Button>
-          </>
+          </VStack>
         )}
       </VStack>
-    </div>
+    </Box>
   );
 };
 

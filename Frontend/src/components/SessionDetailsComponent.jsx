@@ -11,20 +11,27 @@ const SessionDetailsComponent = ({ sessionID, date, time }) => {
 
   return (
     <Box
-      p={4}
-      borderWidth={1}
-      borderRadius="lg"
-      shadow="md"
+      p={5}
+      borderRadius="2xl"
+      shadow="lg"
       width="100%"
       maxW="500px"
-      bg={"green.100"}
+      bgGradient="linear(to-r, teal.100, green.100)"
+      cursor="pointer"
+      transition="all 0.2s ease-in-out"
+      _hover={{
+        transform: "scale(1.03)",
+        shadow: "xl",
+        bgGradient: "linear(to-r, teal.200, green.200)",
+      }}
       onClick={handleClick}
-      _hover={{ bg: "green.200" }}
     >
       <VStack align="start" spacing={1}>
-        <Text fontWeight="bold">Session ID: {sessionID}</Text>
-        <Text>Date: {date}</Text>
-        <Text>Time: {time}</Text>
+        <Text fontWeight="bold" fontSize="lg" color="teal.800">
+          Session #{sessionID}
+        </Text>
+        <Text color="gray.700">📅 {date}</Text>
+        <Text color="gray.700">⏰ {time}</Text>
       </VStack>
     </Box>
   );

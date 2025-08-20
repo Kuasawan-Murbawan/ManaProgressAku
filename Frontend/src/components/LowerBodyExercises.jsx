@@ -40,26 +40,43 @@ const LowerBodyExercises = ({ isOpenLowerBody, onCloseLowerBody }) => {
   };
 
   return (
-    <Modal isOpen={isOpenLowerBody} onClose={onCloseLowerBody}>
+    <Modal
+      isOpen={isOpenLowerBody}
+      onClose={onCloseLowerBody}
+      size="md"
+      isCentered
+    >
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Lower Body Exercises</ModalHeader>
+      <ModalContent rounded="xl" shadow="xl">
+        <ModalHeader fontWeight="bold" fontSize="2xl" textAlign="center">
+          Lower Body Exercises
+        </ModalHeader>
         <ModalCloseButton />
-        <VStack spacing={5} align="start">
-          {LowerBodyExercises.map((exer) => (
-            <Box
-              key={exer.exerciseID}
-              h={"12"}
-              bg={"blue.300"}
-              w={"full"}
-              onClick={() => handleClick(exer)}
-            >
-              <Text textAlign={"center"}>
-                {exer.exerciseID}. {exer.exerciseName}
-              </Text>
-            </Box>
-          ))}
-        </VStack>
+        <ModalBody>
+          <VStack spacing={4} w="full" pb={4}>
+            {LowerBodyExercises.map((exer, index) => (
+              <Box
+                key={exer.exerciseID}
+                w="full"
+                p={4}
+                rounded="lg"
+                shadow="sm"
+                bg={index % 2 === 0 ? "pink.100" : "teal.100"} // alternating pastel
+                cursor="pointer"
+                _hover={{
+                  bg: index % 2 === 0 ? "pink.200" : "teal.200",
+                  transform: "scale(1.02)",
+                }}
+                transition="all 0.2s"
+                onClick={() => handleClick(exer)}
+              >
+                <Text textAlign="center" fontWeight="medium" fontSize="lg">
+                  {exer.exerciseName}
+                </Text>
+              </Box>
+            ))}
+          </VStack>
+        </ModalBody>
       </ModalContent>
     </Modal>
   );

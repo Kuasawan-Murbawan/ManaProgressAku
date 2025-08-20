@@ -34,7 +34,7 @@ const ExerciseListComponent = () => {
 
   // A reusable grid
   const ExerciseGrid = ({ title, items, color }) => (
-    <Box mb={10}>
+    <Box p={3}>
       <Heading mb={4} fontSize="xl" color={color}>
         {title}
       </Heading>
