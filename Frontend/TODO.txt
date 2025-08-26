@@ -84,3 +84,9 @@ Q: why do we separate activities and sessionActivities in Activity Store? if it 
 ~20 August 2025~
 [/] add support for lower body exercises
 [/] added style for home, exerciselist, pastsessions, essentially all pages
+
+~26 August 2024~
+[/] delete activities in new session
+        * we dont implement edit activity bc its complicated and dont have much payoff huhu
+[/] weight can have decimal point
+        *need to click arrow up

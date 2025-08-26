@@ -38,48 +38,38 @@ export const useActivityStore = create(
       }
     },
 
-    // deleteAllActivities: async (activityID) => {
-    //   const { activities } = useActivityStore.getState();
-    //   let allSuccess = true;
-    //   let messages = [];
+    deleteActivity: async (activityID) => {
+      try {
+        const res = await fetch(`/api/deleteActivity/${activityID}`, {
+          method: "DELETE",
+        });
 
-    //   for (const activity of activities) {
-    //     try {
-    //       const res = await fetch(
-    //         `/api/deleteActivity/${activity.activityID}`,
-    //         {
-    //           method: "DELETE",
-    //         }
-    //       );
+        const responseData = await res.json();
 
-    //       const responseData = await res.json();
+        if (res.ok && responseData.status === "SUCCESS") {
+          console.log("Activity deleted ", responseData.data.activityID);
 
-    //       if (res.ok && responseData.status === "SUCCESS") {
-    //         console.log("Activity deleted: ", activity.activityID);
-    //         messages.push(`Deleted: ${activity.activityID}`);
-    //       } else {
-    //         allSuccess = false;
-    //         messages.push(
-    //           responseData.errorMessage ||
-    //             `Failed to delete activity ${activity.activityID}`
-    //         );
-    //       }
-    //     } catch (err) {
-    //       allSuccess = false;
-    //       messages.push(`Error deleting activity ${activity.activityID}`);
-    //     }
-    //   }
+          set((state) => ({
+            activities: state.activities.filter(
+              (activity) => activity.activityID !== activityID
+            ),
+          }));
 
-    //   // Optionally clear local store
-    //   if (allSuccess) {
-    //     useActivityStore.setState({ activities: [] });
-    //   }
-
-    //   return {
-    //     success: allSuccess,
-    //     message: messages.join("\n"),
-    //   };
-    // },
+          return {
+            success: true,
+            message: responseData.message || "Activity Deleted",
+          };
+        } else {
+          return {
+            success: false,
+            message: responseData.errorMessage || "Failed to delete activity",
+          };
+        }
+      } catch (error) {
+        console.error("Error deleting activity:", error);
+        return { success: false, message: error.message };
+      }
+    },
 
     deleteActivitiesBySession: async (sessionID) => {
       try {

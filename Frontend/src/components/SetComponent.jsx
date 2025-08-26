@@ -22,7 +22,13 @@ const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
             value={weight}
             min={0}
             max={500}
-            onChange={(valStr, valNum) => onChange("weight", valNum)}
+            step={0.1}
+            precision={2}
+            clampValueOnBlur={false} // <-- prevents auto rounding weirdness
+            keepWithinRange={true}
+            onChange={(valStr, valNum) =>
+              onChange("weight", isNaN(valNum) ? "" : valNum)
+            }
             w="full"
           >
             <NumberInputField />

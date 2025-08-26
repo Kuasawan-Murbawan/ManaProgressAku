@@ -71,6 +71,7 @@ const SessionActivitiesDetails = () => {
           return (
             <ExerciseSummaryCard
               key={index}
+              activityID={activity.activityID}
               exerciseName={getExerciseName(activity.exerciseID)}
               weights={weights.slice(0, minLength)}
               reps={reps.slice(0, minLength)}

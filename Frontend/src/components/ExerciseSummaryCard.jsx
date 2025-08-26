@@ -8,9 +8,33 @@ import {
   Td,
   Text,
   TableContainer,
+  IconButton,
+  HStack,
+  Spacer,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogOverlay,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogBody,
+  AlertDialogFooter,
+  Button,
 } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useActivityStore } from "../store/activity";
+import { useRef } from "react";
 
-const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
+const ExerciseSummaryCard = ({ activityID, exerciseName, weights, reps }) => {
+  const { deleteActivity } = useActivityStore();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
+
+  const handleDeleteActivity = async () => {
+    await deleteActivity(activityID);
+    onClose();
+  };
+
   return (
     <Box
       bgGradient="linear(to-r, teal.100, green.100)"
@@ -23,15 +47,21 @@ const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
       transition="all 0.2s ease-in-out"
       _hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
     >
-      <Text
-        fontSize="2xl"
-        fontWeight="extrabold"
-        mb={4}
-        textAlign="center"
-        color="green.700"
-      >
-        {exerciseName}
-      </Text>
+      <HStack mb={4}>
+        <Text fontSize="2xl" fontWeight="extrabold" color="green.700">
+          {exerciseName}
+        </Text>
+        <Spacer />
+
+        <IconButton
+          aria-label="Delete exercise"
+          icon={<DeleteIcon />}
+          colorScheme="red"
+          variant="ghost"
+          size="lg"
+          onClick={onOpen}
+        />
+      </HStack>
 
       <TableContainer borderRadius="lg" overflow="hidden" boxShadow="sm">
         <Table variant="striped" colorScheme="green" size="md">
@@ -76,6 +106,34 @@ const ExerciseSummaryCard = ({ exerciseName, weights, reps }) => {
           </Tbody>
         </Table>
       </TableContainer>
+
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Delete Activity
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure you want to delete <b>{exerciseName}</b>? This action
+              cannot be undone.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={handleDeleteActivity} ml={3}>
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Box>
   );
 };
