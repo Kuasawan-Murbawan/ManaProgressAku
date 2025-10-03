@@ -22,6 +22,9 @@ public class Session {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
     public Session() {
     }
 
@@ -61,4 +64,11 @@ public class Session {
     }
 
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 }

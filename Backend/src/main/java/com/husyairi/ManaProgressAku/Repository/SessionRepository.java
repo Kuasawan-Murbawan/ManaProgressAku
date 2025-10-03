@@ -4,6 +4,8 @@ import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SessionRepository extends JpaRepository<Session, String> {
 
@@ -12,4 +14,6 @@ public interface SessionRepository extends JpaRepository<Session, String> {
     OrderBySessionIDDesc - Order by sessionID descending (biggest one first)
      */
     Session findTopByOrderBySessionIDDesc();
+
+    List<Session> findByUserId(Long userId);
 }

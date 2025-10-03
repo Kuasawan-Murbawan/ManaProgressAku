@@ -5,13 +5,18 @@ import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionRequest;
 import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionResponse;
 import com.husyairi.ManaProgressAku.DTO.Session.UpdateSessionRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
+import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Repository.SessionRepository;
+import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +33,22 @@ public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private ExerciseRepository exerciseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private Long getCurrentUserId() {
+
+
+
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+    User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
+            "User not found"
+    ));
+
+    return currentUser.getId();
+}
 
     private String generateSessionID(){
 
@@ -61,6 +82,7 @@ public class SessionServiceImpl implements SessionService {
 
         // generate new Session ID
         newSession.setSessionID(generateSessionID());
+        newSession.setUserId(getCurrentUserId());
 
         try {
             Session savedSession = sessionRepository.save(newSession);
@@ -85,6 +107,12 @@ public class SessionServiceImpl implements SessionService {
             throw new BadRequestException(404, "Session ID not found.", new HashMap<>());
         }
 
+        Long sessionUserId = retrievedSession.get().getUserId();
+
+        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
+        }
+
         Session session = retrievedSession.get();
 
         return new GetSessionResponse(
@@ -103,6 +131,13 @@ public class SessionServiceImpl implements SessionService {
             throw new BadRequestException(404, "Session ID not found", new HashMap<>());
         }
 
+        // TODO: make this checker a function
+        Long sessionUserId = isExist.get().getUserId();
+
+        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
+        }
+
         Session updatedSession = isExist.get();
         updatedSession.setTime(request.getTime());
         updatedSession.setDate(request.getDate());
@@ -119,10 +154,17 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteSession (String sessionID){
 
-        boolean isExist = sessionRepository.existsById(sessionID);
+        Optional<Session> isExist = sessionRepository.findById(sessionID);
 
-        if(!isExist){
+        if(isExist.isEmpty()){
             throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        }
+
+        Long sessionUserId = isExist.get().getUserId();
+
+
+        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
         }
 
         try {
@@ -130,6 +172,11 @@ public class SessionServiceImpl implements SessionService {
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage() ,new HashMap<>());
         }
+    }
+
+    @Override
+    public List<Session> getUserSessions(){
+        return sessionRepository.findByUserId(getCurrentUserId());
     }
 
     @Override

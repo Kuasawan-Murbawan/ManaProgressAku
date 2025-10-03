@@ -58,4 +58,50 @@
 [/] activity id need to generate in BE
 
 ~15 July 2025~
-[/] configure InsertActivityResponse to put all details
+[/] configure InsertActivityResponse to put all detailsz
+
+~10 Sept 2025~
+[/] implement accounts
+[/] create user database
+
+~11 Sept 2025~
+[/] sign up mechanism
+[/] authenticate
+
+TODO: now, we can authenticate using JWT token, postman -> getallsession -> Auth[JWT Bearer] -> Secret [token generated
+from login] -> 200 ok
+- the problem is we dont get any information, so how?
+
+~12 Sept 2025~
+- we didnt update the database yet to accommodate account, so i think the i want to do it like this
+- Here are the list of all tables
+    exercise - general exercise name and id that all users can access
+    session - includes sessionid, date, time (i think i want to put userID here to diferentiate which sessions belongs
+                to which user
+    activity - includes activityid, rep, sessionid, sets, weight, exerciseid
+    users - includes # id, created_at, email, name, role, updated_at, password
+
+~2 Oct 2025~
+Currently, we have added user_id in Session and create a table called Users. When i test the login endpoint in postman,
+http://localhost:8080/auth/login, the output is 200 OK :
+
+"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lQGdtYWlsLmNvbSIsImlhdCI6MTc1OTM5Mjc1MSwiZXhwIjoxNzU5Mzk2MzUxfQ.
+JdEXdxOLR9M6zld15GSopjxSbXaU1M21R8-ZOwRjTr4",
+"expiresIn": 3600000
+  }.
+
+ now, when i try to test the GetAllExercise endpoint ({{baseURL}}/mana-progress-aku/admin/getAllExercises),
+ i put the token in Auth -> JWT Bearer -> secret column. the output is 200 ok but it doesnt produce any data
+ of all the exercise that is in the database
+
+ Solution : put the token in Auth -> Bearer Token
+
+ [/] Each user an only access their own sessions (getUserSessions)
+ [/] create session
+ [/] update session
+ [/] delete session
+ [/] get session
+
+ ~3 Oct 2025~
+ [] create activity
+

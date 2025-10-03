@@ -76,6 +76,15 @@ public class SessionController {
         );
     }
 
+    @GetMapping("/getUserSessions")
+    public ResponseEntity<ApiSuccessResponse<List<Session>>> getUserSessions(){
+        List<Session> sessionsFetched = sessionService.getUserSessions();
+
+        return ResponseEntity.ok(
+                new ApiSuccessResponse<>("Sessions fetched! " , sessionsFetched)
+        );
+    }
+
     @GetMapping("/getAllSessions")
     public ResponseEntity<ApiSuccessResponse<List<Session>>> getAllSession(){
 
