@@ -39,16 +39,14 @@ public class SessionServiceImpl implements SessionService {
 
     private Long getCurrentUserId() {
 
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
+                "User not found"
+        ));
 
-    String email = SecurityContextHolder.getContext().getAuthentication().getName();
-
-    User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
-            "User not found"
-    ));
-
-    return currentUser.getId();
-}
+        return currentUser.getId();
+    }
 
     private String generateSessionID(){
 

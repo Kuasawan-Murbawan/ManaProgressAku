@@ -1,17 +1,19 @@
 package com.husyairi.ManaProgressAku.DTO.Activity;
 
+import com.husyairi.ManaProgressAku.Entity.Model.Session;
+
 public class InsertActivityResponse {
 
     private String activityID;
-    private String sessionID;
+    private Session session;
     private Integer exerciseID;
     private Integer sets;
     private String rep;
     private String weight;
 
-    public InsertActivityResponse(String activityID, String sessionID, Integer exerciseID, Integer sets, String rep, String weight) {
+    public InsertActivityResponse(String activityID, Session session, Integer exerciseID, Integer sets, String rep, String weight) {
         this.activityID = activityID;
-        this.sessionID = sessionID;
+        this.session = session;
         this.exerciseID = exerciseID;
         this.sets = sets;
         this.rep = rep;
@@ -26,12 +28,12 @@ public class InsertActivityResponse {
         this.activityID = activityID;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public Session getSession() {
+        return session;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+    public void setSessionID(Session session) {
+        this.session = session;
     }
 
     public Integer getExerciseID() {

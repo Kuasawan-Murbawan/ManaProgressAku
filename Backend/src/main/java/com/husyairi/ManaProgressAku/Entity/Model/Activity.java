@@ -7,11 +7,12 @@ import jakarta.persistence.*;
 public class Activity {
 
     @Id
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(name = "activityid", columnDefinition = "VARCHAR(20)", nullable = false)
     private String activityID;
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
-    private String sessionID;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sessionid", referencedColumnName = "sessionid", nullable = false)
+    private Session session;
 
     @Column(nullable = false)
     private Integer exerciseID;
@@ -27,9 +28,9 @@ public class Activity {
 
     public Activity(){}
 
-    public Activity(String activityID, String sessionID, Integer exerciseID, Integer sets, String rep, String weight) {
+    public Activity(String activityID, Session session, Integer exerciseID, Integer sets, String rep, String weight) {
         this.activityID = activityID;
-        this.sessionID = sessionID;
+        this.session = session;
         this.exerciseID = exerciseID;
         this.sets = sets;
         this.rep = rep;
@@ -44,12 +45,12 @@ public class Activity {
         this.activityID = activityID;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public Session getSession() {
+        return session;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     public Integer getExerciseID() {

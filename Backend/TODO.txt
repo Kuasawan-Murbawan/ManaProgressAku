@@ -103,5 +103,13 @@ JdEXdxOLR9M6zld15GSopjxSbXaU1M21R8-ZOwRjTr4",
  [/] get session
 
  ~3 Oct 2025~
- [] create activity
+ [/] get session activity
 
+~6 Oct 2025~
+TODO: for activities, do we want to check the auth also? bc if we do, we need to join Session and activity table to get
+the user id
+TODO: block get all activities from public
+
+[/] get individual activity
+    - check if user is auth to see the activity
+[]

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ActivityRepository extends JpaRepository<Activity, String> {
 
-    List<Activity> findBySessionID(String sessionID);
+    List<Activity> findBySession_SessionID(String sessionID);
+
     Activity findTopByOrderByActivityIDDesc();
 }

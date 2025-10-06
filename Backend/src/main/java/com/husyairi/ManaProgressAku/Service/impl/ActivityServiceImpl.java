@@ -5,11 +5,18 @@ import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityRequest;
 import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityResponse;
 import com.husyairi.ManaProgressAku.DTO.Activity.UpdateActivityRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
+import com.husyairi.ManaProgressAku.Entity.Model.Session;
+import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
+import com.husyairi.ManaProgressAku.Repository.SessionRepository;
+import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +27,23 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private SessionRepository sessionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private Long getCurrentUserId() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
+                "User not found"
+        ));
+
+        return currentUser.getId();
+    }
 
     private String generateActivityID(){
 
@@ -40,9 +64,13 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public InsertActivityResponse createActivity(InsertActivityRequest request){
+
+        Session userSession = sessionRepository.findById(request.getSessionID())
+                .orElseThrow(() -> new RuntimeException("Session not found"));
+
         Activity newActivity = new Activity(
                 generateActivityID(),
-                request.getSessionID(),
+                userSession,
                 request.getExerciseID(),
                 request.getSets(),
                 request.getRep(),
@@ -53,7 +81,7 @@ public class ActivityServiceImpl implements ActivityService {
             Activity savedActivity = activityRepository.save(newActivity);
             return new InsertActivityResponse(
                     savedActivity.getActivityID(),
-                    savedActivity.getSessionID(),
+                    savedActivity.getSession(),
                     savedActivity.getExerciseID(),
                     savedActivity.getSets(),
                     savedActivity.getRep(),
@@ -61,35 +89,33 @@ public class ActivityServiceImpl implements ActivityService {
             );
         }catch (Exception e){
             throw new BadRequestException(400, "Error saving activity: " + e.getMessage(), new HashMap<>());
-
         }
     }
 
     @Override
     public GetActivityResponse getActivity(String activityID){
 
-        Optional<Activity> retrievedActivity;
+        Activity activity = activityRepository.findById(activityID)
+                .orElseThrow(() ->
+                        new BadRequestException(404,
+                                "Activity ID: " + activityID + " not found",
+                                new HashMap<>()));
 
-        try{
-            retrievedActivity = activityRepository.findById(activityID);
-        }catch (Exception e){
-            throw new BadRequestException(500, e.getMessage(), new HashMap<>());
+        Long currentUserId = getCurrentUserId();
+
+        if(!activity.getSession().getUserId().equals(currentUserId)){
+            throw new BadRequestException(403, "Not authorized", new HashMap<>());
         }
-
-        if(retrievedActivity.isEmpty()){
-            throw new BadRequestException(404, "Activity ID: " + activityID + " not found", new HashMap<>());
-        }
-
-        Activity activity = retrievedActivity.get();
 
         return new GetActivityResponse(
                 activity.getActivityID(),
-                activity.getSessionID(),
+                activity.getSession().getSessionID(), // just ID, not full Session
                 activity.getExerciseID(),
                 activity.getSets(),
                 activity.getWeight(),
                 activity.getRep()
         );
+
     }
 
     @Override
@@ -135,7 +161,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public int deleteActivitiesBySession(String sessionID){
-        List<Activity> activities = activityRepository.findBySessionID(sessionID);
+        List<Activity> activities = activityRepository.findBySession_SessionID(sessionID);
 
         if(activities.isEmpty()){
             // we put 0 instead of throwing Exception bc it is not an error
@@ -153,7 +179,23 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> getSessionActivities(String sessionID){
-        return activityRepository.findBySessionID(sessionID);
+
+        // get session object
+        Optional<Session> isExist = sessionRepository.findById(sessionID);
+
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        }
+
+        // extract the userid
+        Long sessionUserId = isExist.get().getUserId();
+
+        // compare with the current user id
+        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
+        }
+
+        return activityRepository.findBySession_SessionID(sessionID);
     }
 
     @Override
