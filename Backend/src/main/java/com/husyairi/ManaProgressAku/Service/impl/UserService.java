@@ -2,9 +2,12 @@ package com.husyairi.ManaProgressAku.Service.impl;
 
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Repository.UserRepository;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service

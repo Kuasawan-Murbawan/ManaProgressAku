@@ -8,6 +8,7 @@ import com.husyairi.ManaProgressAku.Service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -108,7 +109,8 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllActivity")
+    @GetMapping("/admin/getAllActivity")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiSuccessResponse<List<Activity>>> getAllActivities(){
 
         List<Activity> data =  activityService.getAllActivities();
@@ -119,6 +121,12 @@ public class ActivityController {
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/test")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String adminTest() {
+        return "You are admin!";
     }
 
 }

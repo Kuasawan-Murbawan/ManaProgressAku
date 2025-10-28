@@ -66,7 +66,11 @@ public class ActivityServiceImpl implements ActivityService {
     public InsertActivityResponse createActivity(InsertActivityRequest request){
 
         Session userSession = sessionRepository.findById(request.getSessionID())
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new BadRequestException(404 , "Session not found", new HashMap<>()));
+
+        if(!userSession.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to add this activity to this session.", new HashMap<>());
+        }
 
         Activity newActivity = new Activity(
                 generateActivityID(),
@@ -77,19 +81,16 @@ public class ActivityServiceImpl implements ActivityService {
                 request.getWeight()
         );
 
-        try{
-            Activity savedActivity = activityRepository.save(newActivity);
-            return new InsertActivityResponse(
-                    savedActivity.getActivityID(),
-                    savedActivity.getSession(),
-                    savedActivity.getExerciseID(),
-                    savedActivity.getSets(),
-                    savedActivity.getRep(),
-                    savedActivity.getWeight()
-            );
-        }catch (Exception e){
-            throw new BadRequestException(400, "Error saving activity: " + e.getMessage(), new HashMap<>());
-        }
+        Activity savedActivity = activityRepository.save(newActivity);
+
+        return new InsertActivityResponse(
+                savedActivity.getActivityID(),
+                savedActivity.getSession(),
+                savedActivity.getExerciseID(),
+                savedActivity.getSets(),
+                savedActivity.getRep(),
+                savedActivity.getWeight());
+
     }
 
     @Override
@@ -121,13 +122,13 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity updateActivity(UpdateActivityRequest request){
 
-        Optional<Activity> isExist = activityRepository.findById(request.getActivityID());
+        Activity updatedActivity = activityRepository.findById(request.getActivityID()).
+                orElseThrow(() -> new BadRequestException(404, "Activity ID " + request.getActivityID() + " not found", new HashMap<>()));
 
-        if(isExist.isEmpty()){
-            throw new BadRequestException(404, "Session ID : " + request.getActivityID() + " not found." , new HashMap<>());
+        if(!updatedActivity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to access this session", new HashMap<>());
         }
 
-        Activity updatedActivity = isExist.get();
         updatedActivity.setActivityID(request.getActivityID());
         updatedActivity.setExerciseID(request.getExerciseID());
         updatedActivity.setSets(request.getSets());
@@ -141,19 +142,20 @@ public class ActivityServiceImpl implements ActivityService {
         }
 
         return updatedActivity;
-
     }
 
     @Override
     public void deleteActivity(String activityID){
-        boolean isExist = activityRepository.existsById(activityID);
 
-        if(!isExist){
-            throw new BadRequestException(404, "Activity ID : " + activityID + " not found", new HashMap<>());
+        Activity activity = activityRepository.findById(activityID).
+                orElseThrow(() -> new BadRequestException(404, "Activity not found", new HashMap<>()));
+
+        if(!activity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to delete activity", new HashMap<>());
         }
 
         try{
-            activityRepository.deleteById(activityID);
+            activityRepository.deleteById(activity.getActivityID());
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage(), new HashMap<>());
         }
@@ -163,9 +165,17 @@ public class ActivityServiceImpl implements ActivityService {
     public int deleteActivitiesBySession(String sessionID){
         List<Activity> activities = activityRepository.findBySession_SessionID(sessionID);
 
+        Session session = sessionRepository.findById(sessionID).orElseThrow(() -> new BadRequestException(
+                404, "No session found", new HashMap<>()
+        ));
+
+        if(!session.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to delete activities", new HashMap<>());
+        }
+
         if(activities.isEmpty()){
             // we put 0 instead of throwing Exception bc it is not an error
-            // it is possible for session to have 0 activities (if the cancel)
+            // it is possible for session to have 0 activities (if they cancel)
             return 0;
         }
 
@@ -181,18 +191,11 @@ public class ActivityServiceImpl implements ActivityService {
     public List<Activity> getSessionActivities(String sessionID){
 
         // get session object
-        Optional<Session> isExist = sessionRepository.findById(sessionID);
+        Session session = sessionRepository.findById(sessionID).
+                orElseThrow(() -> new BadRequestException(404, "No session found", new HashMap<>() ));
 
-        if(isExist.isEmpty()){
-            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
-        }
-
-        // extract the userid
-        Long sessionUserId = isExist.get().getUserId();
-
-        // compare with the current user id
-        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
+        if(!session.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to fetch this session", new HashMap<>());
         }
 
         return activityRepository.findBySession_SessionID(sessionID);
@@ -200,6 +203,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<Activity> getAllActivities(){
+
         return activityRepository.findAll();
     }
 

@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Entity.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -12,6 +13,7 @@ public class Activity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessionid", referencedColumnName = "sessionid", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Session session;
 
     @Column(nullable = false)

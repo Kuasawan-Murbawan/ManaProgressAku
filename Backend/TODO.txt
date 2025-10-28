@@ -85,11 +85,6 @@ from login] -> 200 ok
 Currently, we have added user_id in Session and create a table called Users. When i test the login endpoint in postman,
 http://localhost:8080/auth/login, the output is 200 OK :
 
-"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huZG9lQGdtYWlsLmNvbSIsImlhdCI6MTc1OTM5Mjc1MSwiZXhwIjoxNzU5Mzk2MzUxfQ.
-JdEXdxOLR9M6zld15GSopjxSbXaU1M21R8-ZOwRjTr4",
-"expiresIn": 3600000
-  }.
-
  now, when i try to test the GetAllExercise endpoint ({{baseURL}}/mana-progress-aku/admin/getAllExercises),
  i put the token in Auth -> JWT Bearer -> secret column. the output is 200 ok but it doesnt produce any data
  of all the exercise that is in the database
@@ -106,10 +101,21 @@ JdEXdxOLR9M6zld15GSopjxSbXaU1M21R8-ZOwRjTr4",
  [/] get session activity
 
 ~6 Oct 2025~
-TODO: for activities, do we want to check the auth also? bc if we do, we need to join Session and activity table to get
-the user id
-TODO: block get all activities from public
+TODO: for activities, do we want to check the auth also? bc if we do, we need to join Session and activity table to get the user id
 
 [/] get individual activity
     - check if user is auth to see the activity
-[]
+
+~8 Oct 2025~
+[/] insert activity
+[/] update activity
+[/] delete activity
+
+~10 Oct 2025~
+[/] modify so that invalid token produce error
+
+~19 Oct 2025~
+[/] properly adapt to incorporate role
+[/] solved getAllActivity issue
+
+~28 Oct 2025~

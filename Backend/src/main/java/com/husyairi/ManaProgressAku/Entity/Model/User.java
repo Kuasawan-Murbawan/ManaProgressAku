@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.husyairi.ManaProgressAku.Enums.Role;
 import java.util.Date;
 import java.util.Collection;
 import java.util.List;
@@ -27,8 +28,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Column
-    private String role;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
@@ -94,11 +96,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
