@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import API from "../api/axios.js";
 
 export const useActivityStore = create(
   persist((set, get) => ({
@@ -7,26 +8,18 @@ export const useActivityStore = create(
     // sessionActivities: [],
     addActivity: async (newActivity) => {
       try {
-        const res = await fetch("/api/insertActivity", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newActivity),
-        });
+        const res = await API.post("/insertActivity", newActivity);
 
-        const data = await res.json();
-
-        if (data.status === "SUCCESS") {
+        if (res.status === 200) {
           set(() => ({
-            activities: [...get().activities, data.data],
+            activities: [...get().activities, res.data.data],
           }));
           return { success: true, message: "Activity saved successfully!" };
         } else {
           console.log("sum ting wong");
           return {
             success: false,
-            message: data.message || "Failed to save activity.",
+            message: res.data.message || "Failed to save activity.",
           };
         }
       } catch (err) {
@@ -40,14 +33,10 @@ export const useActivityStore = create(
 
     deleteActivity: async (activityID) => {
       try {
-        const res = await fetch(`/api/deleteActivity/${activityID}`, {
-          method: "DELETE",
-        });
+        const res = await API.delete(`/deleteActivity/${activityID}`);
 
-        const responseData = await res.json();
-
-        if (res.ok && responseData.status === "SUCCESS") {
-          console.log("Activity deleted ", responseData.data.activityID);
+        if (res.status == 200) {
+          console.log("Activity deleted ", res.data.data.activityID);
 
           set((state) => ({
             activities: state.activities.filter(
@@ -57,12 +46,12 @@ export const useActivityStore = create(
 
           return {
             success: true,
-            message: responseData.message || "Activity Deleted",
+            message: res.data.message || "Activity Deleted",
           };
         } else {
           return {
             success: false,
-            message: responseData.errorMessage || "Failed to delete activity",
+            message: res.data.errorMessage || "Failed to delete activity",
           };
         }
       } catch (error) {
@@ -73,28 +62,23 @@ export const useActivityStore = create(
 
     deleteActivitiesBySession: async (sessionID) => {
       try {
-        const res = await fetch(
-          `/api/deleteActivitiesBySessionID/${sessionID}`,
-          {
-            method: "DELETE",
-          }
+        const res = await API.delete(
+          `/deleteActivitiesBySessionID/${sessionID}`
         );
 
-        const responseData = await res.json();
-
-        if (res.ok && responseData.status === "SUCCESS") {
+        if (res.status === 200) {
           console.log("All activities deleted for session:", sessionID);
 
           set({ activities: [] });
 
           return {
             success: true,
-            message: responseData.message || "Deleted all activities",
+            message: res.data.message || "Deleted all activities",
           };
         } else {
           return {
             success: false,
-            message: responseData.errorMessage || "Failed to delete activities",
+            message: res.data.errorMessage || "Failed to delete activities",
           };
         }
       } catch (error) {
@@ -111,18 +95,17 @@ export const useActivityStore = create(
 
     fetchActivityBySession: async (sessionID) => {
       try {
-        const res = await fetch(`/api/sessionActivities/${sessionID}`);
-        const responseData = await res.json();
+        const res = await API.get(`/sessionActivities/${sessionID}`);
 
-        if (res.ok) {
-          if (responseData.data.length === 0) {
+        if (res.status == 200) {
+          if (res.data.data.length === 0) {
             console.log("No activities found for this session.");
             set({ activities: [] });
           } else {
-            set({ activities: responseData.data });
+            set({ activities: res.data.data });
           }
         } else {
-          console.error("Failed to fetch activities:", responseData.message);
+          console.error("Failed to fetch activities:", res.message);
         }
       } catch (error) {
         console.error("Error fetching activities:", error);

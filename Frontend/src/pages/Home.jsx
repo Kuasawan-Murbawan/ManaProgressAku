@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import StartSessionDialog from "../components/StartSessionDialog";
 import { useExerciseStore } from "../store/exercise";
 import { useActivityStore } from "../store/activity";
+import ConfirmLogoutDialog from "../components/ConfirmLogoutDialog";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -30,6 +31,13 @@ const Home = () => {
     isOpen: confirmSessionIsOpen,
     onOpen: confirmSessionOnOpen,
     onClose: confirmSessionOnClose,
+  } = useDisclosure();
+
+  // Log Out
+  const {
+    isOpen: confirmLogoutIsOpen,
+    onOpen: confirmLogoutOnOpen,
+    onClose: confirmLogoutOnClose,
   } = useDisclosure();
 
   // Reusable Menu Card
@@ -95,12 +103,24 @@ const Home = () => {
           hoverBg="teal.200"
           onClick={() => navigate("/exerciseList")}
         />
+
+        <MenuCard
+          text={"Log Out"}
+          bg={"red.400"}
+          hoverBg={"red.200"}
+          onClick={confirmLogoutOnOpen}
+        />
       </VStack>
 
       {/* Start Session Dialog */}
       <StartSessionDialog
         isOpen={confirmSessionIsOpen}
         onClose={confirmSessionOnClose}
+      />
+
+      <ConfirmLogoutDialog
+        isOpen={confirmLogoutIsOpen}
+        onClose={confirmLogoutOnClose}
       />
     </Box>
   );

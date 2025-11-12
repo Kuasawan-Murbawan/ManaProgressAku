@@ -22,10 +22,12 @@ const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
   const { deleteSession } = useSessionStore();
 
   const handleConfirm = async () => {
-    const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
+    // delete activities first as to avoid foreign key error
+    const result = await deleteActivitiesBySession(sessionID);
 
-    if (res.success) {
-      const result = await deleteActivitiesBySession(sessionID);
+    if (result.success) {
+      const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
+
       clearActivities();
       // TODO: if from Past Session page, this will also brought to home
       navigate("/");

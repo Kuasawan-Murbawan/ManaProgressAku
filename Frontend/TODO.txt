@@ -15,7 +15,7 @@
 
 # Activity
 [/] - Create 
-[] - Delete
+[/] - Delete
 [] - Update
 [] - Get all
 
@@ -90,3 +90,19 @@ Q: why do we separate activities and sessionActivities in Activity Store? if it 
         * we dont implement edit activity bc its complicated and dont have much payoff huhu
 [/] weight can have decimal point
         *need to click arrow up
+
+~28 Oct 2025~
+[/] create login page
+[] incorporate token
+
+Issue: when trying to login using FE, it produce login error, but if use postman, there's no problem
+
+~12 Nov 2025~
+[/] solve login problem
+ solution: the error is in the auth controller (RequestMapping is 'auth' instead of '/mana-progress-aku/auth)
+
+[/] implement log out
+[/] if no auth, log out
+[/] update Exercise store
+[/] update Session store
+

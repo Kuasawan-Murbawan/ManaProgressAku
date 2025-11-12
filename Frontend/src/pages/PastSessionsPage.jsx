@@ -7,11 +7,11 @@ import { useSessionStore } from "../store/session";
 const PastSessionsPage = () => {
   const navigate = useNavigate();
 
-  const { sessions, fetchAllSessions } = useSessionStore();
+  const { sessions, fetchUserSessions } = useSessionStore();
 
   useEffect(() => {
-    fetchAllSessions();
-  }, [fetchAllSessions]);
+    fetchUserSessions();
+  }, [fetchUserSessions]);
 
   // Sort sessions by most recent date/time first
   const sortedSessions = [...sessions].sort((a, b) => {
