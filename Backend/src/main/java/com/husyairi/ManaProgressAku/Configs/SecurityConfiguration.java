@@ -32,17 +32,27 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return
                 http
+                // disable CSRF bc we use token-based auth
                 .csrf(csrf -> csrf.disable())
+
+                // enable CORS for frontend
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/signup").permitAll().
-                        anyRequest().authenticated()
+
+                // authorize routes
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                                        "/mana-progress-aku/auth/**",
+                                        "/auth/**"
+                                ).permitAll().anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authenticationProvider(authenticationProvider)
+
+                // add JWT filter
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

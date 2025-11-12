@@ -118,4 +118,6 @@ TODO: for activities, do we want to check the auth also? bc if we do, we need to
 [/] properly adapt to incorporate role
 [/] solved getAllActivity issue
 
-~28 Oct 2025~
+~12 Nov 2025~
+Error to delete session that contains activities, bc there are activity that uses the session as foreign key,
+so, we handled it using front end (1. delete activities 2. delete session)
