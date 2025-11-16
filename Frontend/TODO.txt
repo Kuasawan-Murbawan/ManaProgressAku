@@ -106,3 +106,14 @@ Issue: when trying to login using FE, it produce login error, but if use postman
 [/] update Exercise store
 [/] update Session store
 
+TODO:
+- what else did i miss?
+- maybe try to understand everything
+- begin deploy
+
+~16 Nov 2025~
+[/] error handling - differentiate in login if server error or invalid username
+[/] clicking enter will submit login
+
+TODO:
+[] Sign up page

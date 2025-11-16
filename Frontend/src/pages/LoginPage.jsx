@@ -10,11 +10,9 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // prevent page reload
 
     localStorage.removeItem("token"); // clear previous token
-
-    console.log("Login payload", { email, password });
 
     try {
       const response = await API.post("/auth/login", { email, password });
@@ -27,7 +25,11 @@ export default function LoginPage() {
       // redirect to home
       navigate("/", { replace: true }); // make sure when user hit back, it doesnt go to login page
     } catch (err) {
-      setError("Invalid email or password");
+      if (err.response.status == 403) {
+        setError("Invalid email or password");
+      } else {
+        setError("Issue with the server, please try again later!");
+      }
     }
   };
 
@@ -38,31 +40,50 @@ export default function LoginPage() {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      bg="gray.50"
+      bg="gray.300"
     >
       <VStack
         spacing={4}
         p={8}
         borderWidth={1}
         borderRadius="lg"
-        bg="white"
+        bg="gray.200"
         boxShadow="lg"
       >
-        <Heading size="lg">Login</Heading>
-        <Input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <Text color="red.500">{error}</Text>}
-        <Button colorScheme="teal" onClick={handleLogin} width="full">
-          Login
+        <form onSubmit={handleLogin}>
+          <VStack spacing={4}>
+            <Heading size="lg">Login</Heading>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            {error && <Text color="red.500">{error}</Text>}
+            <Button type="submit" colorScheme="teal" width="full">
+              Login
+            </Button>
+          </VStack>
+        </form>
+
+        <Button
+          width="full"
+          bg="blue.100"
+          color="black" // default text color
+          _hover={{
+            shadow: "xl",
+            transform: "scale(1.04)",
+            transition: "0.1s ease-in-out",
+            bg: "blue.900",
+            color: "white", // text color on hover
+          }}
+        >
+          Sign Up
         </Button>
       </VStack>
     </Box>
