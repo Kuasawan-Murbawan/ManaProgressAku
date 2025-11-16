@@ -10,10 +10,23 @@ import java.util.List;
 public interface SessionRepository extends JpaRepository<Session, String> {
 
     /*
-    findTopBy - Get only the first record
-    OrderBySessionIDDesc - Order by sessionID descending (biggest one first)
+    Find the highest/latest sessionID value
+    findTopBy -> Get only the first record
+    OrderBySessionIDDesc -> Order by sessionID descending (biggest one first)
+
+    SELECT *
+    FROM session
+    ORDER BY session_id DESC
+    LIMIT 1
      */
     Session findTopByOrderBySessionIDDesc();
 
+    /*
+    Find Sessions based on userId
+
+    SELECT *
+    FROM session
+    WHERE user_id = {userId}
+     */
     List<Session> findByUserId(Long userId);
 }

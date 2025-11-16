@@ -3,13 +3,16 @@ package com.husyairi.ManaProgressAku.Service.impl;
 import com.husyairi.ManaProgressAku.DTO.User.LoginUser;
 import com.husyairi.ManaProgressAku.DTO.User.RegisterUser;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
+import com.husyairi.ManaProgressAku.Enums.Role;
+import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -31,15 +34,32 @@ public class AuthenticationService {
     }
 
     public User signUp(RegisterUser  newUserInput){
+
+        System.out.println("Check account..");
+
+        String newUserEmail = newUserInput.getEmail();
+
+        if(userRepository.findByEmail(newUserEmail).isPresent()){
+            throw new BadRequestException(400, "Email already registered", new HashMap<>());
+        }
+
+        System.out.println("Check complete, registering new user..");
+
         User user = new User(
                             newUserInput.getName(),
                             newUserInput.getEmail(),
-                            passwordEncoder.encode(newUserInput.getPassword()));
+                            passwordEncoder.encode(newUserInput.getPassword()),
+                            Role.USER);
+
 
         return userRepository.save(user);
     }
 
     public User authenticateUser(LoginUser userInput) {
+
+        /*
+        Looks up user email in database and compares with hashed password
+         */
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userInput.getEmail(),
@@ -47,6 +67,7 @@ public class AuthenticationService {
                 )
         );
 
+        // If success, find the email in database, this will return User object
         return userRepository.findByEmail(userInput.getEmail()).orElseThrow();
         }
     }

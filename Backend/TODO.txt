@@ -68,7 +68,7 @@
 [/] sign up mechanism
 [/] authenticate
 
-TODO: now, we can authenticate using JWT token, postman -> getallsession -> Auth[JWT Bearer] -> Secret [token generated
+DONE: now, we can authenticate using JWT token, postman -> getallsession -> Auth[JWT Bearer] -> Secret [token generated
 from login] -> 200 ok
 - the problem is we dont get any information, so how?
 
@@ -101,7 +101,7 @@ http://localhost:8080/auth/login, the output is 200 OK :
  [/] get session activity
 
 ~6 Oct 2025~
-TODO: for activities, do we want to check the auth also? bc if we do, we need to join Session and activity table to get the user id
+DONE : for activities, do we want to check the auth also? bc if we do, we need to join Session and activity table to get the user id
 
 [/] get individual activity
     - check if user is auth to see the activity
@@ -121,3 +121,6 @@ TODO: for activities, do we want to check the auth also? bc if we do, we need to
 ~12 Nov 2025~
 Error to delete session that contains activities, bc there are activity that uses the session as foreign key,
 so, we handled it using front end (1. delete activities 2. delete session)
+
+~16 Nov 2025~
+[/] remove role in registering process, bc all users must not been admin, admin need another page to register

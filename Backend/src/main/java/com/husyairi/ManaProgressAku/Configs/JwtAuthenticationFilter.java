@@ -43,9 +43,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String requestPath = request.getServletPath();
 
+        // System.out.println(requestPath);
+
         // allow login and register
-        if(requestPath.startsWith("/mana-progress-aku/auth") || requestPath.startsWith("/auth")){
-//            System.out.println(">>> Skipping JWT filter for auth endpoints");
+        if(requestPath.startsWith("/mana-progress-aku/auth")
+                || requestPath.startsWith("/auth")
+                || requestPath.startsWith("/swagger-ui")
+                || requestPath.startsWith("/users")
+                || requestPath.startsWith("/v3")) {
+            System.out.println(">>> Skipping JWT filter for auth endpoints");
             filterChain.doFilter(request, response);
             return;
         }

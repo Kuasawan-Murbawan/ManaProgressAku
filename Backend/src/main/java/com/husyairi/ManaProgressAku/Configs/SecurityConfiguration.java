@@ -44,7 +44,12 @@ public class SecurityConfiguration {
                 // authorize routes
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                                         "/mana-progress-aku/auth/**",
-                                        "/auth/**"
+                                        "/auth/**",
+                                        "/users/**",
+
+                                        "/swagger-ui/**",
+                                        "/v3/**"
+
                                 ).permitAll().anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
