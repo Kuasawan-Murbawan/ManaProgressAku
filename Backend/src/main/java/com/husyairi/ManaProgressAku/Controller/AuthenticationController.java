@@ -25,10 +25,15 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> registerUser(@RequestBody RegisterUser registerUserDetail){
+    public ResponseEntity<LoginResponse> registerUser(@RequestBody RegisterUser registerUserDetail){
         User registeredUser = authenticationService.signUp(registerUserDetail);
 
-        return ResponseEntity.ok(registeredUser);
+        String jwtToken = jwtService.generateToken(registeredUser);
+
+        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+
+
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/login")
