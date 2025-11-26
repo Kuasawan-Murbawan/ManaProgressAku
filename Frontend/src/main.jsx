@@ -14,6 +14,7 @@ import PastSessionsPage from "./pages/PastSessionsPage";
 import SessionActivitiesDetails from "./components/SessionActivitiesDetails";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,14 @@ const router = createBrowserRouter([
     element: (
       <ChakraProvider>
         <LoginPage />
+      </ChakraProvider>
+    ),
+  },
+  {
+    path: "/register",
+    element: (
+      <ChakraProvider>
+        <RegisterPage />
       </ChakraProvider>
     ),
   },

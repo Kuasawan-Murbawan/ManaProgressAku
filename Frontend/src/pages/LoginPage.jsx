@@ -82,6 +82,7 @@ export default function LoginPage() {
             bg: "blue.900",
             color: "white", // text color on hover
           }}
+          onClick={() => navigate("/register")}
         >
           Sign Up
         </Button>

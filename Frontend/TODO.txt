@@ -115,5 +115,8 @@ TODO:
 [/] error handling - differentiate in login if server error or invalid username
 [/] clicking enter will submit login
 
-TODO:
-[] Sign up page
+~26 Nov 2025~
+[/] Sign up page
+[/] generate token for signup
+
+TODO: can proceed to deploy
