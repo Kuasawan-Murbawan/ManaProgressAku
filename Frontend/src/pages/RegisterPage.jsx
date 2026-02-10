@@ -22,6 +22,8 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  localStorage.removeItem("token"); // clear previous token
+
   const handleRegister = async (e) => {
     e.preventDefault();
 

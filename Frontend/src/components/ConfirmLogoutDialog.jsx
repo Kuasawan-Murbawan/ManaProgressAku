@@ -10,15 +10,18 @@ import {
 import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
+import { useSessionStore } from "../store/session";
 
 const ConfirmLogoutDialog = ({ isOpen, onClose }) => {
   const cancelRef = useRef();
   const navigate = useNavigate();
+  const { clearSession } = useSessionStore();
 
   const handleConfirmLogout = async () => {
     setTimeout(2000);
 
     const authStore = useAuthStore.getState();
+    clearSession();
     authStore.logout();
   };
 

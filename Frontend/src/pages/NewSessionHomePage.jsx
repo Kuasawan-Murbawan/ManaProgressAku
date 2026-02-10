@@ -8,7 +8,7 @@ import {
   Flex,
   Divider,
 } from "@chakra-ui/react";
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteSessionDialog from "../components/DeleteSessionDialog";
 import { useActivityStore } from "../store/activity";
@@ -16,6 +16,7 @@ import { useExerciseStore } from "../store/exercise";
 import ExerciseSummaryCard from "../components/ExerciseSummaryCard";
 import { useSessionStore } from "../store/session";
 import useNavigationBlocker from "../hook/useNavigationBlocker.js";
+import { useUserStore } from "../store/user.js";
 
 const NewSessionHomePage = () => {
   const navigate = useNavigate();
@@ -23,9 +24,14 @@ const NewSessionHomePage = () => {
   const { activities, clearActivities } = useActivityStore();
   const { exercise } = useExerciseStore();
   const { sessionID, clearSession } = useSessionStore();
+  const { currentUser, fetchCurrentUser } = useUserStore();
 
   const [isBlocking, setIsBlocking] = useState(true);
   useNavigationBlocker(isBlocking);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, [fetchCurrentUser]);
 
   const toast = useToast();
 
@@ -78,7 +84,7 @@ const NewSessionHomePage = () => {
       {/* Header */}
       <Box textAlign="center" mb={8}>
         <Text fontSize="4xl" fontWeight="bold" color="purple.700">
-          Hello Din 👋
+          Hello {currentUser ? currentUser : "there"} 👋
         </Text>
         <Text fontSize="lg" color="gray.600">
           What do you want to do today?
