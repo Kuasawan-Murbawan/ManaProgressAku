@@ -16,7 +16,6 @@ import java.util.List;
 @CrossOrigin("*")
 @RestController
 
-@RequestMapping("/mana-progress-aku")
 public class SessionController {
 
     private final SessionService sessionService;

@@ -15,7 +15,6 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/mana-progress-aku")
 public class ActivityController {
 
     private final ActivityService activityService;

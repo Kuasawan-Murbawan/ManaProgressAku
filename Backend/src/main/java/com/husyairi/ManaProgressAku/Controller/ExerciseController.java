@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 
 // define base path
-@RequestMapping("/mana-progress-aku")
 public class ExerciseController {
 
     private final ExerciseService exerciseService;

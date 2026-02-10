@@ -1,10 +1,13 @@
 package com.husyairi.ManaProgressAku.Controller;
 
+import com.husyairi.ManaProgressAku.DTO.User.CustomUserDetails;
+import com.husyairi.ManaProgressAku.DTO.User.UserProfile;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Service.impl.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,13 +24,26 @@ public class UserController {
     }
 
     @GetMapping("/kawe")
-    public ResponseEntity<User> authenticatedUser(){
+    public ResponseEntity<UserDetails> authenticatedUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User) authentication.getPrincipal();
+        UserDetails currentUser = (UserDetails) authentication.getPrincipal();
 
         return ResponseEntity.ok(currentUser);
      }
+
+    @GetMapping("/me")
+    public ResponseEntity<String> me() {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetails user =
+                (CustomUserDetails) authentication.getPrincipal();
+
+        return ResponseEntity.ok(user.getName());
+    }
+
+
 
     @GetMapping("/all")
     public ResponseEntity<List<User>> allUsers(){

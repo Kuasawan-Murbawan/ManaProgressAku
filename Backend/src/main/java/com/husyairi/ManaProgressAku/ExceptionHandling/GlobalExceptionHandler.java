@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadRequestException(Exception exception) {
+    public ResponseEntity<ApiErrorResponse> handleBadRequestException(BadRequestException exception) {
         BadRequestException raisedException = (BadRequestException) exception;
 
         ApiErrorResponse errorResponse = new ApiErrorResponse(
@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
                 raisedException.getErrorMessage(),
                 raisedException.getErrorDetails()
         );
+        
 
         // Dynamically map error ID to correct HTTP status
         HttpStatus status;

@@ -39,7 +39,8 @@ src/main/resources/application.properties
 src/main/resources/application.yml
 src/main/resources/application-*.properties
 src/main/resources/application-*.yml
+src/main/java/com/husyairi/ManaProgressAku/Config/*
 
 ### others ###
-src/main/java/com/husyairi/ManaProgressAku/Configs/DataInitializer.java
+src/main/java/com/husyairi/ManaProgressAku/Config/DataInitializer.java
 TODO.txt

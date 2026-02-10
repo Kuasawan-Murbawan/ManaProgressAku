@@ -1,6 +1,7 @@
 package com.husyairi.ManaProgressAku.Enums;
 
-public enum Role {
+public enum
+Role {
     USER,
     ADMIN
 }

@@ -35,15 +35,11 @@ public class AuthenticationService {
 
     public User signUp(RegisterUser  newUserInput){
 
-        System.out.println("Check account..");
-
         String newUserEmail = newUserInput.getEmail();
 
         if(userRepository.findByEmail(newUserEmail).isPresent()){
             throw new BadRequestException(400, "Email already registered", new HashMap<>());
         }
-
-        System.out.println("Check complete, registering new user..");
 
         User user = new User(
                             newUserInput.getName(),
