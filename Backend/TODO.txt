@@ -124,3 +124,7 @@ so, we handled it using front end (1. delete activities 2. delete session)
 
 ~16 Nov 2025~
 [/] remove role in registering process, bc all users must not been admin, admin need another page to register
+
+~24 Feb 2026~
+[/] add role in jwt token
+[] issue: cannot do authenticate, problem with password encoder

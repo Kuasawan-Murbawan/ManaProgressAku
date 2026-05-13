@@ -5,6 +5,7 @@ import com.husyairi.ManaProgressAku.DTO.User.UserProfile;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Service.impl.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,11 +45,11 @@ public class UserController {
     }
 
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<User>> allUsers(){
 
-        System.out.println("DIsplaying all users..");
+//        System.out.println("DIsplaying all users..");
         List<User> users = userService.allUsers();
 
         return ResponseEntity.ok(users);

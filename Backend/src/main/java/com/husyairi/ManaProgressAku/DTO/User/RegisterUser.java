@@ -1,7 +1,5 @@
 package com.husyairi.ManaProgressAku.DTO.User;
 
-import com.husyairi.ManaProgressAku.Enums.Role;
-
 public class RegisterUser {
     private String email;
 
@@ -35,12 +33,4 @@ public class RegisterUser {
     public void setName(String name) {
         this.name = name;
     }
-
-//    public String getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(String role) {
-//        this.role = role;
-//    }
 }

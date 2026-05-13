@@ -7,6 +7,7 @@ import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/insertExercise")
     public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> insertExercise(@RequestBody InsertExerciseRequest request){
         InsertExerciseResponse data = exerciseService.insertExercise(request);
@@ -50,6 +52,7 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateExercise")
     public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> updateExercise(@RequestBody UpdateExerciseRequest request){
 
@@ -63,6 +66,7 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteExercise/{exerciseID}")
     public ResponseEntity<ApiSuccessResponse<DeleteExerciseResponse>> deleteExercise(@PathVariable Integer exerciseID){
 
@@ -75,7 +79,7 @@ public class ExerciseController {
         );
     }
 
-    @GetMapping("/admin/getAllExercises")
+    @GetMapping("/getAllExercises")
     public ResponseEntity<ApiSuccessResponse<List<Exercise>>> getAllExercise(){
 
         List<Exercise> allExercises = exerciseService.getAllExercise();

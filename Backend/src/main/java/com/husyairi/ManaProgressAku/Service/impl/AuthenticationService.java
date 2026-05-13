@@ -8,8 +8,11 @@ import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.husyairi.ManaProgressAku.Service.impl.CustomUserDetailsService;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -23,14 +26,18 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final CustomUserDetailsService customUserDetailsService;
+
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            CustomUserDetailsService customUserDetailService
     ){
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.customUserDetailsService = customUserDetailService;
     }
 
     public User signUp(RegisterUser  newUserInput){
@@ -51,19 +58,29 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public User authenticateUser(LoginUser userInput) {
+//    public UserDetails authenticateUser(LoginUser userInput) {
+//
+//        /*
+//        Looks up user email in database and compares with hashed password
+//         */
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        userInput.getEmail(),
+//                        userInput.getPassword()
+//                )
+//        );
+//
+//        return (UserDetails) authentication.getPrincipal();
+//    }
+public UserDetails authenticateUser(LoginUser userInput) {
 
-        /*
-        Looks up user email in database and compares with hashed password
-         */
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userInput.getEmail(),
-                        userInput.getPassword()
-                )
-        );
+    UserDetails user =
+            customUserDetailsService.loadUserByUsername(userInput.getEmail());
 
-        // If success, find the email in database, this will return User object
-        return userRepository.findByEmail(userInput.getEmail()).orElseThrow();
-        }
-    }
+
+    System.out.println(">>> Found user: " + user.getUsername());
+
+    return user;
+}
+
+}

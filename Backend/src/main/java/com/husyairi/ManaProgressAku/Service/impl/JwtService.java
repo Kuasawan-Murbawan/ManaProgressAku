@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
+import com.husyairi.ManaProgressAku.DTO.User.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -49,10 +50,14 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+
+        CustomUserDetails customUser = (CustomUserDetails) userDetails;
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
+                .setSubject(customUser.getEmail())
+                .claim("role", customUser.getRole())   // ADMIN - USER
+                .claim("userID", customUser.getID())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)

@@ -92,7 +92,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Password hashing (optional but recommended) -->
+		<!-- Password hashing -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
