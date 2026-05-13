@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Box, Input, Button, Heading, Text, VStack } from "@chakra-ui/react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault(); // prevent page reload
 
-    localStorage.removeItem("token"); // clear previous token
+    // localStorage.removeItem("token"); // clear previous token
 
     try {
       const response = await API.post("/auth/login", { email, password });
@@ -20,16 +21,19 @@ export default function LoginPage() {
       const token = response.data.token;
 
       // store token
-      localStorage.setItem("token", token);
+      // localStorage.setItem("token", token);   - old implementation
+
+      const setToken = useAuthStore((state) => state.setToken);
+      setToken(token);
 
       // redirect to home
       navigate("/", { replace: true }); // make sure when user hit back, it doesnt go to login page
     } catch (err) {
-      if (err.response.status == 403) {
-        setError("Invalid email or password");
-      } else {
-        setError("Issue with the server, please try again later!");
-      }
+      // if (err.response.status == 403) {
+      //   setError("Invalid email or password");
+      // } else {
+      //   setError("Issue with the server, please try again later!");
+      // }
     }
   };
 

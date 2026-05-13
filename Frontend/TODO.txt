@@ -120,3 +120,6 @@ TODO:
 [/] generate token for signup
 
 TODO: can proceed to deploy
+
+~24 Feb 2026~
+[] the email is not authenticated because password is nor decoded

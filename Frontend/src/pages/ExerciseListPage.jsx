@@ -2,14 +2,19 @@ import React from "react";
 import ExerciseListComponent from "../components/ExerciseListComponent";
 import { Box, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/auth";
 
 const ExerciseListPage = () => {
   const navigate = useNavigate();
 
+  const role = useAuthStore((state) => state.user?.role);
+  const isAdmin = role === "ADMIN";
+
   return (
     <div>
+      {isAdmin && <Button size="lg" colorScheme="green"></Button>}
+      ➕ Add Exercise
       <ExerciseListComponent />
-
       <Box
         display="flex"
         justifyContent="center"
