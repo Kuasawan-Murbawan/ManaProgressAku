@@ -1,19 +1,19 @@
 import React from "react";
 import ExerciseListComponent from "../components/ExerciseListComponent";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
+import InsertExerciseModal from "../components/InsertExerciseModal";
 
 const ExerciseListPage = () => {
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const role = useAuthStore((state) => state.user?.role);
   const isAdmin = role === "ADMIN";
 
   return (
     <div>
-      {isAdmin && <Button size="lg" colorScheme="green"></Button>}
-      ➕ Add Exercise
       <ExerciseListComponent />
       <Box
         display="flex"
@@ -32,6 +32,13 @@ const ExerciseListPage = () => {
         >
           ⬅ Home
         </Button>
+        {isAdmin && (
+          <Button size="lg" colorScheme="green" margin="20px" onClick={onOpen}>
+            ➕ Add Exercise
+          </Button>
+        )}
+
+        <InsertExerciseModal isOpen={isOpen} onClose={onClose} />
       </Box>
     </div>
   );

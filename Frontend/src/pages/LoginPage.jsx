@@ -9,11 +9,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
 
   const handleLogin = async (e) => {
     e.preventDefault(); // prevent page reload
-
-    // localStorage.removeItem("token"); // clear previous token
 
     try {
       const response = await API.post("/auth/login", { email, password });
@@ -23,17 +22,17 @@ export default function LoginPage() {
       // store token
       // localStorage.setItem("token", token);   - old implementation
 
-      const setToken = useAuthStore((state) => state.setToken);
       setToken(token);
 
       // redirect to home
       navigate("/", { replace: true }); // make sure when user hit back, it doesnt go to login page
     } catch (err) {
-      // if (err.response.status == 403) {
-      //   setError("Invalid email or password");
-      // } else {
-      //   setError("Issue with the server, please try again later!");
-      // }
+      if (err.status == 401) {
+        console.log(err);
+        setError("Invalid email or password");
+      } else {
+        setError("Issue with the server, please try again later!");
+      }
     }
   };
 

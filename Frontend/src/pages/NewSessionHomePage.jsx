@@ -56,8 +56,6 @@ const NewSessionHomePage = () => {
     clearActivities();
     clearSession();
 
-    console.log("Session " + sessionID + " has finished.");
-
     toast({
       title: "Session finished 🎉",
       description: "Great job completing your workout!",

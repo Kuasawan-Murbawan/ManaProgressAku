@@ -3,11 +3,11 @@ import { persist } from "zustand/middleware";
 import API from "../api/axios.js";
 
 export const useExerciseStore = create(
-  persist((set) => ({
+  persist((set, get) => ({
     exercise: [],
     fetchAllExercises: async () => {
       try {
-        const res = await API.get("/admin/getAllExercises"); // frontend will use Vite proxy
+        const res = await API.get("/getAllExercises"); // frontend will use Vite proxy
 
         set({ exercise: res.data.data || [] });
       } catch (error) {
@@ -20,5 +20,13 @@ export const useExerciseStore = create(
       const found = exercise.find((e) => e.exerciseID === id);
       return found ? found.exerciseName : `Unknown Exercise: ${id}`;
     },
-  }))
+    insertExercise: async (newExercise) => {
+      try {
+        const res = await API.post("/insertExercise", newExercise);
+        await get().fetchAllExercises();
+      } catch (error) {
+        console.error("Failed to add new exercise", error);
+      }
+    },
+  })),
 );

@@ -123,3 +123,11 @@ TODO: can proceed to deploy
 
 ~24 Feb 2026~
 [] the email is not authenticated because password is nor decoded
+
+~13 May 2026~
+[] [17:05, 11/05/2026] husyairi: - when begin exercise page idle, it goes blank
+- ⁠the user try to refresh
+- ⁠then after go back it will delete progress
+- ⁠solution: make prompt that halang user to tefresh
+[15:38, 13/05/2026] husyairi: page to add exercises without hardcode it
+[15:51, 13/05/2026] husyairi: button to check if own weight (for calistenic)
