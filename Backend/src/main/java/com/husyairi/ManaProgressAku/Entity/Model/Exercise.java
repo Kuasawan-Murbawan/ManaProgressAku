@@ -22,9 +22,10 @@ public class Exercise {
     public Exercise() {
     }
 
-    public Exercise(String exerciseName, String generalInfo) {
+    public Exercise(String exerciseName, String generalInfo, String exerciseType) {
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
+        this.exerciseType = exerciseType;
     }
 
     public Exercise(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType) {
