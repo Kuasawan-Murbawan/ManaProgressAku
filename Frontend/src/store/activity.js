@@ -36,11 +36,9 @@ export const useActivityStore = create(
         const res = await API.delete(`/deleteActivity/${activityID}`);
 
         if (res.status == 200) {
-          console.log("Activity deleted ", res.data.data.activityID);
-
           set((state) => ({
             activities: state.activities.filter(
-              (activity) => activity.activityID !== activityID
+              (activity) => activity.activityID !== activityID,
             ),
           }));
 
@@ -63,12 +61,10 @@ export const useActivityStore = create(
     deleteActivitiesBySession: async (sessionID) => {
       try {
         const res = await API.delete(
-          `/deleteActivitiesBySessionID/${sessionID}`
+          `/deleteActivitiesBySessionID/${sessionID}`,
         );
 
         if (res.status === 200) {
-          console.log("All activities deleted for session:", sessionID);
-
           set({ activities: [] });
 
           return {
@@ -111,5 +107,5 @@ export const useActivityStore = create(
         console.error("Error fetching activities:", error);
       }
     },
-  }))
+  })),
 );

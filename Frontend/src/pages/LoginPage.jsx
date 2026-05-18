@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Box, Input, Button, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Input,
+  Button,
+  Heading,
+  Text,
+  VStack,
+  Image,
+} from "@chakra-ui/react";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
@@ -45,50 +53,72 @@ export default function LoginPage() {
       justifyContent="center"
       bg="gray.300"
     >
-      <VStack
-        spacing={4}
-        p={8}
-        borderWidth={1}
-        borderRadius="lg"
-        bg="gray.200"
-        boxShadow="lg"
-      >
-        <form onSubmit={handleLogin}>
-          <VStack spacing={4}>
-            <Heading size="lg">Login</Heading>
-            <Input
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <Input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {error && <Text color="red.500">{error}</Text>}
-            <Button type="submit" colorScheme="teal" width="full">
-              Login
-            </Button>
-          </VStack>
-        </form>
-
-        <Button
-          width="full"
-          bg="blue.100"
-          color="black" // default text color
+      <VStack spacing={0}>
+        {/* Logo */}
+        <Image
+          src="/logo2.png"
+          alt="Mana Progress Aku Logo"
+          maxW="300px"
+          objectFit="contain"
           _hover={{
-            shadow: "xl",
-            transform: "scale(1.04)",
-            transition: "0.1s ease-in-out",
-            bg: "blue.900",
-            color: "white", // text color on hover
+            transform: "scale(1.02)",
           }}
-          onClick={() => navigate("/register")}
+          transition="0.2s"
+          position="relative"
+          top="50px"
+        />
+
+        {/* Login Card */}
+        <VStack
+          spacing={4}
+          p={8}
+          borderWidth={1}
+          borderRadius="lg"
+          bg="gray.200"
+          boxShadow="lg"
+          w="340px"
         >
-          Sign Up
-        </Button>
+          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+            <VStack spacing={4}>
+              <Heading size="lg">Login</Heading>
+
+              <Input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <Input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              {error && <Text color="red.500">{error}</Text>}
+
+              <Button type="submit" colorScheme="teal" width="full">
+                Login
+              </Button>
+            </VStack>
+          </form>
+
+          <Button
+            width="full"
+            bg="blue.100"
+            color="black"
+            _hover={{
+              shadow: "xl",
+              transform: "scale(1.04)",
+              transition: "0.1s ease-in-out",
+              bg: "blue.900",
+              color: "white",
+            }}
+            onClick={() => navigate("/register")}
+          >
+            Sign Up
+          </Button>
+        </VStack>
       </VStack>
     </Box>
   );

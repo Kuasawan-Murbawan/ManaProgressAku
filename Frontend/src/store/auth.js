@@ -10,7 +10,7 @@ Source: JWT payload
 
 export const useAuthStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       // token: localStorage.getItem("token" || null),
       token: null,
       user: null,

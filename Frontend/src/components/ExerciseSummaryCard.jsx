@@ -63,7 +63,14 @@ const ExerciseSummaryCard = ({ activityID, exerciseName, weights, reps }) => {
         />
       </HStack>
 
-      <TableContainer borderRadius="lg" overflow="hidden" boxShadow="sm">
+      <TableContainer
+        borderRadius="lg"
+        overflow="scroll"
+        boxShadow="sm"
+        borderRadius={7}
+        border={"2px"}
+        borderColor={"gray.500"}
+      >
         <Table variant="striped" colorScheme="green" size="md">
           <Thead bg="green.200">
             <Tr>

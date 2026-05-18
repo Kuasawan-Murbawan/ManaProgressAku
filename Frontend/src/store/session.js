@@ -14,7 +14,6 @@ export const useSessionStore = create(
 
       if (newSessionID) {
         set({ sessionID: newSessionID });
-        console.log("Session created: ", res.data.data.sessionID);
 
         return { success: true, message: "Session created!" };
       } else {
@@ -24,9 +23,6 @@ export const useSessionStore = create(
     deleteSession: async (sessionID) => {
       const res = await API.delete(`/deleteSession/${sessionID}`);
       if (res.status == 200) {
-        console.log(res);
-        console.log("Session deleted: ", sessionID);
-
         set({ sessionID: "" });
         return { success: true, message: res.data.message };
       } else {
@@ -48,7 +44,7 @@ export const useSessionStore = create(
         set({ sessions: [] });
       }
     },
-  }))
+  })),
 );
 
 if (typeof window !== "undefined") {

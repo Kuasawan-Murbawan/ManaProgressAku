@@ -60,7 +60,7 @@ const CurrentActivityPage = () => {
       exerciseID: exercise.exerciseID,
       sets: sets.length,
       rep: sets.map((s) => s.reps).join(","),
-      weight: sets.map((s) => s.weight).join(","),
+      weight: sets.map((s) => parseFloat(s.weight).toFixed(2)).join(","), // convert the string to Float
     };
 
     const result = await addActivity(activityPayLoad);

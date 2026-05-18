@@ -13,6 +13,7 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
+import { useAuthStore } from "../store/auth";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -22,7 +23,7 @@ const RegisterPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  localStorage.removeItem("token"); // clear previous token
+  const setToken = useAuthStore((state) => state.setToken);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ const RegisterPage = () => {
       });
 
       const token = response.data.token;
-      localStorage.setItem("token", token);
+      setToken(token);
 
       navigate("/", { replace: true });
     } catch (err) {
