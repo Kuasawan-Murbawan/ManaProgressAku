@@ -31,7 +31,8 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> registerUser(@RequestBody RegisterUser registerUserDetail){
         User registeredUser = authenticationService.signUp(registerUserDetail);
 
-        String jwtToken = jwtService.generateToken((UserDetails) registeredUser);
+//        String jwtToken = jwtService.generateToken((UserDetails) registeredUser);
+        String jwtToken =jwtService.generateToken(new CustomUserDetails(registeredUser));
 
         LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
 
