@@ -7,6 +7,8 @@ import com.husyairi.ManaProgressAku.DTO.User.RegisterUser;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Service.impl.AuthenticationService;
 import com.husyairi.ManaProgressAku.Service.impl.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Tag(name = "Authentication", description = "Login and Registration APIs")
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
@@ -27,6 +29,10 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    @Operation(
+            summary = "Register User",
+            description = "Registers a user using name, email and password, then returns a JWT token."
+    )
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> registerUser(@RequestBody RegisterUser registerUserDetail){
         User registeredUser = authenticationService.signUp(registerUserDetail);
@@ -40,6 +46,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(loginResponse);
     }
 
+    @Operation(
+            summary = "Login User",
+            description = "Authenticates a user using email and password, then returns a JWT token."
+    )
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginUser loginUserDetails){
 

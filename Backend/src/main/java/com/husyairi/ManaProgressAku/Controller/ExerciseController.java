@@ -14,8 +14,6 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-
-// define base path
 public class ExerciseController {
 
     private final ExerciseService exerciseService;

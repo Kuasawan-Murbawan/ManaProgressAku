@@ -58,20 +58,6 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-//    public UserDetails authenticateUser(LoginUser userInput) {
-//
-//        /*
-//        Looks up user email in database and compares with hashed password
-//         */
-//        Authentication authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        userInput.getEmail(),
-//                        userInput.getPassword()
-//                )
-//        );
-//
-//        return (UserDetails) authentication.getPrincipal();
-//    }
 public UserDetails authenticateUser(LoginUser userInput) {
 
     UserDetails user =
