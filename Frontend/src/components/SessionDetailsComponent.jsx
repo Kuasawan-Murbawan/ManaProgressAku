@@ -1,9 +1,13 @@
 import React from "react";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { formatDistanceToNowStrict } from "date-fns";
 
 const SessionDetailsComponent = ({ sessionID, date, time }) => {
   const navigate = useNavigate();
+  const title = formatDistanceToNowStrict(new Date(`${date} ${time}`), {
+    addSuffix: true,
+  });
 
   const handleClick = () => {
     navigate(`/session/${sessionID}`);
@@ -28,7 +32,7 @@ const SessionDetailsComponent = ({ sessionID, date, time }) => {
     >
       <VStack align="start" spacing={1}>
         <Text fontWeight="bold" fontSize="lg" color="teal.800">
-          Session #{sessionID}
+          {title}
         </Text>
         <Text color="gray.700">📅 {date}</Text>
         <Text color="gray.700">⏰ {time}</Text>
