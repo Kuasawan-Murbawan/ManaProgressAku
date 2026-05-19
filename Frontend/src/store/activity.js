@@ -5,6 +5,7 @@ import API from "../api/axios.js";
 export const useActivityStore = create(
   persist((set, get) => ({
     activities: [],
+    isLoading: false,
     // sessionActivities: [],
     addActivity: async (newActivity) => {
       try {
@@ -91,6 +92,7 @@ export const useActivityStore = create(
 
     fetchActivityBySession: async (sessionID) => {
       try {
+        set({ isLoading: true });
         const res = await API.get(`/sessionActivities/${sessionID}`);
 
         if (res.status == 200) {
@@ -105,6 +107,8 @@ export const useActivityStore = create(
         }
       } catch (error) {
         console.error("Error fetching activities:", error);
+      } finally {
+        set({ isLoading: false });
       }
     },
   })),

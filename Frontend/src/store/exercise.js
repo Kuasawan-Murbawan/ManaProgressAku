@@ -5,14 +5,18 @@ import API from "../api/axios.js";
 export const useExerciseStore = create(
   persist((set, get) => ({
     exercise: [],
+    isLoading: false,
     fetchAllExercises: async () => {
       try {
+        set({ isLoading: true });
         const res = await API.get("/getAllExercises"); // frontend will use Vite proxy
 
         set({ exercise: res.data.data || [] });
       } catch (error) {
         console.error("Failed to fetch exercises:", error);
         set({ exercise: [] });
+      } finally {
+        set({ isLoading: false });
       }
     },
     getExerciseName: (id) => {

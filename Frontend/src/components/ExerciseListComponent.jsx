@@ -11,11 +11,13 @@ import {
   CardBody,
   VStack,
   Divider,
+  Center,
+  Spinner,
 } from "@chakra-ui/react";
 import ExerciseDetailModal from "./ExerciseDetailModal";
 
 const ExerciseListComponent = () => {
-  const { fetchAllExercises, exercise } = useExerciseStore();
+  const { fetchAllExercises, exercise, isLoading } = useExerciseStore();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedExercise, setSelectedExercise] = useState(null);
 
@@ -81,19 +83,30 @@ const ExerciseListComponent = () => {
         Exercise Library
       </Heading>
 
-      {/* Upper Body Section */}
-      <ExerciseGrid
-        title="Upper Body"
-        items={upperBodyExercises}
-        color="blue"
-      />
+      {isLoading ? (
+        <Center>
+          <VStack>
+            <Spinner />
+            <Text color={"gray.500"}>Loading Exercises..</Text>
+          </VStack>
+        </Center>
+      ) : (
+        <Box>
+          {/* Upper Body Section */}
+          <ExerciseGrid
+            title="Upper Body"
+            items={upperBodyExercises}
+            color="blue"
+          />
 
-      {/* Lower Body Section */}
-      <ExerciseGrid
-        title="Lower Body"
-        items={lowerBodyExercises}
-        color="teal"
-      />
+          {/* Lower Body Section */}
+          <ExerciseGrid
+            title="Lower Body"
+            items={lowerBodyExercises}
+            color="teal"
+          />
+        </Box>
+      )}
 
       <ExerciseDetailModal
         isOpen={isOpen}

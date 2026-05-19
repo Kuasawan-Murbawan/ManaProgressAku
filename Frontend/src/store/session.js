@@ -6,6 +6,7 @@ export const useSessionStore = create(
   persist((set) => ({
     sessionID: "",
     sessions: [],
+    isLoading: false,
     createSession: async (newSession) => {
       const res = await API.post("/insertSession", newSession);
 
@@ -37,11 +38,14 @@ export const useSessionStore = create(
     },
     fetchUserSessions: async () => {
       try {
+        set({ isLoading: true });
         const res = await API.get("/getUserSessions");
         set({ sessions: res.data.data || [] });
       } catch (error) {
         console.error("Failed to fetch sessions", error);
         set({ sessions: [] });
+      } finally {
+        set({ isLoading: false });
       }
     },
   })),

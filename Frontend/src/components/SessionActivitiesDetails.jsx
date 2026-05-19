@@ -1,4 +1,13 @@
-import { Button, Text, useDisclosure, HStack, Box } from "@chakra-ui/react";
+import {
+  Button,
+  Text,
+  useDisclosure,
+  HStack,
+  Box,
+  Spinner,
+  Center,
+  VStack,
+} from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import ExerciseSummaryCard from "./ExerciseSummaryCard";
 import { useActivityStore } from "../store/activity";
@@ -9,7 +18,7 @@ import DeleteSessionDialog from "./DeleteSessionDialog";
 const SessionActivitiesDetails = () => {
   const { sessionID } = useParams();
   const { getExerciseName } = useExerciseStore();
-  const { activities, fetchActivityBySession, clearActivities } =
+  const { activities, fetchActivityBySession, clearActivities, isLoading } =
     useActivityStore();
   const navigate = useNavigate();
 
@@ -62,7 +71,14 @@ const SessionActivitiesDetails = () => {
         </HStack>
       </Box>
 
-      {activities.length > 0 ? (
+      {isLoading ? (
+        <Center py={10}>
+          <VStack>
+            <Spinner size="xl" thickness="4px" color="green.500" />
+            <Text color={"gray.500"}>Loading Activities...</Text>
+          </VStack>
+        </Center>
+      ) : activities.length > 0 ? (
         activities.map((activity, index) => {
           const reps = activity.rep ? activity.rep.split(",") : [];
           const weights = activity.weight ? activity.weight.split(",") : [];

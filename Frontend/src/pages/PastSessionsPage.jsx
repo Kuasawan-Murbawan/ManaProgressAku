@@ -1,4 +1,4 @@
-import { Box, Button, Center, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Center, Text, VStack, Spinner } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SessionDetailsComponent from "../components/SessionDetailsComponent";
@@ -7,7 +7,7 @@ import { useSessionStore } from "../store/session";
 const PastSessionsPage = () => {
   const navigate = useNavigate();
 
-  const { sessions, fetchUserSessions } = useSessionStore();
+  const { sessions, fetchUserSessions, isLoading } = useSessionStore();
 
   useEffect(() => {
     fetchUserSessions();
@@ -41,7 +41,14 @@ const PastSessionsPage = () => {
 
       {/* Session List */}
       <VStack spacing={6} align="stretch">
-        {sortedSessions.length > 0 ? (
+        {isLoading ? (
+          <Center py={10}>
+            <VStack>
+              <Spinner size="xl" thickness="4px" color="purple.500" />
+              <Text color={"gray.500"}>Loading Sessions...</Text>
+            </VStack>
+          </Center>
+        ) : sortedSessions.length > 0 ? (
           sortedSessions.map((session) => (
             <SessionDetailsComponent
               key={session.sessionID}
