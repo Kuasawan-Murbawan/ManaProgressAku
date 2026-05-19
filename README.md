@@ -161,3 +161,10 @@ cd Frontend
 npm install
 npm run dev
 ```
+
+## Backend
+
+```bash
+cd Backend
+mvn spring-boot:run
+```
