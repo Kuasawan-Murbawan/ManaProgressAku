@@ -65,7 +65,7 @@ export default function LoginPage() {
           }}
           transition="0.2s"
           position="relative"
-          top="50px"
+          top="-70px"
         />
 
         {/* Login Card */}
@@ -77,6 +77,8 @@ export default function LoginPage() {
           bg="gray.200"
           boxShadow="lg"
           w="340px"
+          position="relative"
+          top="-90px"
         >
           <form onSubmit={handleLogin} style={{ width: "100%" }}>
             <VStack spacing={4}>

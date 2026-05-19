@@ -67,7 +67,6 @@ const ExerciseSummaryCard = ({ activityID, exerciseName, weights, reps }) => {
         borderRadius="lg"
         overflow="scroll"
         boxShadow="sm"
-        borderRadius={7}
         border={"2px"}
         borderColor={"gray.500"}
       >
