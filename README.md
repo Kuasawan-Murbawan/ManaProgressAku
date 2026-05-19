@@ -133,8 +133,8 @@ This repository also contains additional technical documentation:
 
 | Document               | Purpose                                                    |
 | ---------------------- | ---------------------------------------------------------- |
-| `docs/ARCHITECTURE.md` | High-level system architecture and infrastructure overview |
-| `docs/CHANGELOG.md`    | Project release history and planned improvements           |
+| [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md) | High-level system architecture and infrastructure overview |
+| [docs/CHANGELOG.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/CHANGELOG.md)    | Project release history and planned improvements           |
 | Swagger UI             | Detailed API endpoint documentation                        |
 
 ---
