@@ -22,7 +22,7 @@ const NewSessionHomePage = () => {
   const navigate = useNavigate();
 
   const { activities, clearActivities } = useActivityStore();
-  const { exercise } = useExerciseStore();
+  const { exercise, fetchAllExercises } = useExerciseStore();
   const { sessionID, clearSession } = useSessionStore();
   const { currentUser, fetchCurrentUser } = useUserStore();
 
@@ -48,6 +48,7 @@ const NewSessionHomePage = () => {
 
   const handleAddActivity = () => {
     setIsBlocking(false);
+    fetchAllExercises();
     setTimeout(() => navigate("/newExercise"), 100);
   };
 

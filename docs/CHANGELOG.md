@@ -11,7 +11,19 @@ All notable changes to ManaProgressAku will be here.
 - Edit exercise activity
 - Active session persistence
 - Session recovery after refresh
-- API documentation
+
+---
+
+## [v1.0.1] - 2026-05-20
+
+Documentation and API testing
+
+### Added
+
+- Add Swagger dependencies and documentation for Controller and DTO
+- Create smoke test files using Postman
+- Added ReadMe, Architecture and ChangeLog
+- Fetch all exercise when click "Add Activity"
 
 ---
 
