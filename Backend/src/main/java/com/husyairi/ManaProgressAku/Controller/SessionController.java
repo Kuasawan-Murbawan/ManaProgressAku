@@ -1,21 +1,22 @@
 package com.husyairi.ManaProgressAku.Controller;
 
-import com.husyairi.ManaProgressAku.DTO.Exercise.DeleteExerciseResponse;
 import com.husyairi.ManaProgressAku.DTO.Session.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.SessionService;
-import org.hibernate.sql.Delete;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Session", description = "CRUD for Session")
 @CrossOrigin("*")
 @RestController
-
 public class SessionController {
 
     private final SessionService sessionService;
@@ -25,6 +26,10 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
+    @Operation(
+            summary = "Create a new session",
+            description = "Create new session using current Date and Time"
+    )
     @PostMapping("/insertSession")
     public ResponseEntity<ApiSuccessResponse<InsertSessionResponse>> insertSession(@RequestBody InsertSessionRequest request){
         InsertSessionResponse data = sessionService.createSession(request);
@@ -38,6 +43,10 @@ public class SessionController {
 
     }
 
+    @Operation(
+            summary = "Get a session",
+            description = "Return a session using session ID"
+    )
     @GetMapping("/getSession/{sessionID}")
     public ResponseEntity<ApiSuccessResponse<GetSessionResponse>> getSession(@PathVariable String sessionID){
 
@@ -51,6 +60,10 @@ public class SessionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Update session",
+            description = "Update session using request body"
+    )
     @PutMapping("/updateSession")
     public ResponseEntity<ApiSuccessResponse<Session>> updateSession (@RequestBody UpdateSessionRequest request){
 
@@ -64,6 +77,10 @@ public class SessionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Delete session",
+            description = "Delete a session using session ID"
+    )
     @DeleteMapping("/deleteSession/{sessionID}")
     public ResponseEntity<ApiSuccessResponse<DeleteSessionResponse>> deleteSession(@PathVariable String sessionID){
         sessionService.deleteSession(sessionID);
@@ -75,6 +92,10 @@ public class SessionController {
         );
     }
 
+    @Operation(
+            summary = "Get user's past session",
+            description = "Return all sessions from current user"
+    )
     @GetMapping("/getUserSessions")
     public ResponseEntity<ApiSuccessResponse<List<Session>>> getUserSessions(){
         List<Session> sessionsFetched = sessionService.getUserSessions();
@@ -84,10 +105,13 @@ public class SessionController {
         );
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllSessions")
     public ResponseEntity<ApiSuccessResponse<List<Session>>> getAllSession(){
 
-        List<Session> allSessions = sessionService.getAllSessions();
+//        List<Session> allSessions = sessionService.getAllSessions();
+
+        List<Session> allSessions = null;
 
         return ResponseEntity.ok(
                 new ApiSuccessResponse<>("All sessions fetched successfully!", allSessions)

@@ -5,6 +5,8 @@ import com.husyairi.ManaProgressAku.DTO.Session.DeleteSessionResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Activity", description = "CRUD for activity")
 @CrossOrigin("*")
 @RestController
 public class ActivityController {
@@ -25,6 +28,10 @@ public class ActivityController {
     }
 
 
+    @Operation(
+            summary = "Insert new Activity",
+            description = "Create new Activity using Activity ID, weight, set, reps"
+    )
     @PostMapping("/insertActivity")
     public ResponseEntity<ApiSuccessResponse<InsertActivityResponse>> insertActivity(@RequestBody InsertActivityRequest request){
         InsertActivityResponse data = activityService.createActivity(request);
@@ -37,7 +44,10 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    @Operation(
+            summary = "Get an Activity",
+            description = "Return an Activity using Activity ID"
+    )
     @GetMapping("/getActivity/{activityID}")
     public ResponseEntity<ApiSuccessResponse<GetActivityResponse>> getActivity(@PathVariable String activityID){
         GetActivityResponse data = activityService.getActivity(activityID);
@@ -50,7 +60,10 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    @Operation(
+            summary = "Update Activity",
+            description = "Update an Activity using all Activity details in request body"
+    )
     @PutMapping("/updateActivity")
     public ResponseEntity<ApiSuccessResponse<Activity>> updateActivity(@RequestBody UpdateActivityRequest request){
 
@@ -64,7 +77,10 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    @Operation(
+            summary = "Delete Activity",
+            description = "Delete Activity using Activity ID"
+    )
     @DeleteMapping("/deleteActivity/{activityID}")
     public ResponseEntity<ApiSuccessResponse<DeleteActivityResponse>> deleteActivity(@PathVariable String activityID){
 
@@ -80,6 +96,10 @@ public class ActivityController {
         );
     }
 
+    @Operation(
+            summary = "Delete Activities in a Session",
+            description = "Delete all Activities in a Session using Session ID"
+    )
     @DeleteMapping("/deleteActivitiesBySessionID/{sessionID}")
     public ResponseEntity<ApiSuccessResponse<DeleteActivitiesBySessionResponse>> deleteActivitiesBySessionID(@PathVariable String sessionID){
         int deletedCount = activityService.deleteActivitiesBySession(sessionID);
@@ -94,6 +114,10 @@ public class ActivityController {
         );
     }
 
+    @Operation(
+            summary = "Get all Activities in a Session",
+            description = "Fetch all Activities in a Session using Session ID"
+    )
     @GetMapping("/sessionActivities/{sessionID}")
     public ResponseEntity<ApiSuccessResponse<List<Activity>>> getSessionActivities(@PathVariable String sessionID){
 

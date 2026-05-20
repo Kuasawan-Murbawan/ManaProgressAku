@@ -1,11 +1,22 @@
 package com.husyairi.ManaProgressAku.DTO.Activity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class InsertActivityRequest {
 
+    @Schema(example = "SESS003")
     private String sessionID;
+
+    @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
+
+    @Schema(example = "3", description = "3 sets of workout")
     private Integer sets;
+
+    @Schema(example = "10,10,10", description = "Weight of the equipment in KG")
     private String weight;
+
+    @Schema(example = "8,8,8", description = "Reps for each set")
     private String rep;
 
     public InsertActivityRequest( String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {

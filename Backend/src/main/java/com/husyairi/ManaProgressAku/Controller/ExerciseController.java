@@ -4,6 +4,8 @@ import com.husyairi.ManaProgressAku.DTO.Exercise.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Exercise", description = "CRUD for Exercise")
 @CrossOrigin("*")
 @RestController
 public class ExerciseController {
@@ -23,6 +26,10 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
+    @Operation(
+            summary = "Insert new exercise",
+            description = "Create new exercise using Exercise name, info and type"
+    )
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/insertExercise")
     public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> insertExercise(@RequestBody InsertExerciseRequest request){
@@ -37,6 +44,10 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Get an exercise",
+            description = "Return an exercise using Exercise ID"
+    )
     @GetMapping("/getExercise/{exerciseID}")
     public ResponseEntity<ApiSuccessResponse<GetExerciseResponse>> getExercise(@PathVariable Integer exerciseID) {
         GetExerciseResponse data = exerciseService.getExercise(exerciseID);
@@ -50,6 +61,10 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Update Exercise",
+            description = "Update an exercise using all exercise details in request body"
+    )
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateExercise")
     public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> updateExercise(@RequestBody UpdateExerciseRequest request){
@@ -64,6 +79,10 @@ public class ExerciseController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "Delete exercise",
+            description = "Delete exercise using exercise ID"
+    )
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteExercise/{exerciseID}")
     public ResponseEntity<ApiSuccessResponse<DeleteExerciseResponse>> deleteExercise(@PathVariable Integer exerciseID){
@@ -77,6 +96,10 @@ public class ExerciseController {
         );
     }
 
+    @Operation(
+            summary = "Get All Exercises",
+            description = "returns all exercise - accessible for all user types"
+    )
     @GetMapping("/getAllExercises")
     public ResponseEntity<ApiSuccessResponse<List<Exercise>>> getAllExercise(){
 

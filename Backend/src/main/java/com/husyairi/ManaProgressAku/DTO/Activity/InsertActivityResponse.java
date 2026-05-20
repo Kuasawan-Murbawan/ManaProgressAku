@@ -1,14 +1,23 @@
 package com.husyairi.ManaProgressAku.DTO.Activity;
 
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class InsertActivityResponse {
 
     private String activityID;
     private Session session;
+
+    @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
+
+    @Schema(example = "3", description = "3 sets of workout")
     private Integer sets;
+
+    @Schema(example = "8,8,8", description = "Reps for each set")
     private String rep;
+
+    @Schema(example = "10,10,10", description = "Weight of the equipment in KG")
     private String weight;
 
     public InsertActivityResponse(String activityID, Session session, Integer exerciseID, Integer sets, String rep, String weight) {
