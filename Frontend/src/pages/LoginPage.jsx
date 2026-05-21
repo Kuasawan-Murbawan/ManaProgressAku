@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
 
 export default function LoginPage() {
+
+  // Hello From McNa !
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
