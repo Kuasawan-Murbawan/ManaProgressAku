@@ -26,6 +26,9 @@ public class Session {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "status", nullable = false)
+    private String status;
+
     public Session() {
     }
 
