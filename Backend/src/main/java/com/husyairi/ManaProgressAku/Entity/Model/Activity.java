@@ -3,6 +3,10 @@ package com.husyairi.ManaProgressAku.Entity.Model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "activity")
 public class Activity {
@@ -19,24 +23,25 @@ public class Activity {
     @Column(nullable = false)
     private Integer exerciseID;
 
-    @Column
-    private Integer sets;
+    @OneToMany(
+            mappedBy = "activity",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonIgnoreProperties("activity")
+    private List<ActivitySet> activitySets = new ArrayList<>();
 
-    @Column(columnDefinition = "VARCHAR(20)")
-    private String rep;
-
-    @Column(columnDefinition = "VARCHAR(20)")
-    private String weight;
+    @Column(name = "created_at")
+    private LocalDateTime created_at;
 
     public Activity(){}
 
-    public Activity(String activityID, Session session, Integer exerciseID, Integer sets, String rep, String weight) {
+    public Activity(String activityID, Session session, Integer exerciseID, List<ActivitySet> activitySets, LocalDateTime created_at) {
         this.activityID = activityID;
         this.session = session;
         this.exerciseID = exerciseID;
-        this.sets = sets;
-        this.rep = rep;
-        this.weight = weight;
+        this.activitySets = activitySets;
+        this.created_at = created_at;
     }
 
     public String getActivityID() {
@@ -63,27 +68,4 @@ public class Activity {
         this.exerciseID = exerciseID;
     }
 
-    public Integer getSets() {
-        return sets;
-    }
-
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
 }

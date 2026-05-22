@@ -65,83 +65,88 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public InsertActivityResponse createActivity(InsertActivityRequest request){
 
-        Session userSession = sessionRepository.findById(request.getSessionID())
-                .orElseThrow(() -> new BadRequestException(404 , "Session not found", new HashMap<>()));
+//        Session userSession = sessionRepository.findById(request.getSessionID())
+//                .orElseThrow(() -> new BadRequestException(404 , "Session not found", new HashMap<>()));
+//
+//        if(!userSession.getUserId().equals(getCurrentUserId())){
+//            throw new BadRequestException(403, "Not authorized to add this activity to this session.", new HashMap<>());
+//        }
+//
+//        Activity newActivity = new Activity(
+//                generateActivityID(),
+//                userSession,
+//                request.getExerciseID(),
+//                request.getSets(),
+//                request.getRep(),
+//                request.getWeight()
+//        );
+//
+//        Activity savedActivity = activityRepository.save(newActivity);
+//
+//        return new InsertActivityResponse(
+//                savedActivity.getActivityID(),
+//                savedActivity.getSession(),
+//                savedActivity.getExerciseID(),
+//                savedActivity.getSets(),
+//                savedActivity.getRep(),
+//                savedActivity.getWeight());
 
-        if(!userSession.getUserId().equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not authorized to add this activity to this session.", new HashMap<>());
-        }
-
-        Activity newActivity = new Activity(
-                generateActivityID(),
-                userSession,
-                request.getExerciseID(),
-                request.getSets(),
-                request.getRep(),
-                request.getWeight()
-        );
-
-        Activity savedActivity = activityRepository.save(newActivity);
-
-        return new InsertActivityResponse(
-                savedActivity.getActivityID(),
-                savedActivity.getSession(),
-                savedActivity.getExerciseID(),
-                savedActivity.getSets(),
-                savedActivity.getRep(),
-                savedActivity.getWeight());
-
+        return null;
     }
 
     @Override
     public GetActivityResponse getActivity(String activityID){
 
-        Activity activity = activityRepository.findById(activityID)
-                .orElseThrow(() ->
-                        new BadRequestException(404,
-                                "Activity ID: " + activityID + " not found",
-                                new HashMap<>()));
+//        Activity activity = activityRepository.findById(activityID)
+//                .orElseThrow(() ->
+//                        new BadRequestException(404,
+//                                "Activity ID: " + activityID + " not found",
+//                                new HashMap<>()));
+//
+//        Long currentUserId = getCurrentUserId();
+//
+//        if(!activity.getSession().getUserId().equals(currentUserId)){
+//            throw new BadRequestException(403, "Not authorized", new HashMap<>());
+//        }
+//
+//        return new GetActivityResponse(
+//                activity.getActivityID(),
+//                activity.getSession().getSessionID(), // just ID, not full Session
+//                activity.getExerciseID(),
+//                activity.getSets(),
+//                activity.getWeight(),
+//                activity.getRep()
+//        );
 
-        Long currentUserId = getCurrentUserId();
-
-        if(!activity.getSession().getUserId().equals(currentUserId)){
-            throw new BadRequestException(403, "Not authorized", new HashMap<>());
-        }
-
-        return new GetActivityResponse(
-                activity.getActivityID(),
-                activity.getSession().getSessionID(), // just ID, not full Session
-                activity.getExerciseID(),
-                activity.getSets(),
-                activity.getWeight(),
-                activity.getRep()
-        );
+        return null;
 
     }
 
     @Override
     public Activity updateActivity(UpdateActivityRequest request){
 
-        Activity updatedActivity = activityRepository.findById(request.getActivityID()).
-                orElseThrow(() -> new BadRequestException(404, "Activity ID " + request.getActivityID() + " not found", new HashMap<>()));
+//        Activity updatedActivity = activityRepository.findById(request.getActivityID()).
+//                orElseThrow(() -> new BadRequestException(404, "Activity ID " + request.getActivityID() + " not found", new HashMap<>()));
+//
+//        if(!updatedActivity.getSession().getUserId().equals(getCurrentUserId())){
+//            throw new BadRequestException(403, "Not authorized to access this session", new HashMap<>());
+//        }
+//
+//        updatedActivity.setActivityID(request.getActivityID());
+//        updatedActivity.setExerciseID(request.getExerciseID());
+//        updatedActivity.setSets(request.getSets());
+//        updatedActivity.setWeight(request.getWeight());
+//        updatedActivity.setRep(request.getRep());
+//
+//        try{
+//            activityRepository.save(updatedActivity);
+//        }catch (Exception e){
+//            throw new BadRequestException(500, "", new HashMap<>());
+//        }
+//
+//        return updatedActivity;
 
-        if(!updatedActivity.getSession().getUserId().equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not authorized to access this session", new HashMap<>());
-        }
-
-        updatedActivity.setActivityID(request.getActivityID());
-        updatedActivity.setExerciseID(request.getExerciseID());
-        updatedActivity.setSets(request.getSets());
-        updatedActivity.setWeight(request.getWeight());
-        updatedActivity.setRep(request.getRep());
-
-        try{
-            activityRepository.save(updatedActivity);
-        }catch (Exception e){
-            throw new BadRequestException(500, "", new HashMap<>());
-        }
-
-        return updatedActivity;
+        return null;
     }
 
     @Override
