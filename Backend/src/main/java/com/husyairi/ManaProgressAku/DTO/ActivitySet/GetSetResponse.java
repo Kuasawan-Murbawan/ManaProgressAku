@@ -14,17 +14,17 @@ public class GetSetResponse {
 
     private Integer setNumber;
 
-    private Activity activity;
+    private String activityID;
 
     public GetSetResponse() {
     }
 
-    public GetSetResponse(Long setID, BigDecimal weight, Integer reps, Integer setNumber, Activity activity) {
+    public GetSetResponse(Long setID, BigDecimal weight, Integer reps, Integer setNumber, String activityID) {
         this.setID = setID;
         this.weight = weight;
         this.reps = reps;
         this.setNumber = setNumber;
-        this.activity = activity;
+        this.activityID = activityID;
     }
 
     public Long getSetID() {
@@ -59,11 +59,11 @@ public class GetSetResponse {
         this.setNumber = setNumber;
     }
 
-    public Activity getActivity() {
-        return activity;
+    public String getActivity() {
+        return activityID;
     }
 
-    public void setActivity(Activity activity) {
-        this.activity = activity;
+    public void setActivity(String activity) {
+        this.activityID = activityID;
     }
 }

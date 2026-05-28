@@ -12,12 +12,9 @@ public class InsertActivityRequest {
     @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
 
-    private LocalDateTime created_at;
-
-    public InsertActivityRequest(String sessionID, Integer exerciseID, LocalDateTime created_at) {
+    public InsertActivityRequest(String sessionID, Integer exerciseID) {
         this.sessionID = sessionID;
         this.exerciseID = exerciseID;
-        this.created_at = created_at;
     }
 
     public String getSessionID() {
@@ -36,11 +33,4 @@ public class InsertActivityRequest {
         this.exerciseID = exerciseID;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
 }

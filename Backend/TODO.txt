@@ -127,4 +127,8 @@ so, we handled it using front end (1. delete activities 2. delete session)
 
 ~24 Feb 2026~
 [/] add role in jwt token
-[] issue: cannot do authenticate, problem with password encoder
+[/] issue: cannot do authenticate, problem with password encoder
+
+~28 May 2026~
+[] edit, delete sets
+[] Get All Sets in an Activity

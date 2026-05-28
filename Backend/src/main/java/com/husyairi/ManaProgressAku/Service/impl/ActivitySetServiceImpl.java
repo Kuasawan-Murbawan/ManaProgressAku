@@ -44,7 +44,7 @@ public class ActivitySetServiceImpl implements ActivitySetService {
                 savedSet.getWeight(),
                 savedSet.getReps(),
                 savedSet.getSetNumber(),
-                savedSet.getActivity()
+                savedSet.getActivity().getActivityID()
         );
     }
 

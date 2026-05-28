@@ -85,7 +85,7 @@ public class ActivityServiceImpl implements ActivityService {
 
         return new InsertActivityResponse(
                 savedActivity.getActivityID(),
-                savedActivity.getSession(),
+                savedActivity.getSession().getSessionID(),
                 savedActivity.getExerciseID(),
                 savedActivity.getCreated_at()
         );

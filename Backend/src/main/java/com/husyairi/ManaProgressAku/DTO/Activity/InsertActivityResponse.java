@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 public class InsertActivityResponse {
 
     private String activityID;
-    private Session session;
+    private String sessionID;
 
     @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
@@ -16,9 +16,9 @@ public class InsertActivityResponse {
     private LocalDateTime created_at;
 
 
-    public InsertActivityResponse(String activityID, Session session, Integer exerciseID, LocalDateTime created_at) {
+    public InsertActivityResponse(String activityID, String sessionID, Integer exerciseID, LocalDateTime created_at) {
         this.activityID = activityID;
-        this.session = session;
+        this.sessionID = sessionID;
         this.exerciseID = exerciseID;
         this.created_at = created_at;
     }
@@ -31,12 +31,12 @@ public class InsertActivityResponse {
         this.activityID = activityID;
     }
 
-    public Session getSession() {
-        return session;
+    public String getSession() {
+        return sessionID;
     }
 
-    public void setSessionID(Session session) {
-        this.session = session;
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 
     public Integer getExerciseID() {
