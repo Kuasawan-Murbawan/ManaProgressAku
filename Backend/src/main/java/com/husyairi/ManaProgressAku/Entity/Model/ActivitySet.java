@@ -41,6 +41,13 @@ public class ActivitySet{
         this.activity = activity;
     }
 
+    public ActivitySet(BigDecimal weight, Integer reps, Integer setNumber, Activity activity) {
+        this.weight = weight;
+        this.reps = reps;
+        this.setNumber = setNumber;
+        this.activity = activity;
+    }
+
     public ActivitySet() {
     }
 
