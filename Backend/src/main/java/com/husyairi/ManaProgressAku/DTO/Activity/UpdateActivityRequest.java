@@ -4,17 +4,11 @@ public class UpdateActivityRequest {
     private String activityID;
     private String sessionID;
     private Integer exerciseID;
-    private Integer sets;
-    private String weight;
-    private String rep;
 
-    public UpdateActivityRequest(String activityID, String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {
+    public UpdateActivityRequest(String activityID, String sessionID, Integer exerciseID) {
         this.activityID = activityID;
         this.sessionID = sessionID;
         this.exerciseID = exerciseID;
-        this.sets = sets;
-        this.weight = weight;
-        this.rep = rep;
     }
 
     public String getActivityID() {
@@ -41,27 +35,4 @@ public class UpdateActivityRequest {
         this.exerciseID = exerciseID;
     }
 
-    public Integer getSets() {
-        return sets;
-    }
-
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
-    }
 }

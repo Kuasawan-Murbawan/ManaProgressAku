@@ -68,4 +68,11 @@ public class Activity {
         this.exerciseID = exerciseID;
     }
 
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
 }

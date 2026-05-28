@@ -2,6 +2,8 @@ package com.husyairi.ManaProgressAku.DTO.Activity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 public class InsertActivityRequest {
 
     @Schema(example = "SESS003")
@@ -10,21 +12,12 @@ public class InsertActivityRequest {
     @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
 
-    @Schema(example = "3", description = "3 sets of workout")
-    private Integer sets;
+    private LocalDateTime created_at;
 
-    @Schema(example = "10,10,10", description = "Weight of the equipment in KG")
-    private String weight;
-
-    @Schema(example = "8,8,8", description = "Reps for each set")
-    private String rep;
-
-    public InsertActivityRequest( String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {
+    public InsertActivityRequest(String sessionID, Integer exerciseID, LocalDateTime created_at) {
         this.sessionID = sessionID;
         this.exerciseID = exerciseID;
-        this.sets = sets;
-        this.weight = weight;
-        this.rep = rep;
+        this.created_at = created_at;
     }
 
     public String getSessionID() {
@@ -43,27 +36,11 @@ public class InsertActivityRequest {
         this.exerciseID = exerciseID;
     }
 
-    public Integer getSets() {
-        return sets;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 }

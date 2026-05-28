@@ -1,21 +1,19 @@
 package com.husyairi.ManaProgressAku.DTO.Activity;
 
+import java.time.LocalDateTime;
+
 public class GetActivityResponse {
 
     private String activityID;
     private String sessionID;
     private Integer exerciseID;
-    private Integer sets;
-    private String weight;
-    private String rep;
+    private LocalDateTime created_at;
 
-    public GetActivityResponse(String activityID, String sessionID, Integer exerciseID, Integer sets, String weight, String rep) {
+    public GetActivityResponse(String activityID, String sessionID, Integer exerciseID, LocalDateTime created_at) {
         this.activityID = activityID;
         this.sessionID = sessionID;
         this.exerciseID = exerciseID;
-        this.sets = sets;
-        this.weight = weight;
-        this.rep = rep;
+        this.created_at = created_at;
     }
 
     public String getActivityID() {
@@ -42,27 +40,11 @@ public class GetActivityResponse {
         this.exerciseID = exerciseID;
     }
 
-    public Integer getSets() {
-        return sets;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 }

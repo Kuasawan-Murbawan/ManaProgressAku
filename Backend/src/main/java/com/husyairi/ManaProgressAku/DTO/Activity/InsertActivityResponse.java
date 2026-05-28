@@ -3,6 +3,8 @@ package com.husyairi.ManaProgressAku.DTO.Activity;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDateTime;
+
 public class InsertActivityResponse {
 
     private String activityID;
@@ -11,22 +13,14 @@ public class InsertActivityResponse {
     @Schema(example = "4", description = "ID for the particular exercise")
     private Integer exerciseID;
 
-    @Schema(example = "3", description = "3 sets of workout")
-    private Integer sets;
+    private LocalDateTime created_at;
 
-    @Schema(example = "8,8,8", description = "Reps for each set")
-    private String rep;
 
-    @Schema(example = "10,10,10", description = "Weight of the equipment in KG")
-    private String weight;
-
-    public InsertActivityResponse(String activityID, Session session, Integer exerciseID, Integer sets, String rep, String weight) {
+    public InsertActivityResponse(String activityID, Session session, Integer exerciseID, LocalDateTime created_at) {
         this.activityID = activityID;
         this.session = session;
         this.exerciseID = exerciseID;
-        this.sets = sets;
-        this.rep = rep;
-        this.weight = weight;
+        this.created_at = created_at;
     }
 
     public String getActivityID() {
@@ -53,27 +47,11 @@ public class InsertActivityResponse {
         this.exerciseID = exerciseID;
     }
 
-    public Integer getSets() {
-        return sets;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
-
-    public String getRep() {
-        return rep;
-    }
-
-    public void setRep(String rep) {
-        this.rep = rep;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 }
