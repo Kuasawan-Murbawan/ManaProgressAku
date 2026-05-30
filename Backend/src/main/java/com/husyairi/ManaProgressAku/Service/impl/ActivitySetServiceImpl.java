@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class ActivitySetServiceImpl implements ActivitySetService {
@@ -137,5 +138,18 @@ public class ActivitySetServiceImpl implements ActivitySetService {
                 fetchedSet.getActivity().getActivityID()
         );
 
+    }
+
+    public List<ActivitySet> getAllSetByActivity (String activityID){
+
+        Activity fetchedActivity = activityRepository.findById(activityID).orElseThrow(() ->
+                new BadRequestException(404, "No activity found", new HashMap<>()));
+
+        if(!fetchedActivity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403,"Not authorized to access this activity", new HashMap<>());
+        }
+
+//        return activitySetRepository.findByActivityActivityID(fetchedActivity.getActivityID());
+        return activitySetRepository.findSetsByActivityID(fetchedActivity.getActivityID());
     }
 }

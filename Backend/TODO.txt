@@ -130,7 +130,7 @@ so, we handled it using front end (1. delete activities 2. delete session)
 [/] issue: cannot do authenticate, problem with password encoder
 
 ~28 May 2026~
-[] edit, delete sets
+[/] edit, delete sets
     - controller, service, repo
-[] Get All Sets in an Activity
+[/] Get All Sets in an Activity
 [] Insert session -  put Active
