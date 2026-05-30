@@ -10,4 +10,6 @@ public interface ActivitySetService {
     public Long deleteSet(Long request);
 
     public GetSetResponse getSet(Long setID);
+
+    public GetSetResponse editSet(InsertSetRequest request,Long setID);
 }

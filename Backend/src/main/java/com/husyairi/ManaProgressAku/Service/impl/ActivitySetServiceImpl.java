@@ -109,4 +109,33 @@ public class ActivitySetServiceImpl implements ActivitySetService {
                 set.getActivity().getActivityID()
         );
     }
+
+    public GetSetResponse editSet (InsertSetRequest req, Long setID){
+
+        ActivitySet fetchedSet = activitySetRepository.findById(setID).orElseThrow(() ->
+                new BadRequestException(404, "Set not found", new HashMap<>()));
+
+        if(!fetchedSet.getActivity().getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Unauthorized to make this request", new HashMap<>());
+        }
+
+        fetchedSet.setSetNumber(req.getSetNumber());
+        fetchedSet.setReps(req.getReps());
+        fetchedSet.setWeight(req.getWeight());
+
+        try{
+            activitySetRepository.save(fetchedSet);
+        }catch (Exception e){
+            throw new BadRequestException(500, "Internal Server error", new HashMap<>());
+        }
+
+        return new GetSetResponse(
+                fetchedSet.getSetID(),
+                fetchedSet.getWeight(),
+                fetchedSet.getReps(),
+                fetchedSet.getSetNumber(),
+                fetchedSet.getActivity().getActivityID()
+        );
+
+    }
 }

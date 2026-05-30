@@ -62,4 +62,16 @@ public class ActivitySetController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/editSet/{setID}")
+    public ResponseEntity<ApiSuccessResponse<GetSetResponse>> editSet(@PathVariable Long setID, @RequestBody InsertSetRequest request){
+        GetSetResponse data = activitySetService.editSet(request, setID);
+
+        ApiSuccessResponse<GetSetResponse> response = new ApiSuccessResponse<>(
+                "Set updated sucessfully",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
