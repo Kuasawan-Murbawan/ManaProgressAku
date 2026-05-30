@@ -105,6 +105,20 @@ public class SessionController {
         );
     }
 
+    @PatchMapping("/finishSession/{sessionID}")
+    public ResponseEntity<ApiSuccessResponse<Session>> finishSession (@PathVariable String sessionID){
+
+        Session data = sessionService.finishSession(sessionID);
+
+        ApiSuccessResponse<Session> response = new ApiSuccessResponse<>(
+                "Session completed successfully",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllSessions")
     public ResponseEntity<ApiSuccessResponse<List<Session>>> getAllSession(){

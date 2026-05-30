@@ -174,6 +174,22 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
+    public Session finishSession(String sessionID){
+
+        Session fetchedSession = sessionRepository.findById(sessionID).orElseThrow(() ->
+                new BadRequestException(404, "No session found", new HashMap<>()));
+
+        if(!fetchedSession.getUserId().equals(getCurrentUserId())){
+            throw  new BadRequestException(403, "Not authorized to perform this operation", new HashMap<>());
+        }
+
+        fetchedSession.setStatus("COMPLETED");
+        sessionRepository.save(fetchedSession);
+
+        return fetchedSession;
+    }
+
+    @Override
     public List<Session> getUserSessions(){
         return sessionRepository.findByUserId(getCurrentUserId());
     }

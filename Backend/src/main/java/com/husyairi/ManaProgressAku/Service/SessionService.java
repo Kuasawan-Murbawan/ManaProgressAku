@@ -18,6 +18,8 @@ public interface SessionService {
 
     public void deleteSession(String sessionID);
 
+    public Session finishSession(String sessionID);
+
     public List<Session> getAllSessions();
 
     public List<Session> getUserSessions();
