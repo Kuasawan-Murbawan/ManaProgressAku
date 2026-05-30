@@ -94,78 +94,51 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public GetSessionResponse getSession (String sessionID) {
 
-        Optional<Session> retrievedSession;
-        try {
-            retrievedSession = sessionRepository.findById(sessionID);
-        } catch (Exception e) {
-            throw new BadRequestException(500, e.getMessage() , new HashMap<>());
+        Session fetchedSession = sessionRepository.findById(sessionID).orElseThrow(() ->
+                new BadRequestException(404, "No session found", new HashMap<>())
+        );
+        if(!fetchedSession.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to perform this operation", new HashMap<>());
         }
-
-        if (retrievedSession.isEmpty()) {
-            throw new BadRequestException(404, "Session ID not found.", new HashMap<>());
-        }
-
-        Long sessionUserId = retrievedSession.get().getUserId();
-
-        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
-        }
-
-        Session session = retrievedSession.get();
-
         return new GetSessionResponse(
-                session.getSessionID(),
-                session.getTime(),
-                session.getDate(),
-                session.getStatus()
+                fetchedSession.getSessionID(),
+                fetchedSession.getTime(),
+                fetchedSession.getDate(),
+                fetchedSession.getStatus()
         );
     }
 
     @Override
     public Session updateSession (UpdateSessionRequest request){
 
-        Optional<Session> isExist = sessionRepository.findById(request.getSessionID());
+        Session fetchedSession = sessionRepository.findById(request.getSessionID()).orElseThrow(() ->
+                new BadRequestException(404, "No session found", new HashMap<>()));
 
-        if(isExist.isEmpty()){
-            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        if(!fetchedSession.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to perform this operation", new HashMap<>());
         }
 
-        // TODO: make this checker a function
-        Long sessionUserId = isExist.get().getUserId();
-
-        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
-        }
-
-        Session updatedSession = isExist.get();
-        updatedSession.setTime(request.getTime());
-        updatedSession.setDate(request.getDate());
+        fetchedSession.setTime(request.getTime());
+        fetchedSession.setDate(request.getDate());
 
         try{
-            sessionRepository.save(updatedSession);
+            sessionRepository.save(fetchedSession);
         }catch (Exception e){
             throw new BadRequestException(500, "", new HashMap<>());
         }
 
-        return updatedSession;
+        return fetchedSession;
     }
 
     @Override
     public void deleteSession (String sessionID){
 
-        Optional<Session> isExist = sessionRepository.findById(sessionID);
+        Session fetchedSession = sessionRepository.findById(sessionID).orElseThrow(()->
+                new BadRequestException(404, "No session found", new HashMap<>()));
 
-        if(isExist.isEmpty()){
-            throw new BadRequestException(404, "Session ID not found", new HashMap<>());
+        if(!fetchedSession.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorize to perform this operation", new HashMap<>());
         }
-
-        Long sessionUserId = isExist.get().getUserId();
-
-
-        if(sessionUserId == null || !sessionUserId.equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not Authorized", new HashMap<>());
-        }
-
         try {
             sessionRepository.deleteById(sessionID);
         }catch (Exception e){
