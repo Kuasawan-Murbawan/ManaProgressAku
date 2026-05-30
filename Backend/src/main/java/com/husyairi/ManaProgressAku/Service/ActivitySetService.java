@@ -8,4 +8,6 @@ public interface ActivitySetService {
     public GetSetResponse insertSet(InsertSetRequest request);
 
     public Long deleteSet(Long request);
+
+    public GetSetResponse getSet(Long setID);
 }

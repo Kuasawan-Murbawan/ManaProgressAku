@@ -11,6 +11,9 @@ import com.husyairi.ManaProgressAku.Repository.ActivitySetRepository;
 import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
 import com.husyairi.ManaProgressAku.Service.ActivitySetService;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +32,8 @@ public class ActivitySetServiceImpl implements ActivitySetService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(ActivitySetServiceImpl.class);
 
     private Long getCurrentUserId(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -85,5 +90,23 @@ public class ActivitySetServiceImpl implements ActivitySetService {
         }
 
         return setID;
+    }
+
+    public GetSetResponse getSet (Long setID){
+
+        ActivitySet set = activitySetRepository.findById(setID).orElseThrow(()->
+                new BadRequestException(404, "Activity set not found", new HashMap<>()));
+
+        if(!set.getActivity().getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to view this set", new HashMap<>());
+        }
+
+        return new GetSetResponse(
+                set.getSetID(),
+                set.getWeight(),
+                set.getReps(),
+                set.getSetNumber(),
+                set.getActivity().getActivityID()
+        );
     }
 }
