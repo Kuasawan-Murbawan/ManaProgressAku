@@ -131,4 +131,5 @@ so, we handled it using front end (1. delete activities 2. delete session)
 
 ~28 May 2026~
 [] edit, delete sets
+    - controller, service, repo
 [] Get All Sets in an Activity
