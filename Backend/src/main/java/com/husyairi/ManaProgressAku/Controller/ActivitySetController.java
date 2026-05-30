@@ -8,10 +8,7 @@ import com.husyairi.ManaProgressAku.Service.ActivitySetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -30,6 +27,19 @@ public class ActivitySetController {
 
         ApiSuccessResponse<GetSetResponse> response = new ApiSuccessResponse<>(
                 "Set inserted successfully",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteSet")
+    public ResponseEntity<ApiSuccessResponse<Long>> deleteActivitySet(@PathVariable Long setID){
+
+        Long data = activitySetService.deleteSet(setID);
+
+        ApiSuccessResponse<Long> response = new ApiSuccessResponse<>(
+                "Set deleted successfully",
                 data
         );
 

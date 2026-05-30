@@ -4,12 +4,16 @@ import com.husyairi.ManaProgressAku.DTO.ActivitySet.GetSetResponse;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.InsertSetRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
 import com.husyairi.ManaProgressAku.Entity.Model.ActivitySet;
+import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
 import com.husyairi.ManaProgressAku.Repository.ActivitySetRepository;
+import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
 import com.husyairi.ManaProgressAku.Service.ActivitySetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,6 +26,18 @@ public class ActivitySetServiceImpl implements ActivitySetService {
 
     @Autowired
     private ActivityRepository activityRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private Long getCurrentUserId(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User currentUser = userRepository.findByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException("User not found"));
+
+        return currentUser.getId();
+    }
 
 
     @Override
@@ -48,4 +64,26 @@ public class ActivitySetServiceImpl implements ActivitySetService {
         );
     }
 
+    @Override
+    public Long deleteSet (Long setID){
+
+        ActivitySet set = activitySetRepository.findById(setID).
+                orElseThrow(() -> new BadRequestException(
+                        404,
+                        "Activity Set not found",
+                        new HashMap<>()
+                ));
+
+        if(!set.getActivity().getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to delete this set", new HashMap<>());
+        }
+
+        try{
+            activitySetRepository.deleteById(setID);
+        }catch (Exception e){
+            throw new BadRequestException(500, e.getMessage(), new HashMap<>());
+        }
+
+        return setID;
+    }
 }

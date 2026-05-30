@@ -133,3 +133,4 @@ so, we handled it using front end (1. delete activities 2. delete session)
 [] edit, delete sets
     - controller, service, repo
 [] Get All Sets in an Activity
+[] Insert session -  put Active
