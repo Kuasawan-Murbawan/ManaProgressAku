@@ -75,7 +75,8 @@ public class SessionServiceImpl implements SessionService {
 
         Session newSession = new Session(
                 request.getDate(),
-                request.getTime()
+                request.getTime(),
+                "ACTIVE"
         );
 
         // generate new Session ID
@@ -88,7 +89,6 @@ public class SessionServiceImpl implements SessionService {
         } catch (Exception e) {
             throw new BadRequestException(400, "Error saving session: " + e.getMessage(), new HashMap<>());
         }
-
     }
 
     @Override
@@ -116,7 +116,8 @@ public class SessionServiceImpl implements SessionService {
         return new GetSessionResponse(
                 session.getSessionID(),
                 session.getTime(),
-                session.getDate()
+                session.getDate(),
+                session.getStatus()
         );
     }
 

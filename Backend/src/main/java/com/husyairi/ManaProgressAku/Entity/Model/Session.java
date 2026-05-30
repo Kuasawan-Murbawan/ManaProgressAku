@@ -26,6 +26,7 @@ public class Session {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    // ACTIVE or COMPLETED
     @Column(name = "status", nullable = false)
     private String status;
 
@@ -38,9 +39,10 @@ public class Session {
         this.time = time;
     }
 
-    public Session(LocalDate date, LocalTime time) {
+    public Session(LocalDate date, LocalTime time, String status) {
         this.date = date;
         this.time = time;
+        this.status = status;
     }
 
     public String getSessionID() {

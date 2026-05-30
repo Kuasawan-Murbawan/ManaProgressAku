@@ -10,14 +10,16 @@ public class GetSessionResponse {
 
     private LocalDate date;
 
+    private String status;
 
     public GetSessionResponse() {
     }
 
-    public GetSessionResponse(String sessionID, LocalTime time, LocalDate date) {
+    public GetSessionResponse(String sessionID, LocalTime time, LocalDate date, String status) {
         this.sessionID = sessionID;
         this.time = time;
         this.date = date;
+        this.status = status;
     }
 
     public String getSessionID() {
@@ -44,4 +46,11 @@ public class GetSessionResponse {
         this.date = date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

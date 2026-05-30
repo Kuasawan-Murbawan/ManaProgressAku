@@ -14,12 +14,15 @@ public class InsertSessionRequest {
     @Schema(example = "17:41:09")
     private LocalDate date;
 
+    private String status;
+
     public InsertSessionRequest() {
     }
 
-    public InsertSessionRequest(LocalTime time, LocalDate date) {
+    public InsertSessionRequest(LocalTime time, LocalDate date, String status) {
         this.time = time;
         this.date = date;
+        this.status = status;
     }
 
     public LocalTime getTime() {
@@ -38,4 +41,11 @@ public class InsertSessionRequest {
         this.date = date;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
