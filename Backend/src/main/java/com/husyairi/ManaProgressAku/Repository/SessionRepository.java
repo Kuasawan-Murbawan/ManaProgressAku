@@ -32,6 +32,6 @@ public interface SessionRepository extends JpaRepository<Session, String> {
      */
     List<Session> findByUserId(Long userId);
 
-    @Query(value = "SELECT * FROM session WHERE user_id= :userID AND status='ACTIVE'", nativeQuery = true)
+    @Query(value = "SELECT * FROM session WHERE user_id= :userID AND status='ACTIVE' LIMIT 1", nativeQuery = true)
     Optional<Session> findActiveSession(Long userID);
 }

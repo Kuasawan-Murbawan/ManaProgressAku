@@ -70,6 +70,16 @@ public class SessionServiceImpl implements SessionService {
 
     public InsertSessionResponse createSession(InsertSessionRequest request){
 
+        Optional<Session> activeSession = sessionRepository.findActiveSession(getCurrentUserId());
+
+        if(activeSession.isPresent()){
+            throw new BadRequestException(
+                    409, // server can't process because conflict with current state
+                    "User already has an active session",
+                    new HashMap<>()
+            );
+        }
+
         Session newSession = new Session(
                 request.getDate(),
                 request.getTime(),
