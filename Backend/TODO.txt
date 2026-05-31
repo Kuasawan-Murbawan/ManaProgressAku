@@ -133,4 +133,38 @@ so, we handled it using front end (1. delete activities 2. delete session)
 [/] edit, delete sets
     - controller, service, repo
 [/] Get All Sets in an Activity
-[] Insert session -  put Active
+[/] Insert session -  put Active
+
+~31 May 2026~
+[] get all active
+    === Check active session ===
+    1. FE send /session/active
+    2. return hasActiveSession:true, sessionID: sess001, startedAt: 2026-05031
+    3. FE prompt FINISH or CONTINUE
+    4. FINISH -> send /finishSesssion/sess001
+    5. CONTINUE -> build page for sess001
+
+[] enforce only 1 Active session per user
+    Service-layer rule
+
+    Before creating a new session:
+
+    Optional<Session> activeSession =
+            sessionRepository.findActiveSession(getCurrentUserId());
+
+    if (activeSession.isPresent()) {
+        throw new BadRequestException(
+                409,
+                "User already has an active session",
+                new HashMap<>()
+        );
+    }
+
+    Then only create new session if no active session exists.
+
+    Repository
+    @Query(
+        value = "SELECT * FROM session WHERE user_id = :userID AND status = 'ACTIVE' LIMIT 1",
+        nativeQuery = true
+    )
+    Optional<Session> findActiveSession(Long userID);

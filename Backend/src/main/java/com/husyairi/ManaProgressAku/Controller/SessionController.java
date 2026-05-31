@@ -119,6 +119,19 @@ public class SessionController {
 
     }
 
+    @GetMapping("/session/active")
+    public ResponseEntity<ApiSuccessResponse<ActiveSessionResponse>> getActiveSession(){
+
+        ActiveSessionResponse data = sessionService.getActiveSession();
+
+        ApiSuccessResponse<ActiveSessionResponse> response = new ApiSuccessResponse<>(
+                "Active session have been checked.",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllSessions")
     public ResponseEntity<ApiSuccessResponse<List<Session>>> getAllSession(){

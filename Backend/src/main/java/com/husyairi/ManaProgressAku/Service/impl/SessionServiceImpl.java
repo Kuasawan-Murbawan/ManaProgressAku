@@ -1,9 +1,6 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
-import com.husyairi.ManaProgressAku.DTO.Session.GetSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionRequest;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.Session.UpdateSessionRequest;
+import com.husyairi.ManaProgressAku.DTO.Session.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
@@ -170,5 +167,29 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public List<Session> getAllSessions(){
         return sessionRepository.findAll();
+    }
+
+    @Override
+    public ActiveSessionResponse getActiveSession(){
+
+        Optional<Session> fetchedSession = sessionRepository.findActiveSession(getCurrentUserId());
+
+        if(fetchedSession.isEmpty()){
+            return new ActiveSessionResponse(
+                    false,
+                    null,
+                    null,
+                    null
+            );
+        }else{
+            Session session = fetchedSession.get();
+            return new ActiveSessionResponse(
+                    true,
+                    session.getSessionID(),
+                    session.getDate(),
+                    session.getStatus()
+            );
+        }
+
     }
 }

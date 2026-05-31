@@ -1,8 +1,6 @@
 package com.husyairi.ManaProgressAku.Service;
 
-import com.husyairi.ManaProgressAku.DTO.Session.GetSessionResponse;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionRequest;
-import com.husyairi.ManaProgressAku.DTO.Session.InsertSessionResponse;
+import com.husyairi.ManaProgressAku.DTO.Session.*;
 import com.husyairi.ManaProgressAku.DTO.Session.UpdateSessionRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 
@@ -23,4 +21,6 @@ public interface SessionService {
     public List<Session> getAllSessions();
 
     public List<Session> getUserSessions();
+
+    public ActiveSessionResponse getActiveSession();
 }
