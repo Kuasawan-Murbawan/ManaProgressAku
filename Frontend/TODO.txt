@@ -131,3 +131,12 @@ TODO: can proceed to deploy
 - ⁠solution: make prompt that halang user to tefresh
 [15:38, 13/05/2026] husyairi: page to add exercises without hardcode it
 [15:51, 13/05/2026] husyairi: button to check if own weight (for calistenic)
+
+~1 June 2026~
+[] Check for active session
+        if true, craete modal to prompt user to continue current session or finish active session
+        if CONTINUE -> navigate to CurrentSessionPage using /session/active and fetch the activities
+        if FINISH -> send /finishSession
+[] handle error 409 when creating session while having active session
+        prompt the same modal
+[] edit set
