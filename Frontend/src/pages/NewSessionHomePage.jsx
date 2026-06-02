@@ -23,7 +23,7 @@ const NewSessionHomePage = () => {
 
   const { activities, clearActivities } = useActivityStore();
   const { exercise, fetchAllExercises } = useExerciseStore();
-  const { sessionID, clearSession } = useSessionStore();
+  const { sessionID, clearSession, finishSession } = useSessionStore();
   const { currentUser, fetchCurrentUser } = useUserStore();
 
   const [isBlocking, setIsBlocking] = useState(true);
@@ -53,6 +53,8 @@ const NewSessionHomePage = () => {
   };
 
   const handleFinishSession = () => {
+
+    finishSession();
     setIsBlocking(false);
     clearActivities();
     clearSession();

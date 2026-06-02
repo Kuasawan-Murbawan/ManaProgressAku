@@ -140,3 +140,16 @@ TODO: can proceed to deploy
 [] handle error 409 when creating session while having active session
         prompt the same modal
 [] edit set
+
+
+~2 June 2026~
+## ====== SESSION ======
+[/] createSession must include "ACTIVE" - no need already handle at BE
+[/] implement finish session
+[] always check for existing ACTIVE session
+[] handle 409 conflict when existing session exist
+
+
+## ====== ACTIVITY SET =====
+[] update the createActivity api body
+[] change to activitySet

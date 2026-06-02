@@ -37,7 +37,7 @@ public class ActivitySetController {
                 data
         );
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/deleteSet/{setID}")

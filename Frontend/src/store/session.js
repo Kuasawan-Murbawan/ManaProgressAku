@@ -3,10 +3,11 @@ import { persist } from "zustand/middleware";
 import API from "../api/axios.js";
 
 export const useSessionStore = create(
-  persist((set) => ({
+  persist((set, get) => ({
     sessionID: "",
     sessions: [],
     isLoading: false,
+    
     createSession: async (newSession) => {
       const res = await API.post("/insertSession", newSession);
 
@@ -21,6 +22,23 @@ export const useSessionStore = create(
         return { success: false, message: "Failed to create session" };
       }
     },
+
+    finishSession: async() => {
+      try {
+        set({ isLoading: true});
+        const sessionID = get().sessionID;
+        const res = await API.patch(`/finishSession/${sessionID}`);
+        if(res.status == 200){
+          set({ sessionID: ""});
+          return {success: true, message: res.data.message};
+        }
+      } catch (error) {
+        console.error("Failed to finish session.", error);        
+      } finally{
+        set({ isLoading: false});
+      }
+    },
+
     deleteSession: async (sessionID) => {
       const res = await API.delete(`/deleteSession/${sessionID}`);
       if (res.status == 200) {
@@ -33,9 +51,11 @@ export const useSessionStore = create(
         };
       }
     },
+
     clearSession: () => {
       set({ sessionID: "" });
     },
+
     fetchUserSessions: async () => {
       try {
         set({ isLoading: true });

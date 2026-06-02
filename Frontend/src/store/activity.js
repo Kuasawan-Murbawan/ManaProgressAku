@@ -11,7 +11,7 @@ export const useActivityStore = create(
       try {
         const res = await API.post("/insertActivity", newActivity);
 
-        if (res.status === 200) {
+        if (res.status === 201) {
           set(() => ({
             activities: [...get().activities, res.data.data],
           }));
