@@ -1,12 +1,12 @@
 import React from "react";
 import {
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Button,
+	AlertDialog,
+	AlertDialogOverlay,
+	AlertDialogContent,
+	AlertDialogHeader,
+	AlertDialogBody,
+	AlertDialogFooter,
+	Button,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 
@@ -15,53 +15,53 @@ import { useNavigate } from "react-router-dom";
 import { useActivityStore } from "../store/activity";
 
 const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
-  const cancelRef = useRef();
-  const { deleteActivitiesBySession, clearActivities } = useActivityStore();
+	const cancelRef = useRef();
+	const { deleteActivitiesBySession, clearActivities } = useActivityStore();
 
-  const navigate = useNavigate();
-  const { deleteSession } = useSessionStore();
+	const navigate = useNavigate();
+	const { deleteSession } = useSessionStore();
 
-  const handleConfirm = async () => {
-    // delete activities first as to avoid foreign key error
-    const result = await deleteActivitiesBySession(sessionID);
+	const handleConfirm = async () => {
+		// delete activities first as to avoid foreign key error
+		const result = await deleteActivitiesBySession(sessionID);
 
-    if (result.success) {
-      const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
+		if (result.success) {
+			const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
 
-      clearActivities();
-      // TODO: if from Past Session page, this will also brought to home
-      navigate("/");
-    } else {
-      alert("Failed to delete session");
-    }
-  };
+			clearActivities();
+			// TODO: if from Past Session page, this will also brought to home
+			navigate("/pastSessions");
+		} else {
+			alert("Failed to delete session");
+		}
+	};
 
-  return (
-    <div>
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader>Delete This Session?</AlertDialogHeader>
-            <AlertDialogBody>
-              This action <b>cannot</b> be undone.
-            </AlertDialogBody>
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme="red" onClick={handleConfirm} ml={3}>
-                Yes, Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    </div>
-  );
+	return (
+		<div>
+			<AlertDialog
+				isOpen={isOpen}
+				leastDestructiveRef={cancelRef}
+				onClose={onClose}
+			>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader>Delete This Session?</AlertDialogHeader>
+						<AlertDialogBody>
+							This action <b>cannot</b> be undone.
+						</AlertDialogBody>
+						<AlertDialogFooter>
+							<Button ref={cancelRef} onClick={onClose}>
+								Cancel
+							</Button>
+							<Button colorScheme="red" onClick={handleConfirm} ml={3}>
+								Yes, Delete
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
+			</AlertDialog>
+		</div>
+	);
 };
 
 export default DeleteSessionDialog;
