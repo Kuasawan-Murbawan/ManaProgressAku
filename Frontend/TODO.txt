@@ -150,7 +150,7 @@ TODO: can proceed to deploy
         Any Page -> session store (activeSession) -> if res.data.hasActiveSession -> set sessionID = res.data.sessionID
         -> navigate to NewSessionHomePage
 [/] create modal to prompt user to finish or continue session
-[] handle 409 conflict when existing session exist
+[/] handle 409 conflict when existing session exist
 
 
 

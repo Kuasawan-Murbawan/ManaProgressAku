@@ -9,17 +9,33 @@ export const useSessionStore = create(
 		isLoading: false,
 
 		createSession: async (newSession) => {
-			const res = await API.post("/insertSession", newSession);
+			try {
+				set({ isLoading: true });
 
-			// Set current session ID
-			const newSessionID = res.data.data?.sessionID;
+				const res = await API.post("/insertSession", newSession);
 
-			if (newSessionID) {
-				set({ sessionID: newSessionID });
+				// Set current session ID
+				const newSessionID = res.data.data?.sessionID;
+				if (newSessionID) {
+					set({ sessionID: newSessionID });
 
-				return { success: true, message: "Session created!" };
-			} else {
-				return { success: false, message: "Failed to create session" };
+					return { success: true, message: "Session created!" };
+				} else {
+					return { success: false, message: "Failed to create session" };
+				}
+			} catch (error) {
+				if (error.response?.status === 409) {
+					return {
+						success: false,
+						message: "Active session exists!",
+					};
+				}
+				return {
+					success: false,
+					message: "Error creating session.",
+				};
+			} finally {
+				set({ isLoading: false });
 			}
 		},
 
