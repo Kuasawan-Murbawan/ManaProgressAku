@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import StartSessionDialog from "../components/StartSessionDialog";
 import { useExerciseStore } from "../store/exercise";
 import { useActivityStore } from "../store/activity";
+import { useSessionStore } from "../store/session";
 import ConfirmLogoutDialog from "../components/ConfirmLogoutDialog";
 
 const Home = () => {
@@ -18,12 +19,25 @@ const Home = () => {
 
   const { exercise, fetchAllExercises } = useExerciseStore();
   const { clearActivities } = useActivityStore();
+  const { activeSession } = useSessionStore();
 
   useEffect(() => {
-    clearActivities(); // clear activities after finishing session
-    if (exercise.length === 0) {
-      fetchAllExercises();
-    }
+    const init = async () => {
+      clearActivities(); // clear activities after finishing session
+
+      if (exercise.length === 0) {
+        await fetchAllExercises();
+      }
+
+      // Check for any active session
+      const hasActive = await activeSession();
+
+      if (hasActive) {
+        navigate("/createSession");
+      }
+    };
+
+    init();
   }, []);
 
   // Create Session

@@ -7,7 +7,7 @@ export const useSessionStore = create(
     sessionID: "",
     sessions: [],
     isLoading: false,
-    
+
     createSession: async (newSession) => {
       const res = await API.post("/insertSession", newSession);
 
@@ -20,6 +20,29 @@ export const useSessionStore = create(
         return { success: true, message: "Session created!" };
       } else {
         return { success: false, message: "Failed to create session" };
+      }
+    },
+    
+    activeSession: async() => {
+      try {
+        set({ isLoading: true});
+        const res = await API.get(`/session/active`);
+
+        if(res.status == 200){
+          if(res.data.data.hasActiveSession){
+            set({ sessionID: res.data.data.sessionID}); 
+            return true;         
+          }
+            return false;
+          
+        }       
+                
+      } catch (error) {
+        console.error("Failed to check active session", error);
+        return false;
+        
+      }finally{
+        set({ isLoading: false});
       }
     },
 

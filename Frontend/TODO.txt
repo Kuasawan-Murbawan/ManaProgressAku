@@ -147,7 +147,10 @@ TODO: can proceed to deploy
 [/] createSession must include "ACTIVE" - no need already handle at BE
 [/] implement finish session
 [] always check for existing ACTIVE session
+        Any Page -> session store (activeSession) -> if res.data.hasActiveSession -> set sessionID = res.data.sessionID
+        -> navigate to NewSessionHomePage
 [] handle 409 conflict when existing session exist
+
 
 
 ## ====== ACTIVITY SET =====
