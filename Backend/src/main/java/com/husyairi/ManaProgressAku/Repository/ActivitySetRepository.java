@@ -12,4 +12,6 @@ public interface ActivitySetRepository extends JpaRepository<ActivitySet, Long> 
     @Query(value = "SELECT * FROM activityset WHERE activityid= :activityID", nativeQuery = true)
     List<ActivitySet> findSetsByActivityID(String activityID);
 
+    @Query(value = "SELECT * FROM activityset WHERE activityid= :activityID ORDER BY set_number ASC", nativeQuery = true)
+    List<ActivitySet> findSetsDetailByActivityID(String activityID);
 }

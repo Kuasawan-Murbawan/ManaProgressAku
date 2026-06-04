@@ -23,4 +23,6 @@ public interface SessionService {
     public List<Session> getUserSessions();
 
     public ActiveSessionResponse getActiveSession();
+
+    public SessionDetailsResponse getSessionDetails(String sessionID);
 }

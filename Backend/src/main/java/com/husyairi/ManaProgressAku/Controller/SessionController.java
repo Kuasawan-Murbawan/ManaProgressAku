@@ -144,4 +144,16 @@ public class SessionController {
                 new ApiSuccessResponse<>("All sessions fetched successfully!", allSessions)
         );
     }
+
+    @GetMapping("/sessions/{sessionID}/details")
+    public ResponseEntity<ApiSuccessResponse<SessionDetailsResponse>> getSessionDetails(@PathVariable String sessionID){
+        SessionDetailsResponse data = sessionService.getSessionDetails(sessionID);
+
+        ApiSuccessResponse<SessionDetailsResponse> response = new ApiSuccessResponse<>(
+                "Fetched session details successfully",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

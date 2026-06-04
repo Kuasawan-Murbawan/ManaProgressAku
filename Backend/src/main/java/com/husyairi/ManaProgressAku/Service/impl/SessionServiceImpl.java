@@ -1,12 +1,14 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
+import com.husyairi.ManaProgressAku.DTO.Activity.ActivityDetailsResponse;
+import com.husyairi.ManaProgressAku.DTO.ActivitySet.SetDetailsResponse;
 import com.husyairi.ManaProgressAku.DTO.Session.*;
+import com.husyairi.ManaProgressAku.Entity.Model.Activity;
+import com.husyairi.ManaProgressAku.Entity.Model.ActivitySet;
 import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
-import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
-import com.husyairi.ManaProgressAku.Repository.SessionRepository;
-import com.husyairi.ManaProgressAku.Repository.UserRepository;
+import com.husyairi.ManaProgressAku.Repository.*;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
+    private ActivitySetRepository activitySetRepository;
 
     private Long getCurrentUserId() {
 
@@ -201,5 +207,49 @@ public class SessionServiceImpl implements SessionService {
             );
         }
 
+    }
+
+    @Override
+    public SessionDetailsResponse getSessionDetails(String sessionID){
+
+        Session fetchedSession = sessionRepository.findById(sessionID)
+                .orElseThrow(() -> new BadRequestException(404, "Session not found", new HashMap<>()));
+
+        if(!fetchedSession.getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to view this session", new HashMap<>());
+        }
+
+        // Fetch all activities in a Session
+        List<Activity> fetchedActivities = activityRepository.findBySession_SessionID(sessionID);
+
+        // Each activities are mapped onto a ActivityDetailsReponse
+        List<ActivityDetailsResponse> activityResponses = fetchedActivities.stream().
+                map(activity -> {
+                    // Fetched all sets in an Activity
+                    List<ActivitySet> fetchedSets = activitySetRepository.findSetsDetailByActivityID(activity.getActivityID());
+
+                    List<SetDetailsResponse> setResponses = fetchedSets.stream()
+                            .map(set -> new SetDetailsResponse(
+                                    set.getSetID(),
+                                    set.getSetNumber(),
+                                    set.getWeight(),
+                                    set.getReps()
+                            )).toList();
+
+                    return new ActivityDetailsResponse(
+                            activity.getActivityID(),
+                            activity.getExerciseID(),
+                            activity.getCreated_at(),
+                            setResponses
+                    );
+                }).toList();
+
+        return new SessionDetailsResponse(
+                fetchedSession.getSessionID(),
+                fetchedSession.getStatus(),
+                fetchedSession.getDate(),
+                fetchedSession.getTime(),
+                activityResponses
+        );
     }
 }
