@@ -153,7 +153,17 @@ TODO: can proceed to deploy
 [/] handle 409 conflict when existing session exist
 
 
+## ====== ACTIVITY =====
+REFER POSTMAN API
+[/] update the createActivity api body 
+        only send sessionID, exercise iD
+[/] update addSet
+        send individual set instead of all set
+        
+[] Finish session
 
-## ====== ACTIVITY SET =====
-[] update the createActivity api body
-[] change to activitySet
+[] display all activites and sets in CurrentSessionPage
+
+
+
+

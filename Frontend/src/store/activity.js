@@ -3,113 +3,107 @@ import { persist } from "zustand/middleware";
 import API from "../api/axios.js";
 
 export const useActivityStore = create(
-  persist((set, get) => ({
-    activities: [],
-    isLoading: false,
-    // sessionActivities: [],
-    addActivity: async (newActivity) => {
-      try {
-        const res = await API.post("/insertActivity", newActivity);
+	persist((set, get) => ({
+		activityID: "",
+		activities: [],
+		isLoading: false,
 
-        if (res.status === 201) {
-          set(() => ({
-            activities: [...get().activities, res.data.data],
-          }));
-          return { success: true, message: "Activity saved successfully!" };
-        } else {
-          console.log("sum ting wong");
-          return {
-            success: false,
-            message: res.data.message || "Failed to save activity.",
-          };
-        }
-      } catch (err) {
-        console.error("Activity save error:", err);
-        return {
-          success: false,
-          message: "Something went wrong while saving activity.",
-        };
-      }
-    },
+		addActivity: async (newActivity) => {
+			try {
+				set({ isLoading: true });
+				console.log("Payload:", newActivity);
+				const res = await API.post(`/insertActivity`, newActivity);
+				set({ activityID: res.data.data.activityID });
+				return { success: true, message: "Activity saved successfully" };
+			} catch (error) {
+				console.error("Error when saving activity", error);
+				return {
+					success: false,
+					message: error,
+				};
+			} finally {
+				set({ isLoading: false });
+			}
+		},
 
-    deleteActivity: async (activityID) => {
-      try {
-        const res = await API.delete(`/deleteActivity/${activityID}`);
+		deleteActivity: async (activityID) => {
+			try {
+				const res = await API.delete(`/deleteActivity/${activityID}`);
 
-        if (res.status == 200) {
-          set((state) => ({
-            activities: state.activities.filter(
-              (activity) => activity.activityID !== activityID,
-            ),
-          }));
+				if (res.status == 200) {
+					set((state) => ({
+						activities: state.activities.filter(
+							(activity) => activity.activityID !== activityID,
+						),
+					}));
 
-          return {
-            success: true,
-            message: res.data.message || "Activity Deleted",
-          };
-        } else {
-          return {
-            success: false,
-            message: res.data.errorMessage || "Failed to delete activity",
-          };
-        }
-      } catch (error) {
-        console.error("Error deleting activity:", error);
-        return { success: false, message: error.message };
-      }
-    },
+					return {
+						success: true,
+						message: res.data.message || "Activity Deleted",
+					};
+				} else {
+					return {
+						success: false,
+						message: res.data.errorMessage || "Failed to delete activity",
+					};
+				}
+			} catch (error) {
+				console.error("Error deleting activity:", error);
+				return { success: false, message: error.message };
+			}
+		},
 
-    deleteActivitiesBySession: async (sessionID) => {
-      try {
-        const res = await API.delete(
-          `/deleteActivitiesBySessionID/${sessionID}`,
-        );
+		deleteActivitiesBySession: async (sessionID) => {
+			try {
+				const res = await API.delete(
+					`/deleteActivitiesBySessionID/${sessionID}`,
+				);
 
-        if (res.status === 200) {
-          set({ activities: [] });
+				if (res.status === 200) {
+					set({ activities: [] });
 
-          return {
-            success: true,
-            message: res.data.message || "Deleted all activities",
-          };
-        } else {
-          return {
-            success: false,
-            message: res.data.errorMessage || "Failed to delete activities",
-          };
-        }
-      } catch (error) {
-        console.error("Error deleting activities:", error);
-        return { success: false, message: error.message };
-      }
-    },
+					return {
+						success: true,
+						message: res.data.message || "Deleted all activities",
+					};
+				} else {
+					return {
+						success: false,
+						message: res.data.errorMessage || "Failed to delete activities",
+					};
+				}
+			} catch (error) {
+				console.error("Error deleting activities:", error);
+				return { success: false, message: error.message };
+			}
+		},
 
-    clearActivities: () => {
-      set({ activities: [] });
-    },
+		clearActivities: () => {
+			set({ activities: [] });
+		},
 
-    updateActivity: async (updatedActivity) => {},
+		updateActivity: async (updatedActivity) => {},
 
-    fetchActivityBySession: async (sessionID) => {
-      try {
-        set({ isLoading: true });
-        const res = await API.get(`/sessionActivities/${sessionID}`);
+		fetchActivityBySession: async (sessionID) => {
+			try {
+				set({ isLoading: true });
+				const res = await API.get(`/sessionActivities/${sessionID}`);
 
-        if (res.status == 200) {
-          if (res.data.data.length === 0) {
-            console.log("No activities found for this session.");
-            set({ activities: [] });
-          } else {
-            set({ activities: res.data.data });
-          }
-        } else {
-          console.error("Failed to fetch activities:", res.message);
-        }
-      } catch (error) {
-        console.error("Error fetching activities:", error);
-      } finally {
-        set({ isLoading: false });
-      }
-    },
-  })),
+				if (res.status == 200) {
+					if (res.data.data.length === 0) {
+						console.log("No activities found for this session.");
+						set({ activities: [] });
+					} else {
+						set({ activities: res.data.data });
+					}
+				} else {
+					console.error("Failed to fetch activities:", res.message);
+				}
+			} catch (error) {
+				console.error("Error fetching activities:", error);
+			} finally {
+				set({ isLoading: false });
+			}
+		},
+	})),
 );

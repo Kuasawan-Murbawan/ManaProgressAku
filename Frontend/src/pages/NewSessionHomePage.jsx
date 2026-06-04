@@ -1,12 +1,12 @@
 import {
-  Box,
-  Button,
-  Text,
-  useDisclosure,
-  VStack,
-  useToast,
-  Flex,
-  Divider,
+	Box,
+	Button,
+	Text,
+	useDisclosure,
+	VStack,
+	useToast,
+	Flex,
+	Divider,
 } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,140 +19,139 @@ import useNavigationBlocker from "../hook/useNavigationBlocker.js";
 import { useUserStore } from "../store/user.js";
 
 const NewSessionHomePage = () => {
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-  const { activities, clearActivities } = useActivityStore();
-  const { exercise, fetchAllExercises } = useExerciseStore();
-  const { sessionID, clearSession, finishSession } = useSessionStore();
-  const { currentUser, fetchCurrentUser } = useUserStore();
+	const { activities, clearActivities } = useActivityStore();
+	const { exercise, fetchAllExercises } = useExerciseStore();
+	const { sessionID, clearSession, finishSession } = useSessionStore();
+	const { currentUser, fetchCurrentUser } = useUserStore();
 
-  const [isBlocking, setIsBlocking] = useState(true);
-  useNavigationBlocker(isBlocking);
+	const [isBlocking, setIsBlocking] = useState(true);
+	useNavigationBlocker(isBlocking);
 
-  useEffect(() => {
-    fetchCurrentUser();
-  }, [fetchCurrentUser]);
+	useEffect(() => {
+		fetchCurrentUser();
+	}, [fetchCurrentUser]);
 
-  const toast = useToast();
+	const toast = useToast();
 
-  const {
-    isOpen: deleteSessionIsOpen,
-    onOpen: deleteSessionOnOpen,
-    onClose: deleteSessionOnClose,
-  } = useDisclosure();
+	const {
+		isOpen: deleteSessionIsOpen,
+		onOpen: deleteSessionOnOpen,
+		onClose: deleteSessionOnClose,
+	} = useDisclosure();
 
-  const getExerciseName = (id) => {
-    const found = exercise.find((e) => e.exerciseID === id);
-    return found ? found.exerciseName : "Unknown Exercise : " + id;
-  };
+	const getExerciseName = (id) => {
+		const found = exercise.find((e) => e.exerciseID === id);
+		return found ? found.exerciseName : "Unknown Exercise : " + id;
+	};
 
-  const handleAddActivity = () => {
-    setIsBlocking(false);
-    fetchAllExercises();
-    setTimeout(() => navigate("/newExercise"), 100);
-  };
+	const handleAddActivity = () => {
+		setIsBlocking(false);
+		fetchAllExercises();
+		setTimeout(() => navigate("/newExercise"), 100);
+	};
 
-  const handleFinishSession = () => {
+	const handleFinishSession = () => {
+		finishSession();
+		setIsBlocking(false);
+		clearActivities();
+		clearSession();
 
-    finishSession();
-    setIsBlocking(false);
-    clearActivities();
-    clearSession();
+		toast({
+			title: "Session finished 🎉",
+			description: "Great job completing your workout!",
+			status: "success",
+			duration: 3000,
+			isClosable: true,
+		});
 
-    toast({
-      title: "Session finished 🎉",
-      description: "Great job completing your workout!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
+		navigate("/");
+	};
 
-    navigate("/");
-  };
+	const handleDeleteSession = () => {
+		setIsBlocking(false);
+		deleteSessionOnOpen();
+	};
 
-  const handleDeleteSession = () => {
-    setIsBlocking(false);
-    deleteSessionOnOpen();
-  };
+	return (
+		<Box
+			minH="100vh"
+			bgGradient="linear(to-br, teal.50, purple.50)"
+			py={8}
+			px={6}
+		>
+			{/* Header */}
+			<Box textAlign="center" mb={8}>
+				<Text fontSize="4xl" fontWeight="bold" color="purple.700">
+					Hello {currentUser ? currentUser : "there"} 👋
+				</Text>
+				<Text fontSize="lg" color="gray.600">
+					What do you want to do today?
+				</Text>
+			</Box>
 
-  return (
-    <Box
-      minH="100vh"
-      bgGradient="linear(to-br, teal.50, purple.50)"
-      py={8}
-      px={6}
-    >
-      {/* Header */}
-      <Box textAlign="center" mb={8}>
-        <Text fontSize="4xl" fontWeight="bold" color="purple.700">
-          Hello {currentUser ? currentUser : "there"} 👋
-        </Text>
-        <Text fontSize="lg" color="gray.600">
-          What do you want to do today?
-        </Text>
-      </Box>
+			{/* Exercises List */}
+			{activities.length > 0 ? (
+				activities.map((activity, index) => (
+					<ExerciseSummaryCard
+						key={index}
+						activityID={activity.activityID}
+						exerciseName={getExerciseName(activity.exerciseID)}
+						weights={activity.weight.split(",")}
+						reps={activity.rep.split(",")}
+					/>
+				))
+			) : (
+				<Text fontStyle="italic" color="gray.500" mb={6} textAlign="center">
+					No activities added yet.
+				</Text>
+			)}
 
-      {/* Exercises List */}
-      {activities.length > 0 ? (
-        activities.map((activity, index) => (
-          <ExerciseSummaryCard
-            key={index}
-            activityID={activity.activityID}
-            exerciseName={getExerciseName(activity.exerciseID)}
-            weights={activity.weight.split(",")}
-            reps={activity.rep.split(",")}
-          />
-        ))
-      ) : (
-        <Text fontStyle="italic" color="gray.500" mb={6} textAlign="center">
-          No activities added yet.
-        </Text>
-      )}
+			<Divider my={6} />
 
-      <Divider my={6} />
+			{/* Buttons */}
+			<Flex justify="center" gap={4} wrap="wrap">
+				<Button
+					onClick={handleAddActivity}
+					colorScheme="teal"
+					variant="solid"
+					borderRadius="xl"
+					px={6}
+					py={4}
+				>
+					➕ Add Exercise
+				</Button>
+				<Button
+					onClick={handleFinishSession}
+					colorScheme="purple"
+					variant="solid"
+					borderRadius="xl"
+					px={6}
+					py={4}
+				>
+					✅ Finish Session
+				</Button>
+				<Button
+					onClick={handleDeleteSession}
+					colorScheme="red"
+					variant="outline"
+					borderRadius="xl"
+					px={6}
+					py={4}
+				>
+					🗑️ Delete Session
+				</Button>
+			</Flex>
 
-      {/* Buttons */}
-      <Flex justify="center" gap={4} wrap="wrap">
-        <Button
-          onClick={handleAddActivity}
-          colorScheme="teal"
-          variant="solid"
-          borderRadius="xl"
-          px={6}
-          py={4}
-        >
-          ➕ Add Exercise
-        </Button>
-        <Button
-          onClick={handleFinishSession}
-          colorScheme="purple"
-          variant="solid"
-          borderRadius="xl"
-          px={6}
-          py={4}
-        >
-          ✅ Finish Session
-        </Button>
-        <Button
-          onClick={handleDeleteSession}
-          colorScheme="red"
-          variant="outline"
-          borderRadius="xl"
-          px={6}
-          py={4}
-        >
-          🗑️ Delete Session
-        </Button>
-      </Flex>
-
-      {/* Delete dialog */}
-      <DeleteSessionDialog
-        isOpen={deleteSessionIsOpen}
-        onClose={deleteSessionOnClose}
-        sessionID={sessionID}
-      />
-    </Box>
-  );
+			{/* Delete dialog */}
+			<DeleteSessionDialog
+				isOpen={deleteSessionIsOpen}
+				onClose={deleteSessionOnClose}
+				sessionID={sessionID}
+			/>
+		</Box>
+	);
 };
 
 export default NewSessionHomePage;
