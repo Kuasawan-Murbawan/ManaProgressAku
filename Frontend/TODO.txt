@@ -159,10 +159,13 @@ REFER POSTMAN API
         only send sessionID, exercise iD
 [/] update addSet
         send individual set instead of all set
-        
-[] Finish session
 
-[] display all activites and sets in CurrentSessionPage
+[/] Finish Activity
+[/] display all activites and sets in CurrentSessionPage
+[] fix delete activity
+        - Options
+        1. refetch session details from backend
+        2. remove the activity from currentSessionDetails in zustand (less api call)
 
 
 

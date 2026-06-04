@@ -7,6 +7,7 @@ export const useSessionStore = create(
 		sessionID: "",
 		sessions: [],
 		isLoading: false,
+		currentSessionDetails: null,
 
 		createSession: async (newSession) => {
 			try {
@@ -100,6 +101,30 @@ export const useSessionStore = create(
 			} catch (error) {
 				console.error("Failed to fetch sessions", error);
 				set({ sessions: [] });
+			} finally {
+				set({ isLoading: false });
+			}
+		},
+
+		fetchSessionDetails: async (sessionID) => {
+			try {
+				set({ isLoading: true });
+
+				const res = await API.get(`/sessions/${sessionID}/details`);
+
+				set({ currentSessionDetails: res.data.data });
+
+				return {
+					success: true,
+					message: "Successfully fetched session details",
+				};
+			} catch (error) {
+				console.error("Failed to fetch session details", error);
+
+				return {
+					success: false,
+					message: "Failed to fetch session details",
+				};
 			} finally {
 				set({ isLoading: false });
 			}

@@ -23,6 +23,8 @@ const CurrentActivityPage = () => {
 	const isAllFieldsFilled = () =>
 		sets.every((set) => set.weight !== "" && set.reps !== "");
 
+	// TODO: successToast, addSet function, check Validation toast
+
 	const failedToast = (result) => {
 		toast({
 			title: "Failed",
@@ -41,6 +43,8 @@ const CurrentActivityPage = () => {
 		if (result?.success) {
 			setSets([{ weight: "", reps: "" }]);
 			setStarted(true);
+		} else {
+			failedToast(result);
 		}
 	};
 
@@ -88,16 +92,15 @@ const CurrentActivityPage = () => {
 
 		setIsSaving(true);
 
-		const activityPayLoad = {
-			sessionID,
-			exerciseID: exercise.exerciseID,
-			sets: sets.length,
-			rep: sets.map((s) => s.reps).join(","),
-			weight: sets.map((s) => parseFloat(s.weight).toFixed(2)).join(","), // convert the string to Float
-		};
+		const currentSet = sets[sets.length - 1];
 
-		const result = null;
-		// await addActivity(activityPayLoad);
+		const result = await addSet({
+			setNumber: sets.length,
+			weight: parseFloat(currentSet.weight),
+			reps: parseInt(currentSet.reps),
+			activityID: activityID,
+		});
+
 		setIsSaving(false);
 
 		if (result.success) {
@@ -110,13 +113,7 @@ const CurrentActivityPage = () => {
 			});
 			navigate("/createSession");
 		} else {
-			toast({
-				title: "Failed",
-				description: result.message,
-				status: "error",
-				duration: 3000,
-				isClosable: true,
-			});
+			failedToast(result);
 		}
 	};
 

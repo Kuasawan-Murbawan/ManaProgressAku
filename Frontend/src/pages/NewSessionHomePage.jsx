@@ -23,7 +23,14 @@ const NewSessionHomePage = () => {
 
 	const { activities, clearActivities } = useActivityStore();
 	const { exercise, fetchAllExercises } = useExerciseStore();
-	const { sessionID, clearSession, finishSession } = useSessionStore();
+	const {
+		sessionID,
+		clearSession,
+		finishSession,
+		currentSessionDetails,
+		fetchSessionDetails,
+		isLoading,
+	} = useSessionStore();
 	const { currentUser, fetchCurrentUser } = useUserStore();
 
 	const [isBlocking, setIsBlocking] = useState(true);
@@ -31,7 +38,11 @@ const NewSessionHomePage = () => {
 
 	useEffect(() => {
 		fetchCurrentUser();
-	}, [fetchCurrentUser]);
+
+		if (sessionID) {
+			fetchSessionDetails(sessionID);
+		}
+	}, [fetchCurrentUser, sessionID]);
 
 	const toast = useToast();
 
@@ -92,14 +103,13 @@ const NewSessionHomePage = () => {
 			</Box>
 
 			{/* Exercises List */}
-			{activities.length > 0 ? (
-				activities.map((activity, index) => (
+			{currentSessionDetails?.activities?.length > 0 ? (
+				currentSessionDetails.activities.map((activity, index) => (
 					<ExerciseSummaryCard
 						key={index}
 						activityID={activity.activityID}
 						exerciseName={getExerciseName(activity.exerciseID)}
-						weights={activity.weight.split(",")}
-						reps={activity.rep.split(",")}
+						sets={activity.sets}
 					/>
 				))
 			) : (
