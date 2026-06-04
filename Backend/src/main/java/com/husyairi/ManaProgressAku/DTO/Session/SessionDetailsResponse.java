@@ -8,14 +8,14 @@ import java.util.List;
 
 public class SessionDetailsResponse {
 
-    private String sesionID;
+    private String sessionID;
     private String status;
     private LocalDate date;
     private LocalTime time;
     private List<ActivityDetailsResponse> activities;
 
-    public SessionDetailsResponse(String sesionID, String status, LocalDate date, LocalTime time, List<ActivityDetailsResponse> activities) {
-        this.sesionID = sesionID;
+    public SessionDetailsResponse(String sessionID, String status, LocalDate date, LocalTime time, List<ActivityDetailsResponse> activities) {
+        this.sessionID = sessionID;
         this.status = status;
         this.date = date;
         this.time = time;
@@ -23,11 +23,11 @@ public class SessionDetailsResponse {
     }
 
     public String getSesionID() {
-        return sesionID;
+        return sessionID;
     }
 
     public void setSesionID(String sesionID) {
-        this.sesionID = sesionID;
+        this.sessionID = sesionID;
     }
 
     public String getStatus() {
