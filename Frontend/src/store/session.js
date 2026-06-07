@@ -7,7 +7,7 @@ export const useSessionStore = create(
 		sessionID: "",
 		sessions: [],
 		isLoading: false,
-		currentSessionDetails: null,
+		currentSessionDetails: [],
 
 		createSession: async (newSession) => {
 			try {
@@ -113,6 +113,7 @@ export const useSessionStore = create(
 				const res = await API.get(`/sessions/${sessionID}/details`);
 
 				set({ currentSessionDetails: res.data.data });
+				set({ sessionID: res.data.data.sessionID || get().sessionID });
 
 				return {
 					success: true,
@@ -128,6 +129,10 @@ export const useSessionStore = create(
 			} finally {
 				set({ isLoading: false });
 			}
+		},
+
+		clearCurrentSessionDetails: () => {
+			set({ currentSessionDetails: null });
 		},
 	})),
 );

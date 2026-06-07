@@ -30,23 +30,10 @@ export const useActivityStore = create(
 			try {
 				const res = await API.delete(`/deleteActivity/${activityID}`);
 
-				if (res.status == 200) {
-					set((state) => ({
-						activities: state.activities.filter(
-							(activity) => activity.activityID !== activityID,
-						),
-					}));
-
-					return {
-						success: true,
-						message: res.data.message || "Activity Deleted",
-					};
-				} else {
-					return {
-						success: false,
-						message: res.data.errorMessage || "Failed to delete activity",
-					};
-				}
+				return {
+					success: true,
+					message: res.data.message || "Activity Deleted",
+				};
 			} catch (error) {
 				console.error("Error deleting activity:", error);
 				return { success: false, message: error.message };
@@ -89,15 +76,11 @@ export const useActivityStore = create(
 				set({ isLoading: true });
 				const res = await API.get(`/sessionActivities/${sessionID}`);
 
-				if (res.status == 200) {
-					if (res.data.data.length === 0) {
-						console.log("No activities found for this session.");
-						set({ activities: [] });
-					} else {
-						set({ activities: res.data.data });
-					}
+				if (res.data.data.length === 0) {
+					console.log("No activities found for this session.");
+					set({ activities: [] });
 				} else {
-					console.error("Failed to fetch activities:", res.message);
+					set({ activities: res.data.data });
 				}
 			} catch (error) {
 				console.error("Error fetching activities:", error);
