@@ -22,12 +22,12 @@ public class SessionDetailsResponse {
         this.activities = activities;
     }
 
-    public String getSesionID() {
+    public String getSessionID() {
         return sessionID;
     }
 
-    public void setSesionID(String sesionID) {
-        this.sessionID = sesionID;
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 
     public String getStatus() {
