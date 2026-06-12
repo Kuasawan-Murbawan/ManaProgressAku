@@ -44,6 +44,7 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Deprecated
     @Operation(
             summary = "Get an Activity",
             description = "Return an Activity using Activity ID"
@@ -60,6 +61,7 @@ public class ActivityController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Deprecated
     @Operation(
             summary = "Update Activity",
             description = "Update an Activity using all Activity details in request body"

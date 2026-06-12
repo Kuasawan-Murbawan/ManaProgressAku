@@ -119,10 +119,12 @@
           "script": {
             "exec": [
               "pm.test(\"Create Session Success\", function(){\r",
-              "    pm.response.to.have.status(200)\r",
+              "    pm.response.to.have.status(201)\r",
+              "\r",
               "});\r",
               "\r",
               "const res = pm.response.json();\r",
+              "pm.expect(res.data.sessionID).to.not.be.null;\r",
               "pm.environment.set(\"sessionID\", res.data.sessionID);"
             ],
             "type": "text/javascript",
@@ -173,7 +175,61 @@
           "script": {
             "exec": [
               "pm.test(\"Insert Activity Success\", function(){\r",
-              "    pm.response.to.have.status(200);\r",
+              "    pm.response.to.have.status(201);\r",
+              "})\r",
+              "\r",
+              "const res = pm.response.json();\r",
+              "pm.environment.set(\"activityID\", res.data.activityID);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"sessionID\" : \"{{sessionID}}\",\r\n    \"exerciseID\" : 6\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/insertActivity",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "insertActivity"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Insert Set 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Insert Activity Success\", function(){\r",
+              "    pm.response.to.have.status(201);\r",
               "})"
             ],
             "type": "text/javascript",
@@ -197,7 +253,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"sessionID\" : \"{{sessionID}}\",\r\n    \"exerciseID\" : 6,\r\n    \"sets\" : 3,\r\n    \"weight\" : \"10,10,15\",\r\n    \"rep\" : \"5,2,10\"\r\n}",
+          "raw": "{\r\n    \"setNumber\" : 1,\r\n    \"weight\" : 10,\r\n    \"reps\" : 5,\r\n    \"activityID\": \"{{activityID}}\"\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -205,26 +261,77 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/insertActivity",
+          "raw": "{{baseUrl}}/insertSet",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "insertActivity"
+            "insertSet"
           ]
         }
       },
       "response": []
     },
     {
-      "name": "Get User Session",
+      "name": "Insert Set 2",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Fetch Session Activities\", function(){\r",
-              "    pm.response.to.have.status(200);\r",
+              "pm.test(\"Insert Activity Success\", function(){\r",
+              "    pm.response.to.have.status(201);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"setNumber\" : 2,\r\n    \"weight\" : 15,\r\n    \"reps\" : 10,\r\n    \"activityID\": \"{{activityID}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/insertSet",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "insertSet"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Finish Current Session",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Session finished successfully\", function(){",
+              "    pm.response.to.have.status(200);",
               "});"
             ],
             "type": "text/javascript",
@@ -244,15 +351,15 @@
             }
           ]
         },
-        "method": "GET",
+        "method": "PATCH",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/sessionActivities/{{sessionID}}",
+          "raw": "{{baseUrl}}/finishSession/{{sessionID}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "sessionActivities",
+            "finishSession",
             "{{sessionID}}"
           ]
         }
@@ -260,7 +367,7 @@
       "response": []
     },
     {
-      "name": "Get Session Details",
+      "name": "Get Current Session Details",
       "event": [
         {
           "listen": "test",
@@ -290,13 +397,152 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/getSession/{{sessionID}}",
+          "raw": "{{baseUrl}}/sessions/{{sessionID}}/details",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "getSession",
-            "{{sessionID}}"
+            "sessions",
+            "{{sessionID}}",
+            "details"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check for active sessions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();",
+              "",
+              "pm.test(\"Active session checked successfully\", function(){",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(response.data.hasActiveSession).to.be.false;",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/session/active",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "session",
+            "active"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Past Session Details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetch Session Success\", function(){\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sessions/{{sessionID}}/details",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sessions",
+            "{{sessionID}}",
+            "details"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Past Sessions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetch Session Activities\", function(){\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "if(response.data?.length > 0){\r",
+              "    pm.environment.set(\"sessionID\", response.data[0].sessionID);\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/getUserSessions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "getUserSessions"
           ]
         }
       },

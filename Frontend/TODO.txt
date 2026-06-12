@@ -162,11 +162,11 @@ REFER POSTMAN API
 
 [/] Finish Activity
 [/] display all activites and sets in CurrentSessionPage
-[] fix delete activity
+[/] fix delete activity
         - Options
         1. refetch session details from backend
         2. remove the activity from currentSessionDetails in zustand (less api call)
+[/] fix past session - it deoesnt show sets
 
-
-
-
+~13 June 2026~
+[/] update postman scripting for local
