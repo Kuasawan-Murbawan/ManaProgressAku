@@ -457,6 +457,55 @@
       "response": []
     },
     {
+      "name": "Get Past Sessions",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Fetch Session Activities\", function(){\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "if(response.data?.length > 0){\r",
+              "    const lastSessionID = response.data.length -1;\r",
+              "    pm.environment.set(\"sessionID\", response.data[lastSessionID].sessionID);\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/getUserSessions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "getUserSessions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Get Past Session Details",
       "event": [
         {
@@ -465,7 +514,16 @@
             "exec": [
               "pm.test(\"Fetch Session Success\", function(){\r",
               "    pm.response.to.have.status(200);\r",
-              "});"
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "if(response.data?.activities?.length > 0){\r",
+              "    pm.environment.set(\"activityID\", response.data.activities[0].activityID);\r",
+              "}\r",
+              "\r",
+              "\r",
+              "\r",
+              ""
             ],
             "type": "text/javascript",
             "packages": {},
@@ -501,20 +559,15 @@
       "response": []
     },
     {
-      "name": "Get Past Sessions",
+      "name": "Delete Activity",
       "event": [
         {
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Fetch Session Activities\", function(){\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "const response = pm.response.json();\r",
-              "if(response.data?.length > 0){\r",
-              "    pm.environment.set(\"sessionID\", response.data[0].sessionID);\r",
-              "}\r",
+              "pm.test(\"Delete Activity Success\", function() {\r",
+              "pm.response.to.have.status(200);\r",
+              "})\r",
               ""
             ],
             "type": "text/javascript",
@@ -534,15 +587,59 @@
             }
           ]
         },
-        "method": "GET",
+        "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/getUserSessions",
+          "raw": "{{baseUrl}}/deleteActivity/{{activityID}}",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "getUserSessions"
+            "deleteActivity",
+            "{{activityID}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Session",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Session Deleted Successfully\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/deleteSession/{{sessionID}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "deleteSession",
+            "{{sessionID}}"
           ]
         }
       },
