@@ -1,6 +1,7 @@
 package com.husyairi.ManaProgressAku.Repository;
 
 import com.husyairi.ManaProgressAku.Entity.Model.ActivitySet;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +15,7 @@ public interface ActivitySetRepository extends JpaRepository<ActivitySet, Long> 
 
     @Query(value = "SELECT * FROM activityset WHERE activityid= :activityID ORDER BY set_number ASC", nativeQuery = true)
     List<ActivitySet> findSetsDetailByActivityID(String activityID);
+
+    @Transactional
+    void deleteByActivityActivityID(String activityID);
 }

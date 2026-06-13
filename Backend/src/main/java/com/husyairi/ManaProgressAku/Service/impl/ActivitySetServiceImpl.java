@@ -152,4 +152,21 @@ public class ActivitySetServiceImpl implements ActivitySetService {
 //        return activitySetRepository.findByActivityActivityID(fetchedActivity.getActivityID());
         return activitySetRepository.findSetsByActivityID(fetchedActivity.getActivityID());
     }
+
+    public void deleteAllSetByActivity (String activityID){
+
+        Activity fetchedActivity = activityRepository.findById(activityID).orElseThrow(()->
+            new BadRequestException(404, "Activity not found", new HashMap<>())
+        );
+
+        if(!fetchedActivity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to perform this operation", new HashMap<>());
+        }
+
+        try{
+            activitySetRepository.deleteByActivityActivityID(fetchedActivity.getActivityID());
+        }catch (Exception e){
+            throw new BadRequestException(500, e.getMessage(), new HashMap<>());
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.husyairi.ManaProgressAku.DTO.Session.DeleteSessionResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
+import com.husyairi.ManaProgressAku.Service.ActivitySetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,12 @@ public class ActivityController {
 
     private final ActivityService activityService;
 
+    private final ActivitySetService activitySetService;
+
     @Autowired
-    public ActivityController(ActivityService activityService) {
+    public ActivityController(ActivityService activityService, ActivitySetService activitySetService) {
         this.activityService = activityService;
+        this.activitySetService = activitySetService;
     }
 
 
@@ -86,6 +90,7 @@ public class ActivityController {
     @DeleteMapping("/deleteActivity/{activityID}")
     public ResponseEntity<ApiSuccessResponse<DeleteActivityResponse>> deleteActivity(@PathVariable String activityID){
 
+        activitySetService.deleteAllSetByActivity(activityID);
         activityService.deleteActivity(activityID);
 
         DeleteActivityResponse response = new DeleteActivityResponse(activityID);

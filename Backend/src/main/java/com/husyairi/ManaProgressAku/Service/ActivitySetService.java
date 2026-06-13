@@ -17,4 +17,6 @@ public interface ActivitySetService {
     public GetSetResponse editSet(InsertSetRequest request,Long setID);
 
     public List<ActivitySet> getAllSetByActivity(String activityID);
+
+    public void deleteAllSetByActivity(String activityID);
 }
