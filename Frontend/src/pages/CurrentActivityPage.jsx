@@ -21,7 +21,9 @@ const CurrentActivityPage = () => {
 
 	// Validation: weight + reps must be filled
 	const isAllFieldsFilled = () =>
-		sets.every((set) => set.weight !== "" && set.reps !== "");
+		sets.every(
+			(set) => set.weight !== "" && set.weight <= 500 && set.reps !== "",
+		);
 
 	// TODO: successToast, addSet function, check Validation toast
 
