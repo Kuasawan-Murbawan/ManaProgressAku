@@ -103,23 +103,23 @@ public class ActivityController {
         );
     }
 
-    @Operation(
-            summary = "Delete Activities in a Session",
-            description = "Delete all Activities in a Session using Session ID"
-    )
-    @DeleteMapping("/deleteActivitiesBySessionID/{sessionID}")
-    public ResponseEntity<ApiSuccessResponse<DeleteActivitiesBySessionResponse>> deleteActivitiesBySessionID(@PathVariable String sessionID){
-        int deletedCount = activityService.deleteActivitiesBySession(sessionID);
-
-        DeleteActivitiesBySessionResponse response = new DeleteActivitiesBySessionResponse(sessionID, deletedCount);
-
-        return ResponseEntity.ok(
-                new ApiSuccessResponse<>(
-                        "Activities deleted successfully!",
-                        response
-                )
-        );
-    }
+//    @Operation(
+//            summary = "Delete Activities in a Session",
+//            description = "Delete all Activities in a Session using Session ID"
+//    )
+//    @DeleteMapping("/deleteActivitiesBySessionID/{sessionID}")
+//    public ResponseEntity<ApiSuccessResponse<DeleteActivitiesBySessionResponse>> deleteActivitiesBySessionID(@PathVariable String sessionID){
+//        int deletedCount = activityService.deleteActivitiesBySession(sessionID);
+//
+//        DeleteActivitiesBySessionResponse response = new DeleteActivitiesBySessionResponse(sessionID, deletedCount);
+//
+//        return ResponseEntity.ok(
+//                new ApiSuccessResponse<>(
+//                        "Activities deleted successfully!",
+//                        response
+//                )
+//        );
+//    }
 
     @Operation(
             summary = "Get all Activities in a Session",

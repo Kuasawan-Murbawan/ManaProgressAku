@@ -5,6 +5,7 @@ import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityRequest;
 import com.husyairi.ManaProgressAku.DTO.Activity.InsertActivityResponse;
 import com.husyairi.ManaProgressAku.DTO.Activity.UpdateActivityRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
+import com.husyairi.ManaProgressAku.Entity.Model.Session;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface ActivityService {
 
     public void deleteActivity(String activityID);
 
-    public int deleteActivitiesBySession(String sessionID);
+    public int deleteActivitiesBySession(Session session);
 
     public List<Activity> getSessionActivities(String sessionID);
 

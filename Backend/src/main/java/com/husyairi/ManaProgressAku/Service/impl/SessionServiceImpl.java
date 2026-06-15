@@ -9,12 +9,10 @@ import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.*;
-import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
@@ -26,19 +24,14 @@ public class SessionServiceImpl implements SessionService {
 
     @Autowired
     private SessionRepository sessionRepository;
-
-    @Autowired
-    private ExerciseService exerciseService;
-
-    @Autowired
-    private ExerciseRepository exerciseRepository;
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private ActivityRepository activityRepository;
     @Autowired
     private ActivitySetRepository activitySetRepository;
+    @Autowired
+    private ActivityServiceImpl activityServiceImpl;
 
     private Long getCurrentUserId() {
 
@@ -146,13 +139,20 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void deleteSession (String sessionID){
 
+        // 1. Find Session using session ID
         Session fetchedSession = sessionRepository.findById(sessionID).orElseThrow(()->
                 new BadRequestException(404, "No session found", new HashMap<>()));
 
+        // 2. Make sure user is authorized to delete session
         if(!fetchedSession.getUserId().equals(getCurrentUserId())){
             throw new BadRequestException(403, "Not authorize to perform this operation", new HashMap<>());
         }
+
+        // 3. Delete activities under the session
+        int activitiesDeleted = activityServiceImpl.deleteActivitiesBySession(fetchedSession);
         try {
+
+            // 7. Delete session
             sessionRepository.deleteById(sessionID);
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage() ,new HashMap<>());
@@ -222,7 +222,7 @@ public class SessionServiceImpl implements SessionService {
         // Fetch all activities in a Session
         List<Activity> fetchedActivities = activityRepository.findBySession_SessionID(sessionID);
 
-        // Each activities are mapped onto a ActivityDetailsReponse
+        // Each activity are mapped onto a ActivityDetailsReponse
         List<ActivityDetailsResponse> activityResponses = fetchedActivities.stream().
                 map(activity -> {
                     // Fetched all sets in an Activity

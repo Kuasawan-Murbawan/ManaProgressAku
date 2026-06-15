@@ -9,6 +9,7 @@ import com.husyairi.ManaProgressAku.Entity.Model.Session;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
+import com.husyairi.ManaProgressAku.Repository.ActivitySetRepository;
 import com.husyairi.ManaProgressAku.Repository.SessionRepository;
 import com.husyairi.ManaProgressAku.Repository.UserRepository;
 import com.husyairi.ManaProgressAku.Service.ActivityService;
@@ -28,12 +29,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private ActivityRepository activityRepository;
-
     @Autowired
     private SessionRepository sessionRepository;
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActivitySetServiceImpl activitySetServiceImpl;
 
     private Long getCurrentUserId() {
 
@@ -157,26 +158,26 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public int deleteActivitiesBySession(String sessionID){
-        List<Activity> activities = activityRepository.findBySession_SessionID(sessionID);
+    public int deleteActivitiesBySession(Session session){
 
-        Session session = sessionRepository.findById(sessionID).orElseThrow(() -> new BadRequestException(
-                404, "No session found", new HashMap<>()
-        ));
+        // 4. Find all activities under a session
+        List<Activity> fetchedActivities = activityRepository.findBySession_SessionID(session.getSessionID());
 
-        if(!session.getUserId().equals(getCurrentUserId())){
-            throw new BadRequestException(403, "Not authorized to delete activities", new HashMap<>());
-        }
-
-        if(activities.isEmpty()){
+        if(fetchedActivities.isEmpty()){
             // we put 0 instead of throwing Exception bc it is not an error
             // it is possible for session to have 0 activities (if they cancel)
             return 0;
         }
 
+        // 5. Delete all sets under each activity
+        for(Activity activity : fetchedActivities){
+            activitySetServiceImpl.deleteAllSetByActivity(activity.getActivityID());
+        }
+
         try{
-            activityRepository.deleteAll(activities);
-            return activities.size();
+            // 6. Delete each activity
+            activityRepository.deleteAll(fetchedActivities);
+            return fetchedActivities.size();
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage(), new HashMap<>());
         }
