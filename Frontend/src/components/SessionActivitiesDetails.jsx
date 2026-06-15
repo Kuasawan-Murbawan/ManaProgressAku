@@ -24,14 +24,15 @@ const SessionActivitiesDetails = () => {
 		isLoading,
 		clearCurrentSessionDetails,
 	} = useSessionStore();
-	const { getExerciseName } = useExerciseStore();
+	const { fetchAllExercises, getExerciseName } = useExerciseStore();
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (sessionID) {
 			fetchSessionDetails(sessionID);
 		}
-	}, [sessionID, fetchSessionDetails]);
+		fetchAllExercises();
+	}, [sessionID, fetchSessionDetails, fetchAllExercises]);
 
 	const handleBackClick = () => {
 		clearCurrentSessionDetails();

@@ -23,10 +23,7 @@ const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
 		useSessionStore();
 
 	const handleConfirm = async () => {
-		// delete activities first as to avoid foreign key error
-		// const result = await deleteActivitiesBySession(sessionID);
-
-		const res = await deleteSession(sessionID); // we get sessionID from the store bc the current session ID is in the store
+		const res = await deleteSession(sessionID);
 
 		if (res.success) {
 			clearSession();
