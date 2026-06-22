@@ -10,7 +10,7 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer exerciseID;
 
-    @Column(columnDefinition = "VARCHAR(20)", nullable = false)
+    @Column(columnDefinition = "VARCHAR(50)", nullable = false)
     private String exerciseName;
 
     @Column(columnDefinition = "VARCHAR(15)")

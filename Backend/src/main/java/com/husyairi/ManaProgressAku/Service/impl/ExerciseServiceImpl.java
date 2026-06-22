@@ -73,6 +73,8 @@ public class ExerciseServiceImpl implements ExerciseService {
         Exercise updatedExercise = isExist.get();
         updatedExercise.setExerciseName(req.getExerciseName());
         updatedExercise.setGeneralInfo(req.getGeneralInfo());
+        updatedExercise.setExerciseType(req.getExerciseType());
+
         try {
             // Save inside database
             exerciseRepository.save(updatedExercise);
