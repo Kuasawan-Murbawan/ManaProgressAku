@@ -46,5 +46,17 @@ export const useExerciseStore = create(
 				};
 			}
 		},
+		editExercise: async (updatedExercise) => {
+			try {
+				const res = await API.put("/updateExercise", updatedExercise);
+				await get().fetchAllExercises();
+				return {
+					success: true,
+					message: "Exercise updated successfully",
+				};
+			} catch (error) {
+				console.error("Failed to add new exercise", error);
+			}
+		},
 	})),
 );
