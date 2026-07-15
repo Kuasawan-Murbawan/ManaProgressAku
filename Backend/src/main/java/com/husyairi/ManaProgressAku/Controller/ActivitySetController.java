@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Controller;
 
+import com.husyairi.ManaProgressAku.DTO.ActivitySet.EditActivitySetRequest;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.GetSetResponse;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.InsertSetRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.ActivitySet;
@@ -74,6 +75,15 @@ public class ActivitySetController {
                 "Set updated sucessfully",
                 data
         );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/editActivitySet")
+    public ResponseEntity<ApiSuccessResponse<String>> editActivitySet(@RequestBody EditActivitySetRequest updatedActivitySet){
+        String result = activitySetService.editActivitySet(updatedActivitySet);
+
+        ApiSuccessResponse<String> response = new ApiSuccessResponse<>("Set updated successfully", result);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

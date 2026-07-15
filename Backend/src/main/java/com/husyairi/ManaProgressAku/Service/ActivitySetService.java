@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Service;
 
+import com.husyairi.ManaProgressAku.DTO.ActivitySet.EditActivitySetRequest;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.GetSetResponse;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.InsertSetRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.ActivitySet;
@@ -19,4 +20,6 @@ public interface ActivitySetService {
     public List<ActivitySet> getAllSetByActivity(String activityID);
 
     public void deleteAllSetByActivity(String activityID);
+
+    public String editActivitySet(EditActivitySetRequest request);
 }

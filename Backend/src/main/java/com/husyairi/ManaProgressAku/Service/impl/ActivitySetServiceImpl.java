@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
+import com.husyairi.ManaProgressAku.DTO.ActivitySet.EditActivitySetRequest;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.GetSetResponse;
 import com.husyairi.ManaProgressAku.DTO.ActivitySet.InsertSetRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.Activity;
@@ -168,5 +169,39 @@ public class ActivitySetServiceImpl implements ActivitySetService {
         }catch (Exception e){
             throw new BadRequestException(500, e.getMessage(), new HashMap<>());
         }
+    }
+
+    public String editActivitySet(EditActivitySetRequest request){
+
+        Activity fetchedActivity = activityRepository.findById(request.getActivityID()).orElseThrow(()->{
+            throw new BadRequestException(404, "No activities found", new HashMap<>());
+        });
+
+        if(!fetchedActivity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to perform this action", new HashMap<>());
+        }
+
+        if(request.getActivitySetList().size() > 0){
+
+            for(ActivitySet currentActSet: request.getActivitySetList()){
+
+                ActivitySet fetchedSet = activitySetRepository.findById(currentActSet.getSetID()).orElseThrow(() ->{
+                    throw new BadRequestException(404, "Activity set not found", new HashMap<>());
+                });
+
+                fetchedSet.setSetNumber(currentActSet.getSetNumber());
+                fetchedSet.setReps(currentActSet.getReps());
+                fetchedSet.setWeight(currentActSet.getWeight());
+
+                try{
+                    activitySetRepository.save(fetchedSet);
+                }catch (Exception e){
+                    throw new BadRequestException(500, "Internal Server error", new HashMap<>());
+                }
+
+            }
+        }
+
+        return request.getActivityID() + " updated successfully!";
     }
 }
