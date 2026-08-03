@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import ExerciseListPage from "./pages/ExerciseListPage";
 import NewSessionHomePage from "./pages/NewSessionHomePage";
 import NewExercisePage from "./pages/NewExercisePage";
-import CurrentExercisePage from "./pages/CurrentExercisePage";
 import CurrentActivityPage from "./pages/CurrentActivityPage";
 import PastSessionsPage from "./pages/PastSessionsPage";
 import SessionActivitiesDetails from "./components/SessionActivitiesDetails";
@@ -17,46 +16,45 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: (
-      <ChakraProvider>
-        <LoginPage />
-      </ChakraProvider>
-    ),
-  },
-  {
-    path: "/register",
-    element: (
-      <ChakraProvider>
-        <RegisterPage />
-      </ChakraProvider>
-    ),
-  },
-  {
-    path: "/",
-    element: (
-      <ChakraProvider>
-        <ProtectedRoute>
-          <App />
-        </ProtectedRoute>
-      </ChakraProvider>
-    ),
-    children: [
-      { index: true, element: <Home /> },
-      { path: "exerciseList", element: <ExerciseListPage /> },
-      { path: "createSession", element: <NewSessionHomePage /> },
-      { path: "newExercise", element: <NewExercisePage /> },
-      { path: "currentExercisePage", element: <CurrentExercisePage /> },
-      { path: "currentActivity", element: <CurrentActivityPage /> },
-      { path: "pastSessions", element: <PastSessionsPage /> },
-      { path: "session/:sessionID", element: <SessionActivitiesDetails /> },
-    ],
-  },
+	{
+		path: "/login",
+		element: (
+			<ChakraProvider>
+				<LoginPage />
+			</ChakraProvider>
+		),
+	},
+	{
+		path: "/register",
+		element: (
+			<ChakraProvider>
+				<RegisterPage />
+			</ChakraProvider>
+		),
+	},
+	{
+		path: "/",
+		element: (
+			<ChakraProvider>
+				<ProtectedRoute>
+					<App />
+				</ProtectedRoute>
+			</ChakraProvider>
+		),
+		children: [
+			{ index: true, element: <Home /> },
+			{ path: "exerciseList", element: <ExerciseListPage /> },
+			{ path: "createSession", element: <NewSessionHomePage /> },
+			{ path: "newExercise", element: <NewExercisePage /> },
+			{ path: "currentActivity", element: <CurrentActivityPage /> },
+			{ path: "pastSessions", element: <PastSessionsPage /> },
+			{ path: "session/:sessionID", element: <SessionActivitiesDetails /> },
+		],
+	},
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
+	<StrictMode>
+		<RouterProvider router={router} />
+	</StrictMode>,
 );

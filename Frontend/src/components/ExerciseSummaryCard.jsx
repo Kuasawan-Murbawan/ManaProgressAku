@@ -26,7 +26,7 @@ import { useRef } from "react";
 import { useSessionStore } from "../store/session";
 
 const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
-	const { deleteActivity } = useActivityStore();
+	const { deleteActivity, setActivities, activities } = useActivityStore();
 	const { fetchSessionDetails, sessionID } = useSessionStore();
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
