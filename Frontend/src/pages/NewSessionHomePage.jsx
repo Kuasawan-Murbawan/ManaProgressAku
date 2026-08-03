@@ -103,8 +103,8 @@ const NewSessionHomePage = () => {
 			</Box>
 
 			{/* Exercises List */}
-			{currentSessionDetails?.activities?.length > 0 ? (
-				currentSessionDetails.activities.map((activity, index) => (
+			{activities?.length > 0 ? (
+				activities.map((activity, index) => (
 					<ExerciseSummaryCard
 						key={index}
 						activityID={activity.activityID}

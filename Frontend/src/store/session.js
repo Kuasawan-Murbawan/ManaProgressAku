@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import API from "../api/axios.js";
+import { useActivityStore } from "./activity.js";
 
 export const useSessionStore = create(
 	persist((set, get) => ({
@@ -111,9 +112,15 @@ export const useSessionStore = create(
 				set({ isLoading: true });
 
 				const res = await API.get(`/sessions/${sessionID}/details`);
+				const { activities, ...sessionMeta } = res.data.data;
 
-				set({ currentSessionDetails: res.data.data });
-				set({ sessionID: res.data.data.sessionID || get().sessionID });
+				// the activities is stored inside activities var
+				// other stuff is stored inside sessionMeta
+				set({ currentSessionDetails: sessionMeta });
+				set({ sessionID: sessionMeta.sessionID || get().sessionID });
+
+				// store the activities inside activity store
+				useActivityStore.getState().setActivities(activities || []);
 
 				return {
 					success: true,

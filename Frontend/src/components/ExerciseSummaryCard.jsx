@@ -33,8 +33,10 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 	const cancelRef = useRef();
 
 	const handleDeleteActivity = async () => {
-		await deleteActivity(activityID);
-		fetchSessionDetails(sessionID);
+		const result = await deleteActivity(activityID);
+		if (result?.success) {
+			setActivities(activities.filter((a) => a.activityID !== activityID)); // no need to ask from server again
+		}
 		onClose();
 	};
 

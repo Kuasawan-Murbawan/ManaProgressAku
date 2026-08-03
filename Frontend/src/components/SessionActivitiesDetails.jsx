@@ -25,6 +25,8 @@ const SessionActivitiesDetails = () => {
 		clearCurrentSessionDetails,
 	} = useSessionStore();
 	const { fetchAllExercises, getExerciseName } = useExerciseStore();
+	const { activities, clearActivities } = useActivityStore();
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -83,8 +85,8 @@ const SessionActivitiesDetails = () => {
 						<Text color={"gray.500"}>Loading Activities...</Text>
 					</VStack>
 				</Center>
-			) : currentSessionDetails?.activities?.length > 0 ? (
-				currentSessionDetails.activities.map((activity, index) => {
+			) : activities?.length > 0 ? (
+				activities.map((activity, index) => {
 					return (
 						<ExerciseSummaryCard
 							key={activity.activityID}

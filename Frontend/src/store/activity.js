@@ -8,6 +8,14 @@ export const useActivityStore = create(
 		activities: [],
 		isLoading: false,
 
+		setActivities: (activities) => {
+			set({ activities });
+		},
+
+		clearActivities: () => {
+			set({ activities: [] });
+		},
+
 		addActivity: async (newActivity) => {
 			try {
 				set({ isLoading: true });
@@ -68,28 +76,6 @@ export const useActivityStore = create(
 			}
 		},
 
-		clearActivities: () => {
-			set({ activities: [] });
-		},
-
 		updateActivity: async (updatedActivity) => {},
-
-		fetchActivityBySession: async (sessionID) => {
-			try {
-				set({ isLoading: true });
-				const res = await API.get(`/sessionActivities/${sessionID}`);
-
-				if (res.data.data.length === 0) {
-					console.log("No activities found for this session.");
-					set({ activities: [] });
-				} else {
-					set({ activities: res.data.data });
-				}
-			} catch (error) {
-				console.error("Error fetching activities:", error);
-			} finally {
-				set({ isLoading: false });
-			}
-		},
 	})),
 );
