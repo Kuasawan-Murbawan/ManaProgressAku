@@ -10,7 +10,8 @@ const CurrentActivityPage = () => {
 	const location = useLocation();
 	const toast = useToast();
 	const navigate = useNavigate();
-	const { activityID, addActivity } = useActivityStore();
+	const { addActivity } = useActivityStore();
+	const [activityID, setActivityID] = useState(null); // local var
 	const { sessionID } = useSessionStore();
 	const { addSet } = useSetStore();
 
@@ -43,6 +44,7 @@ const CurrentActivityPage = () => {
 			exerciseID: exercise.exerciseID,
 		});
 		if (result?.success) {
+			setActivityID(result.activityID);
 			setSets([{ weight: "", reps: "" }]);
 			setStarted(true);
 		} else {

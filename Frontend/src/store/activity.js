@@ -4,17 +4,20 @@ import API from "../api/axios.js";
 
 export const useActivityStore = create(
 	persist((set, get) => ({
-		activityID: "",
+		// activityID: "",
 		activities: [],
 		isLoading: false,
 
 		addActivity: async (newActivity) => {
 			try {
 				set({ isLoading: true });
-				console.log("Payload:", newActivity);
 				const res = await API.post(`/insertActivity`, newActivity);
-				set({ activityID: res.data.data.activityID });
-				return { success: true, message: "Activity saved successfully" };
+				// set({ activityID: res.data.data.activityID });
+				return {
+					success: true,
+					message: "Activity saved successfully",
+					activityID: res.data.data.activityID, // return the id instead of saving it globally
+				};
 			} catch (error) {
 				console.error("Error when saving activity", error);
 				return {
