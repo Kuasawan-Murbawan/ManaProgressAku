@@ -1,7 +1,7 @@
 import { Button, VStack, Text, Box, useToast, Spinner } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import SetComponent from "../components/SetComponent";
+import SetComponent from "../components/Activity/SetComponent";
 import { useActivityStore } from "../store/activity";
 import { useSessionStore } from "../store/session";
 import { useSetStore } from "../store/set";

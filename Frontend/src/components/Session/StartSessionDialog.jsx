@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSessionStore } from "../store/session";
+import { useSessionStore } from "../../store/session";
 
 const StartSessionDialog = ({ isOpen, onClose }) => {
 	const cancelRef = useRef();

@@ -9,12 +9,12 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import ExerciseSummaryCard from "./ExerciseSummaryCard";
-import { useActivityStore } from "../store/activity";
+import ExerciseSummaryCard from "../Activity/ExerciseSummaryCard";
+import { useActivityStore } from "../../store/activity";
 import { useNavigate, useParams } from "react-router-dom";
-import { useExerciseStore } from "../store/exercise";
+import { useExerciseStore } from "../../store/exercise";
 import DeleteSessionDialog from "./DeleteSessionDialog";
-import { useSessionStore } from "../store/session";
+import { useSessionStore } from "../../store/session";
 
 const SessionActivitiesDetails = () => {
 	const { sessionID } = useParams();

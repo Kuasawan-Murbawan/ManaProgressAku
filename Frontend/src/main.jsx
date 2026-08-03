@@ -10,7 +10,7 @@ import NewSessionHomePage from "./pages/NewSessionHomePage";
 import NewExercisePage from "./pages/NewExercisePage";
 import CurrentActivityPage from "./pages/CurrentActivityPage";
 import PastSessionsPage from "./pages/PastSessionsPage";
-import SessionActivitiesDetails from "./components/SessionActivitiesDetails";
+import SessionActivitiesDetails from "./components/Session/SessionActivitiesDetails";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";

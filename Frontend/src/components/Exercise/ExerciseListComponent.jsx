@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useExerciseStore } from "../store/exercise";
+import { useExerciseStore } from "../../store/exercise";
 import {
 	Box,
 	Text,

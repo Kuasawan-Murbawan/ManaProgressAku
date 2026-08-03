@@ -10,10 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { React, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeleteSessionDialog from "../components/DeleteSessionDialog";
+import DeleteSessionDialog from "../components/Session/DeleteSessionDialog";
 import { useActivityStore } from "../store/activity";
 import { useExerciseStore } from "../store/exercise";
-import ExerciseSummaryCard from "../components/ExerciseSummaryCard";
+import ExerciseSummaryCard from "../components/Activity/ExerciseSummaryCard";
 import { useSessionStore } from "../store/session";
 import useNavigationBlocker from "../hook/useNavigationBlocker.js";
 import { useUserStore } from "../store/user.js";

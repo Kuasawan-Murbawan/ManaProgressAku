@@ -13,7 +13,7 @@ import {
 	HStack,
 	useDisclosure,
 } from "@chakra-ui/react";
-import { useAuthStore } from "../store/auth";
+import { useAuthStore } from "../../store/auth";
 import EditExerciseModal from "./EditExerciseModal";
 
 const ExerciseDetailModal = ({ isOpen, onClose, currentExercise }) => {

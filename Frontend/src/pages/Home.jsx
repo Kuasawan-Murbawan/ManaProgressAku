@@ -8,12 +8,12 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import StartSessionDialog from "../components/StartSessionDialog";
+import StartSessionDialog from "../components/Session/StartSessionDialog";
 import { useExerciseStore } from "../store/exercise";
 import { useActivityStore } from "../store/activity";
 import { useSessionStore } from "../store/session";
 import ConfirmLogoutDialog from "../components/ConfirmLogoutDialog";
-import ActiveSessionDialog from "../components/ActiveSessionDialog";
+import ActiveSessionDialog from "../components/Session/ActiveSessionDialog";
 
 const Home = () => {
 	const navigate = useNavigate();

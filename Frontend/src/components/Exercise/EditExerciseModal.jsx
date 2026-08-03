@@ -14,7 +14,7 @@ import {
 	Box,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { useExerciseStore } from "../store/exercise";
+import { useExerciseStore } from "../../store/exercise";
 
 const EditExerciseModal = ({
 	isOpen,

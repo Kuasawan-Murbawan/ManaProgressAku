@@ -1,7 +1,7 @@
 import { Box, Button, Center, Text, VStack, Spinner } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import SessionDetailsComponent from "../components/SessionDetailsComponent";
+import SessionDetailsComponent from "../components/Session/SessionDetailsComponent";
 import { useSessionStore } from "../store/session";
 import { useExerciseStore } from "../store/exercise";
 

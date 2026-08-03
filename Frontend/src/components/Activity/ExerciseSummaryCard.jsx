@@ -21,9 +21,9 @@ import {
 	Button,
 } from "@chakra-ui/react";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useActivityStore } from "../store/activity";
+import { useActivityStore } from "../../store/activity";
 import { useRef } from "react";
-import { useSessionStore } from "../store/session";
+import { useSessionStore } from "../../store/session";
 
 const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 	const { deleteActivity, setActivities, activities } = useActivityStore();
