@@ -171,7 +171,7 @@ public class ActivitySetServiceImpl implements ActivitySetService {
         }
     }
 
-    public String editActivitySet(EditActivitySetRequest request){
+    public List<ActivitySet> editActivitySet(EditActivitySetRequest request){
 
         Activity fetchedActivity = activityRepository.findById(request.getActivityID()).orElseThrow(()->{
             throw new BadRequestException(404, "No activities found", new HashMap<>());
@@ -202,6 +202,6 @@ public class ActivitySetServiceImpl implements ActivitySetService {
             }
         }
 
-        return request.getActivityID() + " updated successfully!";
+        return activitySetRepository.findSetsByActivityID(request.getActivityID());
     }
 }

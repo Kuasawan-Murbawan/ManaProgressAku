@@ -21,5 +21,5 @@ public interface ActivitySetService {
 
     public void deleteAllSetByActivity(String activityID);
 
-    public String editActivitySet(EditActivitySetRequest request);
+    public List<ActivitySet> editActivitySet(EditActivitySetRequest request);
 }

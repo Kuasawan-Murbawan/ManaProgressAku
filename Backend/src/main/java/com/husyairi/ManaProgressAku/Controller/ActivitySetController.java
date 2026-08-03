@@ -80,10 +80,10 @@ public class ActivitySetController {
     }
 
     @PutMapping("/editActivitySet")
-    public ResponseEntity<ApiSuccessResponse<String>> editActivitySet(@RequestBody EditActivitySetRequest updatedActivitySet){
-        String result = activitySetService.editActivitySet(updatedActivitySet);
+    public ResponseEntity<ApiSuccessResponse<List<ActivitySet>>> editActivitySet(@RequestBody EditActivitySetRequest updatedActivitySet){
+        List<ActivitySet> result = activitySetService.editActivitySet(updatedActivitySet);
 
-        ApiSuccessResponse<String> response = new ApiSuccessResponse<>("Set updated successfully", result);
+        ApiSuccessResponse<List<ActivitySet>> response = new ApiSuccessResponse<>("Set updated successfully", result);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
