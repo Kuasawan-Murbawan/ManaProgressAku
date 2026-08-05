@@ -90,9 +90,8 @@ const SessionActivitiesDetails = () => {
 					return (
 						<ExerciseSummaryCard
 							key={activity.activityID}
-							activityID={activity.activityID}
+							activity={activity}
 							exerciseName={getExerciseName(activity.exerciseID)}
-							sets={activity.sets}
 						/>
 					);
 				})

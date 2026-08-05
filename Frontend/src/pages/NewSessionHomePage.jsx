@@ -107,9 +107,8 @@ const NewSessionHomePage = () => {
 				activities.map((activity, index) => (
 					<ExerciseSummaryCard
 						key={index}
-						activityID={activity.activityID}
+						activity={activity}
 						exerciseName={getExerciseName(activity.exerciseID)}
-						sets={activity.sets}
 					/>
 				))
 			) : (

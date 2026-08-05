@@ -24,12 +24,25 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useActivityStore } from "../../store/activity";
 import { useRef } from "react";
 import { useSessionStore } from "../../store/session";
+import EditActivityModal from "./EditActivityModal";
 
-const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
+const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 	const { deleteActivity, setActivities, activities } = useActivityStore();
 	const { fetchSessionDetails, sessionID } = useSessionStore();
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { activityID, sets = [] } = activity;
+	const {
+		isOpen: deleteActivityIsOpen,
+		onOpen: deleteActivityOnOpen,
+		onClose: deleteActivityOnClose,
+	} = useDisclosure();
+
+	const {
+		isOpen: editActivityIsOpen,
+		onOpen: editActivityOnOpen,
+		onClose: editActivityOnClose,
+	} = useDisclosure();
+
 	const cancelRef = useRef();
 
 	const handleDeleteActivity = async () => {
@@ -37,7 +50,7 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 		if (result?.success) {
 			setActivities(activities.filter((a) => a.activityID !== activityID)); // no need to ask from server again
 		}
-		onClose();
+		deleteActivityOnClose();
 	};
 
 	return (
@@ -63,6 +76,7 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 					colorScheme="yellow"
 					variant="ghost"
 					size="lg"
+					onClick={editActivityOnOpen}
 				/>
 				<IconButton
 					aria-label="Delete exercise"
@@ -70,7 +84,7 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 					colorScheme="red"
 					variant="ghost"
 					size="lg"
-					onClick={onOpen}
+					onClick={deleteActivityOnOpen}
 				/>
 			</HStack>
 
@@ -125,9 +139,9 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 			</TableContainer>
 
 			<AlertDialog
-				isOpen={isOpen}
+				isOpen={deleteActivityIsOpen}
 				leastDestructiveRef={cancelRef}
-				onClose={onClose}
+				onClose={deleteActivityOnClose}
 			>
 				<AlertDialogOverlay>
 					<AlertDialogContent>
@@ -141,7 +155,7 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 						</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={onClose}>
+							<Button ref={cancelRef} onClick={deleteActivityOnClose}>
 								Cancel
 							</Button>
 							<Button colorScheme="red" onClick={handleDeleteActivity} ml={3}>
@@ -151,6 +165,12 @@ const ExerciseSummaryCard = ({ exerciseName, sets = [], activityID }) => {
 					</AlertDialogContent>
 				</AlertDialogOverlay>
 			</AlertDialog>
+
+			<EditActivityModal
+				isOpen={editActivityIsOpen}
+				onClose={editActivityOnClose}
+				currentActivity={activity}
+			/>
 		</Box>
 	);
 };

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import API from "../api/axios.js";
+import { useSessionStore } from "./session.js";
 
 export const useActivityStore = create(
 	persist(
@@ -21,7 +22,6 @@ export const useActivityStore = create(
 				try {
 					set({ isLoading: true });
 					const res = await API.post(`/insertActivity`, newActivity);
-					// set({ activityID: res.data.data.activityID });
 					return {
 						success: true,
 						message: "Activity saved successfully",
@@ -77,7 +77,32 @@ export const useActivityStore = create(
 				}
 			},
 
-			updateActivity: async (updatedActivity) => {},
+			editActivity: async (updatedActivity) => {
+				try {
+					set({ isLoading: true });
+					const res = await API.put(`/editActivitySet`, updatedActivity);
+
+					const { fetchSessionDetails } = useSessionStore.getState();
+
+					await fetchSessionDetails(
+						res.data.data[0].activity.session.sessionID,
+					);
+
+					return {
+						success: true,
+						message: "Activity updated successfully",
+						activityID: res.data.data.activityID,
+					};
+				} catch (error) {
+					console.error("Error when updating activity", error);
+					return {
+						success: false,
+						message: error,
+					};
+				} finally {
+					set({ isLoading: false });
+				}
+			},
 		}),
 		{
 			name: "activity-storage",
