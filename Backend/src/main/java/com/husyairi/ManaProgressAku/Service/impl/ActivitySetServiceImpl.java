@@ -181,7 +181,7 @@ public class ActivitySetServiceImpl implements ActivitySetService {
             throw new BadRequestException(403, "Not authorized to perform this action", new HashMap<>());
         }
 
-        if(request.getActivitySetList().size() > 0){
+        if(!request.getActivitySetList().isEmpty()){
 
             for(ActivitySet currentActSet: request.getActivitySetList()){
 

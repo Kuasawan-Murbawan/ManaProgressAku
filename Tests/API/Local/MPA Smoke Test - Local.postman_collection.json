@@ -519,6 +519,7 @@
               "const response = pm.response.json();\r",
               "if(response.data?.activities?.length > 0){\r",
               "    pm.environment.set(\"activityID\", response.data.activities[0].activityID);\r",
+              "    pm.environment.set(\"setID\", response.data.activities[0].sets[0].setID)\r",
               "}\r",
               "\r",
               "\r",
@@ -553,6 +554,58 @@
             "sessions",
             "{{sessionID}}",
             "details"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Activity Set",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Edit Activity Success\", function() {\r",
+              "pm.response.to.have.status(200);\r",
+              "})\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"activityID\": \"{{activityID}}\",\r\n    \"activitySetList\": [\r\n        {\r\n            \"setID\": {{setID}},\r\n            \"setNumber\": 901,\r\n            \"weight\": 45,\r\n            \"reps\": \"90\"\r\n        }        \r\n    ]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/editActivitySet",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "editActivitySet"
           ]
         }
       },
