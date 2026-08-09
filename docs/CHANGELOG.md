@@ -9,10 +9,17 @@ All notable changes to ManaProgressAku will be here.
 # Unreleased
 
 - Edit exercise activity
-- Active session persistence
-- Session recovery after refresh
 
 ---
+
+## [v1.1.0] - 2026-05-25
+
+### Added
+
+- configure database table mapping (added activityset table)
+- added checking for active session at Home page
+- added session recovery after refresh
+- configure UI to accommodate new table structure
 
 ## [v1.0.1] - 2026-05-20
 
