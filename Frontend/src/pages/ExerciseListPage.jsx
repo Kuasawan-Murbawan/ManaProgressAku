@@ -16,7 +16,7 @@ const ExerciseListPage = () => {
 		<div>
 			<ExerciseListComponent />
 			<Box
-				bg="mist.50"
+				bg="mist.400"
 				borderTop="1px solid"
 				borderColor="gray.200"
 				px={{ base: 4, md: 8 }}

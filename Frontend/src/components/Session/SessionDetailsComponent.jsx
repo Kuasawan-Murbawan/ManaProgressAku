@@ -4,41 +4,52 @@ import { useNavigate } from "react-router-dom";
 import { formatDistanceToNowStrict } from "date-fns";
 
 const SessionDetailsComponent = ({ sessionID, date, time }) => {
-  const navigate = useNavigate();
-  const title = formatDistanceToNowStrict(new Date(`${date} ${time}`), {
-    addSuffix: true,
-  });
+	const navigate = useNavigate();
+	const title = formatDistanceToNowStrict(new Date(`${date} ${time}`), {
+		addSuffix: true,
+	});
 
-  const handleClick = () => {
-    navigate(`/session/${sessionID}`);
-  };
+	const handleClick = () => {
+		navigate(`/session/${sessionID}`);
+	};
 
-  return (
-    <Box
-      p={5}
-      borderRadius="2xl"
-      shadow="lg"
-      width="100%"
-      maxW="500px"
-      bgGradient="linear(to-r, teal.100, green.100)"
-      cursor="pointer"
-      transition="all 0.2s ease-in-out"
-      _hover={{
-        transform: "scale(1.03)",
-        shadow: "xl",
-        bgGradient: "linear(to-r, teal.200, green.200)",
-      }}
-      onClick={handleClick}
-    >
-      <VStack align="start" spacing={1}>
-        <Text fontWeight="bold" fontSize="lg" color="teal.800">
-          {title}
-        </Text>
-        <Text color="gray.700">📅 {date}</Text>
-        <Text color="gray.700">⏰ {time}</Text>
-      </VStack>
-    </Box>
-  );
+	return (
+		<Box
+			p={{ base: 4, md: 5 }}
+			width="100%"
+			bg="white"
+			borderRadius="xl"
+			borderLeft="5px solid"
+			borderLeftColor="tiber.600"
+			boxShadow="sm"
+			cursor="pointer"
+			transition="all 0.2s ease"
+			_hover={{
+				transform: "translateY(-2px)",
+				boxShadow: "md",
+				borderLeftColor: "lime.400",
+			}}
+			onClick={handleClick}
+		>
+			<VStack align="start" spacing={1}>
+				<Text
+					fontWeight="700"
+					fontSize={{ base: "md", md: "lg" }}
+					color="tiber.800"
+				>
+					{title}
+				</Text>
+
+				<Text fontSize="sm" color="tiber.900" opacity={0.65}>
+					📅 {date}
+				</Text>
+
+				<Text fontSize="sm" color="tiber.900" opacity={0.65}>
+					⏰ {time}
+				</Text>
+			</VStack>
+		</Box>
+	);
 };
 
 export default SessionDetailsComponent;

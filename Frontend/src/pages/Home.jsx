@@ -89,49 +89,75 @@ const Home = () => {
 	);
 
 	return (
-		<Box minH="100vh" bgGradient="linear(to-b, green.100, blue.50)">
+		<Box minH="100vh" bg="mist.400">
 			{/* Header */}
-			<Container maxW="full" py={10}>
+			<Container maxW="900px" py={{ base: 10, md: 16 }}>
 				<Center>
-					<Text
-						fontSize="5xl"
-						fontWeight="extrabold"
-						color="teal.700"
-						textShadow="1px 1px 2px rgba(0,0,0,0.1)"
-					>
-						🏋️ Mana Progress Aku
-					</Text>
+					<VStack spacing={3} textAlign="center">
+						<Text
+							fontSize={{ base: "3xl", sm: "4xl", md: "5xl" }}
+							fontWeight="extrabold"
+							color="tiber.800"
+							letterSpacing="-0.02em"
+						>
+							🏋️ Mana Progress Aku
+						</Text>
+
+						<Text
+							fontSize={{ base: "sm", md: "md" }}
+							color="tiber.900"
+							opacity={0.7}
+						>
+							Track your workouts. Measure your progress.
+						</Text>
+					</VStack>
 				</Center>
 			</Container>
 
 			{/* Menu Options */}
-			<VStack spacing={8} py={10}>
-				<MenuCard
-					text="✨ Start New Session"
-					bg="pink.100"
-					hoverBg="pink.200"
-					onClick={confirmSessionOnOpen}
-				/>
-				<MenuCard
-					text="📖 Past Sessions"
-					bg="purple.100"
-					hoverBg="purple.200"
-					onClick={() => navigate("/pastSessions")}
-				/>
-				<MenuCard
-					text="📋 Exercise List"
-					bg="teal.100"
-					hoverBg="teal.200"
-					onClick={() => navigate("/exerciseList")}
-				/>
+			<Container maxW="600px" pb={12}>
+				<VStack spacing={4}>
+					<MenuCard
+						text="Start New Session"
+						bg="white"
+						hoverBg="white"
+						borderLeft="5px solid"
+						borderLeftColor="lime.400"
+						color="tiber.800"
+						onClick={confirmSessionOnOpen}
+					/>
 
-				<MenuCard
-					text={"Log Out"}
-					bg={"red.400"}
-					hoverBg={"red.200"}
-					onClick={confirmLogoutOnOpen}
-				/>
-			</VStack>
+					<MenuCard
+						text="Past Sessions"
+						bg="white"
+						hoverBg="white"
+						borderLeft="5px solid"
+						borderLeftColor="tiber.600"
+						color="tiber.800"
+						onClick={() => navigate("/pastSessions")}
+					/>
+
+					<MenuCard
+						text="Exercise Library"
+						bg="white"
+						hoverBg="white"
+						borderLeft="5px solid"
+						borderLeftColor="tiber.600"
+						color="tiber.800"
+						onClick={() => navigate("/exerciseList")}
+					/>
+
+					<MenuCard
+						text="Log Out"
+						bg="#ad213f"
+						hoverBg="red.600"
+						color="white"
+						borderLeft="5px solid"
+						borderLeftColor="red.400"
+						onClick={confirmLogoutOnOpen}
+					/>
+				</VStack>
+			</Container>
 
 			{/* Start Session Dialog */}
 			<StartSessionDialog
