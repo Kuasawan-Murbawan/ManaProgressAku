@@ -1,6 +1,6 @@
 import React from "react";
 import ExerciseListComponent from "../components/Exercise/ExerciseListComponent";
-import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, useDisclosure, HStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
 import InsertExerciseModal from "../components/Exercise/InsertExerciseModal";
@@ -16,27 +16,45 @@ const ExerciseListPage = () => {
 		<div>
 			<ExerciseListComponent />
 			<Box
-				display="flex"
-				justifyContent="center"
-				alignItems="center"
-				pb={6} // add vertical padding so it doesn’t stick to the top
-				bg={"gray.300"}
+				bg="mist.50"
+				borderTop="1px solid"
+				borderColor="gray.200"
+				px={{ base: 4, md: 8 }}
+				py={8}
 			>
-				<Button
-					size="lg"
-					bg="pink.200"
-					_hover={{ bg: "pink.300", transform: "scale(1.05)" }}
-					borderRadius="xl"
-					shadow="md"
-					onClick={() => navigate("/")}
+				<HStack
+					maxW="1200px"
+					mx="auto"
+					justify="center"
+					spacing={4}
+					flexWrap="wrap"
 				>
-					⬅ Home
-				</Button>
-				{isAdmin && (
-					<Button size="lg" colorScheme="green" margin="20px" onClick={onOpen}>
-						➕ Add Exercise
+					<Button
+						variant="outline"
+						borderColor="tiber.500"
+						color="tiber.800"
+						_hover={{
+							bg: "tiber.50",
+						}}
+						onClick={() => navigate("/")}
+					>
+						← Home
 					</Button>
-				)}
+
+					{isAdmin && (
+						<Button
+							bg="tiber.800"
+							color="white"
+							_hover={{
+								bg: "tiber.700",
+								transform: "translateY(-1px)",
+							}}
+							onClick={onOpen}
+						>
+							+ Add Exercise
+						</Button>
+					)}
+				</HStack>
 
 				<InsertExerciseModal isOpen={isOpen} onClose={onClose} />
 			</Box>

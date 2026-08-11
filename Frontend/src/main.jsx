@@ -14,6 +14,7 @@ import SessionActivitiesDetails from "./components/Session/SessionActivitiesDeta
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
+import theme from "./theme";
 
 const router = createBrowserRouter([
 	{
@@ -35,7 +36,7 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: (
-			<ChakraProvider>
+			<ChakraProvider theme={theme}>
 				<ProtectedRoute>
 					<App />
 				</ProtectedRoute>
