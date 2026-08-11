@@ -10,6 +10,7 @@ import {
 	TableContainer,
 	IconButton,
 	HStack,
+	VStack,
 	Spacer,
 	useDisclosure,
 	AlertDialog,
@@ -55,85 +56,94 @@ const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 
 	return (
 		<Box
-			bgGradient="linear(to-r, teal.100, green.100)"
-			p={6}
-			borderRadius="2xl"
-			boxShadow="lg"
-			w="90%"
-			mx="auto"
-			my={8}
-			transition="all 0.2s ease-in-out"
-			_hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
+			w="100%"
+			maxW={"600px"}
+			bg="white"
+			p={{ base: 4, md: 6 }}
+			borderRadius="xl"
+			boxShadow="sm"
+			borderLeft="5px solid"
+			borderLeftColor="tiber.600"
+			transition="all 0.2s ease"
+			_hover={{
+				boxShadow: "md",
+				borderLeftColor: "lime.400",
+			}}
 		>
-			<HStack mb={4}>
-				<Text fontSize="2xl" fontWeight="extrabold" color="green.700">
+			{/* Activity Header */}
+			<HStack mb={5}>
+				<Text
+					fontSize={{ base: "lg", md: "2xl" }}
+					fontWeight="700"
+					color="tiber.800"
+				>
 					{exerciseName}
 				</Text>
+
 				<Spacer />
+
 				<IconButton
 					aria-label="Edit exercise"
 					icon={<EditIcon />}
-					colorScheme="yellow"
+					color="tiber.800"
 					variant="ghost"
-					size="lg"
+					size="md"
+					_hover={{
+						bg: "lime.400",
+					}}
 					onClick={editActivityOnOpen}
 				/>
+
 				<IconButton
 					aria-label="Delete exercise"
 					icon={<DeleteIcon />}
-					colorScheme="red"
+					color="red.500"
 					variant="ghost"
-					size="lg"
+					size="md"
+					_hover={{
+						bg: "red.50",
+					}}
 					onClick={deleteActivityOnOpen}
 				/>
 			</HStack>
 
+			{/* Sets */}
 			<TableContainer
+				bg="white"
 				borderRadius="lg"
-				overflow="scroll"
-				boxShadow="sm"
-				border={"2px"}
-				borderColor={"gray.500"}
+				border="1px solid"
+				maxW={"600px"}
+				mx={"auto"}
+				borderColor="mist.400"
 			>
-				<Table variant="striped" colorScheme="green" size="md">
-					<Thead bg="green.200">
+				<Table variant="simple" size="md">
+					<Thead bg="mist.400">
 						<Tr>
-							<Th color="green.900" fontWeight="bold" textAlign="center">
-								Sets
+							<Th color="tiber.800" fontSize="xs" fontWeight="700">
+								Set
 							</Th>
-							{sets.map((set) => (
-								<Th
-									key={set.setID}
-									color="green.900"
-									fontWeight="bold"
-									textAlign="center"
-								>
-									Set {set.setNumber}
-								</Th>
-							))}
+							<Th color="tiber.800" fontSize="xs" fontWeight="700" isNumeric>
+								Weight (kg)
+							</Th>
+							<Th color="tiber.800" fontSize="xs" fontWeight="700" isNumeric>
+								Reps
+							</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
-						<Tr>
-							<Td fontWeight="semibold" textAlign="center" color="teal.800">
-								Weight (kg)
-							</Td>
-							{sets.map((set) => (
-								<Td key={set.setID} textAlign="center">
+						{sets.map((set) => (
+							<Tr key={set.setID} _hover={{ bg: "gray.50" }}>
+								<Td fontWeight="600" color="tiber.800">
+									{set.setNumber}
+								</Td>
+								<Td fontWeight="700" color="tiber.800" isNumeric>
 									{set.weight}
 								</Td>
-							))}
-						</Tr>
-						<Tr>
-							<Td fontWeight="semibold" textAlign="center" color="teal.800">
-								Reps
-							</Td>
-							{sets.map((set) => (
-								<Td key={set.setID} textAlign="center">
+								<Td fontWeight="700" color="tiber.800" isNumeric>
 									{set.reps}
 								</Td>
-							))}
-						</Tr>
+							</Tr>
+						))}
 					</Tbody>
 				</Table>
 			</TableContainer>

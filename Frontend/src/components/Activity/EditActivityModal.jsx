@@ -12,6 +12,7 @@ import {
 	Select,
 	VStack,
 	Box,
+	Center,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useActivityStore } from "../../store/activity";
@@ -74,7 +75,9 @@ const EditActivityModal = ({ isOpen, onClose, currentActivity }) => {
 			<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Edit Activity</ModalHeader>
+					<ModalHeader ml={"15px"} fontWeight={"700"}>
+						Edit Activity
+					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<VStack>

@@ -4,6 +4,7 @@ import {
 	Container,
 	Text,
 	useDisclosure,
+	Card,
 	VStack,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
@@ -119,9 +120,12 @@ const Home = () => {
 				<VStack spacing={4}>
 					<MenuCard
 						text="Start New Session"
-						bg="white"
-						hoverBg="white"
-						borderLeft="5px solid"
+						bg="lime.300"
+						hoverBg="lime.500"
+						borderStyle="solid"
+						borderWidth="1px"
+						borderLeftWidth="4px"
+						borderColor="gray.200"
 						borderLeftColor="lime.400"
 						color="tiber.800"
 						onClick={confirmSessionOnOpen}

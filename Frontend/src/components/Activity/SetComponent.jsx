@@ -12,7 +12,7 @@ const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
 	const [weightError, setWeightError] = useState("");
 
 	return (
-		<Box bg={"purple.100"} p={6} borderRadius="2xl" boxShadow="md">
+		<Box bg={"mist.400"} p={6} borderRadius="2xl" boxShadow="md">
 			<VStack spacing={6}>
 				<Text fontWeight="bold" fontSize="xl">
 					Set {currentNumber}
@@ -21,6 +21,9 @@ const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
 				<HStack w="100%" justify="space-between">
 					<Text w="70px">Weight:</Text>
 					<NumberInput
+						bg={"mist.50"}
+						borderRadius={"6px"}
+						w={"80%"}
 						value={weight}
 						min={0}
 						max={500}
@@ -54,6 +57,8 @@ const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
 				<HStack w="100%" justify="space-between">
 					<Text w="70px">Reps:</Text>
 					<NumberInput
+						bg={"mist.50"}
+						borderRadius={"6px"}
 						value={reps}
 						min={1}
 						max={500}
