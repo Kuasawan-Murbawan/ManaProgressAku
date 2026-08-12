@@ -9,6 +9,27 @@ All notable changes to ManaProgressAku will be here.
 - profile page
 - better exercise information
 - add user's weight and height to profile
+- gmail registration and login
+
+## [v1.2.0] - 2026-08-13
+
+### Added
+
+- Full visual redesign across the app using a new design system (Tiber/Mist/Lime palette, Space Grotesk + Inter typography). Covers Home, Exercise List, New Session flow (New Exercise, Upper/Lower Body pickers, Current Activity), Past Sessions, Session Activities, Login, and Register.
+- Ability to delete an unsaved set while logging an exercise (e.g. after accidentally clicking "+ Add Set").
+- Saved sets are now locked from editing during active logging and sets can only be edited afterward via Edit Activity.
+- Full-screen modals on mobile breakpoints for all modal dialogs (Exercise Detail, Edit/Insert Exercise, Upper/Lower Body pickers, Edit Activity).
+- Cross-navigation links between Login and Register pages.
+- Added design philosophy documentation to `docs/DESIGN_PHILOSOPHY.md` to guide future development and maintain visual consistency.
+
+### Changed
+
+- `ExerciseSummaryCard` set display converted from a wide horizontal table to a compact, scannable table optimized for mobile widths.
+- All page backgrounds, cards, buttons, and form inputs unified under a single consistent visual language (see `docs/DESIGN_PHILOSOPHY.md`).
+
+### Fixed
+
+- Fixed a bug where finishing an exercise after deleting the in-progress (unsaved) set could re-submit an already-saved set, creating a duplicate entry.
 
 ## [v1.1.1] - 2026-08-06
 
