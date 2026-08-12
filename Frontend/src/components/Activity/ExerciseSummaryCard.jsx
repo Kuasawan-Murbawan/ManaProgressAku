@@ -1,17 +1,16 @@
 import {
 	Box,
+	Text,
+	HStack,
+	Spacer,
 	Table,
 	Thead,
 	Tbody,
 	Tr,
 	Th,
 	Td,
-	Text,
 	TableContainer,
 	IconButton,
-	HStack,
-	VStack,
-	Spacer,
 	useDisclosure,
 	AlertDialog,
 	AlertDialogOverlay,
@@ -71,14 +70,20 @@ const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 			}}
 		>
 			{/* Activity Header */}
-			<HStack mb={5}>
-				<Text
-					fontSize={{ base: "lg", md: "2xl" }}
-					fontWeight="700"
-					color="tiber.800"
-				>
-					{exerciseName}
-				</Text>
+			<HStack mb={4} align="start">
+				<Box>
+					<Text
+						fontFamily="heading"
+						fontSize={{ base: "lg", md: "xl" }}
+						fontWeight="700"
+						color="tiber.800"
+					>
+						{exerciseName}
+					</Text>
+					<Text fontSize="xs" color="tiber.600" opacity={0.6} mt={0.5}>
+						{sets.length} {sets.length === 1 ? "set" : "sets"} logged
+					</Text>
+				</Box>
 
 				<Spacer />
 
@@ -88,9 +93,7 @@ const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 					color="tiber.800"
 					variant="ghost"
 					size="md"
-					_hover={{
-						bg: "lime.400",
-					}}
+					_hover={{ bg: "lime.400" }}
 					onClick={editActivityOnOpen}
 				/>
 
@@ -100,46 +103,89 @@ const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 					color="red.500"
 					variant="ghost"
 					size="md"
-					_hover={{
-						bg: "red.50",
-					}}
+					_hover={{ bg: "red.50" }}
 					onClick={deleteActivityOnOpen}
 				/>
 			</HStack>
 
 			{/* Sets */}
 			<TableContainer
-				bg="white"
-				borderRadius="lg"
 				border="1px solid"
-				maxW={"600px"}
-				mx={"auto"}
-				borderColor="mist.400"
+				borderColor="mist.200"
+				borderRadius="lg"
+				overflow="hidden"
 			>
-				<Table variant="simple" size="md">
+				<Table variant="simple" size="sm">
 					<Thead bg="mist.400">
 						<Tr>
-							<Th color="tiber.800" fontSize="xs" fontWeight="700">
+							<Th
+								color="tiber.700"
+								fontSize="xs"
+								fontWeight="700"
+								letterSpacing="0.05em"
+								py={3}
+							>
 								Set
 							</Th>
-							<Th color="tiber.800" fontSize="xs" fontWeight="700" isNumeric>
+							<Th
+								color="tiber.700"
+								fontSize="xs"
+								fontWeight="700"
+								letterSpacing="0.05em"
+								isNumeric
+								py={3}
+							>
 								Weight (kg)
 							</Th>
-							<Th color="tiber.800" fontSize="xs" fontWeight="700" isNumeric>
+							<Th
+								color="tiber.700"
+								fontSize="xs"
+								fontWeight="700"
+								letterSpacing="0.05em"
+								isNumeric
+								py={3}
+							>
 								Reps
 							</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
 						{sets.map((set) => (
-							<Tr key={set.setID} _hover={{ bg: "gray.50" }}>
-								<Td fontWeight="600" color="tiber.800">
-									{set.setNumber}
+							<Tr key={set.setID} _hover={{ bg: "mist.50" }}>
+								<Td py={3}>
+									<HStack spacing={2}>
+										<Box
+											boxSize="22px"
+											borderRadius="full"
+											bg="lime.400"
+											color="tiber.900"
+											fontSize="xs"
+											fontWeight="700"
+											display="flex"
+											alignItems="center"
+											justifyContent="center"
+											flexShrink={0}
+										>
+											{set.setNumber}
+										</Box>
+									</HStack>
 								</Td>
-								<Td fontWeight="700" color="tiber.800" isNumeric>
+								<Td
+									isNumeric
+									py={3}
+									fontWeight="700"
+									color="tiber.800"
+									fontSize="md"
+								>
 									{set.weight}
 								</Td>
-								<Td fontWeight="700" color="tiber.800" isNumeric>
+								<Td
+									isNumeric
+									py={3}
+									fontWeight="700"
+									color="tiber.800"
+									fontSize="md"
+								>
 									{set.reps}
 								</Td>
 							</Tr>

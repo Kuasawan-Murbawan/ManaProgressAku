@@ -17,6 +17,7 @@ import ExerciseSummaryCard from "../components/Activity/ExerciseSummaryCard";
 import { useSessionStore } from "../store/session";
 import useNavigationBlocker from "../hook/useNavigationBlocker.js";
 import { useUserStore } from "../store/user.js";
+import { AddIcon, CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 
 const NewSessionHomePage = () => {
 	const navigate = useNavigate();
@@ -88,70 +89,106 @@ const NewSessionHomePage = () => {
 	return (
 		<Box
 			minH="100vh"
-			bgGradient="linear(to-br, teal.50, purple.50)"
-			py={8}
-			px={6}
+			bg="mist.400"
+			py={{ base: 6, md: 10 }}
+			px={{ base: 4, md: 6 }}
 		>
-			{/* Header */}
-			<Box textAlign="center" mb={8}>
-				<Text fontSize="4xl" fontWeight="bold" color="purple.700">
-					Hello {currentUser ? currentUser : "there"} 👋
-				</Text>
-				<Text fontSize="lg" color="gray.600">
-					What do you want to do today?
-				</Text>
+			<Box w="100%" maxW="700px" mx="auto">
+				{/* Header */}
+				<Box mb={8}>
+					<Text
+						fontFamily="heading"
+						fontSize={{ base: "2xl", md: "3xl" }}
+						fontWeight="700"
+						color="tiber.800"
+					>
+						Hello{currentUser ? `, ${currentUser}` : " there"}
+					</Text>
+					<Text fontSize="md" color="tiber.700" opacity={0.7} mt={1}>
+						What do you want to do today?
+					</Text>
+				</Box>
+
+				{/* Exercises List */}
+				{activities?.length > 0 ? (
+					<VStack spacing={4} align="stretch" mb={2}>
+						{activities.map((activity, index) => (
+							<ExerciseSummaryCard
+								key={index}
+								activity={activity}
+								exerciseName={getExerciseName(activity.exerciseID)}
+							/>
+						))}
+					</VStack>
+				) : (
+					<Box
+						bg="white"
+						borderRadius="xl"
+						boxShadow="sm"
+						borderLeft="5px solid"
+						borderLeftColor="tiber.600"
+						px={6}
+						py={8}
+						textAlign="center"
+						mb={2}
+					>
+						<Text color="tiber.800" fontWeight="600" mb={1}>
+							No activities added yet.
+						</Text>
+						<Text color="tiber.700" opacity={0.7} fontSize="sm">
+							Add an exercise to start logging this session.
+						</Text>
+					</Box>
+				)}
+
+				<Divider my={8} borderColor="mist.300" />
+
+				{/* Buttons */}
+				<Flex justify="center" gap={3} wrap="wrap">
+					<Button
+						onClick={handleAddActivity}
+						bg="tiber.800"
+						color="white"
+						borderRadius="xl"
+						px={6}
+						leftIcon={<AddIcon boxSize={3} />}
+						_hover={{
+							bg: "tiber.900",
+							transform: "translateY(-2px)",
+							boxShadow: "md",
+						}}
+					>
+						Add Exercise
+					</Button>
+					<Button
+						onClick={handleFinishSession}
+						bg="lime.400"
+						color="tiber.900"
+						borderRadius="xl"
+						px={6}
+						leftIcon={<CheckIcon boxSize={3} />}
+						_hover={{
+							bg: "lime.300",
+							transform: "translateY(-2px)",
+							boxShadow: "md",
+						}}
+					>
+						Finish Session
+					</Button>
+					<Button
+						onClick={handleDeleteSession}
+						variant="outline"
+						borderColor="red.300"
+						color="red.500"
+						borderRadius="xl"
+						px={6}
+						leftIcon={<DeleteIcon boxSize={3} />}
+						_hover={{ bg: "red.50", transform: "translateY(-2px)" }}
+					>
+						Delete Session
+					</Button>
+				</Flex>
 			</Box>
-
-			{/* Exercises List */}
-			{activities?.length > 0 ? (
-				activities.map((activity, index) => (
-					<ExerciseSummaryCard
-						key={index}
-						activity={activity}
-						exerciseName={getExerciseName(activity.exerciseID)}
-					/>
-				))
-			) : (
-				<Text fontStyle="italic" color="gray.500" mb={6} textAlign="center">
-					No activities added yet.
-				</Text>
-			)}
-
-			<Divider my={6} />
-
-			{/* Buttons */}
-			<Flex justify="center" gap={4} wrap="wrap">
-				<Button
-					onClick={handleAddActivity}
-					colorScheme="teal"
-					variant="solid"
-					borderRadius="xl"
-					px={6}
-					py={4}
-				>
-					➕ Add Exercise
-				</Button>
-				<Button
-					onClick={handleFinishSession}
-					colorScheme="purple"
-					variant="solid"
-					borderRadius="xl"
-					px={6}
-					py={4}
-				>
-					✅ Finish Session
-				</Button>
-				<Button
-					onClick={handleDeleteSession}
-					colorScheme="red"
-					variant="outline"
-					borderRadius="xl"
-					px={6}
-					py={4}
-				>
-					🗑️ Delete Session
-				</Button>
-			</Flex>
 
 			{/* Delete dialog */}
 			<DeleteSessionDialog

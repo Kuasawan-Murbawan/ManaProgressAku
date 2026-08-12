@@ -1,29 +1,119 @@
 import {
 	Box,
-	HStack,
+	Flex,
+	FormControl,
+	FormLabel,
 	NumberInput,
 	NumberInputField,
+	Stack,
 	Text,
-	VStack,
+	Badge,
+	HStack,
+	IconButton,
 } from "@chakra-ui/react";
+import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
 import { React, useState } from "react";
 
-const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
+const SetComponent = ({
+	currentNumber,
+	weight,
+	reps,
+	onChange,
+	isDisabled = false,
+	onDelete,
+}) => {
 	const [weightError, setWeightError] = useState("");
 
 	return (
-		<Box bg={"mist.400"} p={6} borderRadius="2xl" boxShadow="md">
-			<VStack spacing={6}>
-				<Text fontWeight="bold" fontSize="xl">
-					Set {currentNumber}
-				</Text>
+		<Box
+			bg="white"
+			borderRadius="xl"
+			boxShadow="sm"
+			border="1px solid"
+			borderColor="mist.200"
+			borderLeft="5px solid"
+			borderLeftColor={isDisabled ? "mist.300" : "tiber.600"}
+			p={{ base: 4, md: 5 }}
+			opacity={isDisabled ? 0.75 : 1}
+			transition="all 0.15s ease"
+		>
+			{/* Set label */}
+			<HStack justify="space-between" mb={4}>
+				<Flex align="center" gap={3}>
+					<Flex
+						align="center"
+						justify="center"
+						boxSize="32px"
+						borderRadius="full"
+						bg={isDisabled ? "mist.300" : "lime.400"}
+						color="tiber.900"
+						fontFamily="heading"
+						fontWeight="700"
+						fontSize="sm"
+						flexShrink={0}
+					>
+						{currentNumber}
+					</Flex>
+					<Text
+						fontFamily="heading"
+						fontWeight="700"
+						fontSize="md"
+						color="tiber.800"
+					>
+						Set {currentNumber}
+					</Text>
+				</Flex>
 
-				<HStack w="100%" justify="space-between">
-					<Text w="70px">Weight:</Text>
+				<HStack spacing={2}>
+					{isDisabled && (
+						<Badge
+							display="flex"
+							alignItems="center"
+							gap={1}
+							bg="mist.100"
+							color="tiber.600"
+							fontSize="2xs"
+							fontWeight="700"
+							textTransform="uppercase"
+							letterSpacing="0.05em"
+							px={2}
+							py={1}
+							borderRadius="md"
+						>
+							<CheckIcon boxSize={2} />
+							Saved
+						</Badge>
+					)}
+
+					{onDelete && !isDisabled && (
+						<IconButton
+							aria-label="Remove set"
+							icon={<DeleteIcon />}
+							size="sm"
+							variant="ghost"
+							color="red.400"
+							_hover={{ bg: "red.50" }}
+							onClick={onDelete}
+						/>
+					)}
+				</HStack>
+			</HStack>
+
+			{/* Fields */}
+			<Stack direction={{ base: "column", sm: "row" }} spacing={4}>
+				<FormControl isDisabled={isDisabled}>
+					<FormLabel
+						fontSize="xs"
+						fontWeight="700"
+						color="tiber.700"
+						textTransform="uppercase"
+						letterSpacing="0.05em"
+						mb={1.5}
+					>
+						Weight (kg)
+					</FormLabel>
 					<NumberInput
-						bg={"mist.50"}
-						borderRadius={"6px"}
-						w={"80%"}
+						isDisabled={isDisabled}
 						value={weight}
 						min={0}
 						max={500}
@@ -41,34 +131,66 @@ const SetComponent = ({ currentNumber, weight, reps, onChange }) => {
 								onChange("weight", valStr);
 							}
 						}} // take as String to allow decimal
-						w="full"
 					>
-						<NumberInputField />
+						<NumberInputField
+							bg="white"
+							borderColor="mist.300"
+							borderRadius="lg"
+							_hover={{ borderColor: "tiber.400" }}
+							_focus={{
+								borderColor: "tiber.600",
+								boxShadow: "0 0 0 1px #146059",
+							}}
+							_disabled={{
+								bg: "mist.50",
+								color: "tiber.600",
+								cursor: "not-allowed",
+							}}
+						/>
 					</NumberInput>
-					<Text>KG</Text>
-				</HStack>
+					{weightError && (
+						<Text color="red.500" fontSize="xs" mt={1}>
+							{weightError}
+						</Text>
+					)}
+				</FormControl>
 
-				{weightError && (
-					<Text color="red.500" fontSize="sm">
-						{weightError}
-					</Text>
-				)}
-
-				<HStack w="100%" justify="space-between">
-					<Text w="70px">Reps:</Text>
+				<FormControl isDisabled={isDisabled}>
+					<FormLabel
+						fontSize="xs"
+						fontWeight="700"
+						color="tiber.700"
+						textTransform="uppercase"
+						letterSpacing="0.05em"
+						mb={1.5}
+					>
+						Reps
+					</FormLabel>
 					<NumberInput
-						bg={"mist.50"}
-						borderRadius={"6px"}
+						isDisabled={isDisabled}
 						value={reps}
 						min={1}
 						max={500}
 						onChange={(valStr, valNum) => onChange("reps", valNum)}
-						w="full"
 					>
-						<NumberInputField />
+						<NumberInputField
+							bg="white"
+							borderColor="mist.300"
+							borderRadius="lg"
+							_hover={{ borderColor: "tiber.400" }}
+							_focus={{
+								borderColor: "tiber.600",
+								boxShadow: "0 0 0 1px #146059",
+							}}
+							_disabled={{
+								bg: "mist.50",
+								color: "tiber.600",
+								cursor: "not-allowed",
+							}}
+						/>
 					</NumberInput>
-				</HStack>
-			</VStack>
+				</FormControl>
+			</Stack>
 		</Box>
 	);
 };

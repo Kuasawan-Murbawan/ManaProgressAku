@@ -8,11 +8,9 @@ import {
 	ModalOverlay,
 	HStack,
 	Button,
-	Input,
-	Select,
 	VStack,
-	Box,
-	Center,
+	Text,
+	useBreakpointValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useActivityStore } from "../../store/activity";
@@ -28,6 +26,7 @@ const EditActivityModal = ({ isOpen, onClose, currentActivity }) => {
 	}, [isOpen, currentActivity]);
 
 	const { editActivity } = useActivityStore();
+	const modalSize = useBreakpointValue({ base: "full", md: "md" });
 
 	const handleChange = (index, field, value) => {
 		const updated = [...editedSets];
@@ -72,46 +71,62 @@ const EditActivityModal = ({ isOpen, onClose, currentActivity }) => {
 
 	return (
 		<div>
-			<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalHeader ml={"15px"} fontWeight={"700"}>
+			<Modal
+				isOpen={isOpen}
+				onClose={onClose}
+				closeOnOverlayClick={false}
+				size={modalSize}
+				isCentered={modalSize !== "full"}
+			>
+				<ModalOverlay bg="blackAlpha.600" />
+				<ModalContent borderRadius={{ base: 0, md: "xl" }} boxShadow="md">
+					<ModalHeader
+						fontFamily="heading"
+						fontWeight="700"
+						fontSize="xl"
+						color="tiber.800"
+					>
 						Edit Activity
 					</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody>
-						<VStack>
-							<Box>
-								<VStack>
-									{editedSets.map((set, index) => (
-										<SetComponent
-											key={set.setID}
-											currentNumber={set.setNumber}
-											weight={set.weight}
-											reps={set.reps}
-											onChange={(field, value) =>
-												handleChange(index, field, value)
-											}
-										/>
-									))}
-								</VStack>
-							</Box>
+					<ModalCloseButton color="tiber.700" />
+					<ModalBody maxH="70vh" overflowY="auto">
+						<VStack spacing={4}>
+							{editedSets.map((set, index) => (
+								<SetComponent
+									key={set.setID}
+									currentNumber={set.setNumber}
+									weight={set.weight}
+									reps={set.reps}
+									onChange={(field, value) => handleChange(index, field, value)}
+								/>
+							))}
 						</VStack>
 					</ModalBody>
-					<ModalFooter>
-						<HStack>
-							<Button colorScheme="red" onClick={handleCancel}>
-								Cancel
-							</Button>
+					<ModalFooter borderTop="1px solid" borderColor="mist.200" gap={3}>
+						<Button
+							onClick={handleCancel}
+							variant="outline"
+							borderColor="red.300"
+							color="red.500"
+							_hover={{ bg: "red.50" }}
+						>
+							Cancel
+						</Button>
 
-							<Button
-								colorScheme="green"
-								onClick={handleSaveEdit}
-								isDisabled={!isAllFieldsFilled()}
-							>
-								Save
-							</Button>
-						</HStack>
+						<Button
+							onClick={handleSaveEdit}
+							isDisabled={!isAllFieldsFilled()}
+							bg="lime.400"
+							color="tiber.900"
+							_hover={{ bg: "lime.300" }}
+							_disabled={{
+								bg: "mist.300",
+								color: "tiber.500",
+								cursor: "not-allowed",
+							}}
+						>
+							Save Changes
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
