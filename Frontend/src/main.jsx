@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: (
-			<ChakraProvider>
+			<ChakraProvider theme={theme}>
 				<LoginPage />
 			</ChakraProvider>
 		),
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
 	{
 		path: "/register",
 		element: (
-			<ChakraProvider>
+			<ChakraProvider theme={theme}>
 				<RegisterPage />
 			</ChakraProvider>
 		),
