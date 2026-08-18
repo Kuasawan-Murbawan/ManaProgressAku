@@ -31,6 +31,7 @@ const StartSessionDialog = ({ isOpen, onClose }) => {
 		setIsLoading(false);
 
 		if (res?.success) {
+			onClose();
 			navigate("/createSession");
 		} else {
 			alert(res?.message || "Failed to start session");

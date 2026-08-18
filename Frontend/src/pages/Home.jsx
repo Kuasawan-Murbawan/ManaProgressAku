@@ -30,13 +30,6 @@ const Home = () => {
 			if (exercise.length === 0) {
 				await fetchAllExercises();
 			}
-
-			// Check for any active session
-			const hasActive = await activeSession();
-
-			if (hasActive) {
-				activeSessionOnOpen();
-			}
 		};
 
 		init();
