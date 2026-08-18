@@ -6,22 +6,35 @@ import {
 	AlertDialogHeader,
 	AlertDialogOverlay,
 	Button,
+	useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSessionStore } from "../../store/session";
 
 const ActiveSessionDialog = ({ isOpen, onClose }) => {
+	const toast = useToast();
 	const navigate = useNavigate();
 	const { finishSession } = useSessionStore();
 
 	const handleContinue = async () => {
+		onClose();
 		navigate("/createSession");
 	};
 
 	const handleFinish = async () => {
-		finishSession();
-		onClose();
+		const result = await finishSession();
+		if (result?.success) {
+			onClose();
+		} else {
+			toast({
+				title: "Failed",
+				description: result?.message || "Failed to finish session.",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		}
 	};
 
 	return (

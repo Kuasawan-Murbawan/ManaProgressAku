@@ -73,6 +73,7 @@ export const useSessionStore = create(
 					}
 				} catch (error) {
 					console.error("Failed to finish session.", error);
+					return { success: false, message: "Failed to finish session" };
 				} finally {
 					set({ isLoading: false });
 				}
