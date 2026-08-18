@@ -50,6 +50,7 @@ const router = createBrowserRouter([
 			{ path: "currentActivity", element: <CurrentActivityPage /> },
 			{ path: "pastSessions", element: <PastSessionsPage /> },
 			{ path: "session/:sessionID", element: <SessionActivitiesDetails /> },
+			{ path: "profile", element: <div>Coming soon</div> }, // placeholder until feature/v1.4.0-profile
 		],
 	},
 ]);
