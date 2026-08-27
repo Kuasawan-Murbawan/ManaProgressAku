@@ -11,6 +11,25 @@ All notable changes to ManaProgressAku will be here.
 - add user's weight and height to profile
 - gmail registration and login
 
+## [v1.3.0] - 2026-08-20
+
+### Added
+
+- New app-wide navigation bar (`NavBar.jsx`) — bottom tab bar on mobile, top bar on desktop — linking Home, Exercise Library, Past Sessions, and Profile, with an elevated "Start Session" action in the center.
+- "Start Session" from the navbar reuses the existing active-session check: resumes an in-progress session if one exists, otherwise opens the create-session dialog — available from any page, not just Home.
+
+### Changed
+
+- Active-session detection moved from `Home.jsx` into `App.jsx`, since the navbar now allows navigating to any page without visiting Home first. The check now re-runs on every route change (not just once on initial load), so an active session is still surfaced no matter where the user navigates.
+- `Home.jsx` no longer owns active-session checking or `ActiveSessionDialog` — it now only handles its own setup (clearing stale activities, warming the exercise cache).
+- Page content spacing (`pt`/`pb` in `App.jsx`) adjusted to account for the fixed navbar on both breakpoints.
+
+### Fixed
+
+- `ActiveSessionDialog`'s "Continue" action now correctly closes the dialog before navigating — previously it could remain "open" underneath the session page after navigating away.
+- `finishSession` (session store) now returns a proper `{ success, message }` result on both failure paths (non-200 response and thrown error) instead of returning `undefined` — `ActiveSessionDialog`'s "Finish" action now surfaces an error toast on failure instead of silently closing as if it succeeded.
+- Active-session check no longer re-prompts the user immediately after they choose "Continue" (excluded via route guard on `/createSession`).
+
 ## [v1.2.0] - 2026-08-13
 
 ### Added
