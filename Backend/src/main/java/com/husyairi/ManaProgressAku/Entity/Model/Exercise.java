@@ -19,13 +19,23 @@ public class Exercise {
     @Column
     private String generalInfo;
 
+    @Column(name = "is_bodyweight", nullable = false)
+    private Boolean isBodyweight = false;
+
     public Exercise() {
     }
 
-    public Exercise(String exerciseName, String generalInfo, String exerciseType) {
+//    public Exercise(String exerciseName, String generalInfo, String exerciseType) {
+//        this.exerciseName = exerciseName;
+//        this.generalInfo = generalInfo;
+//        this.exerciseType = exerciseType;
+//    }
+
+    public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight) {
         this.exerciseName = exerciseName;
-        this.generalInfo = generalInfo;
         this.exerciseType = exerciseType;
+        this.generalInfo = generalInfo;
+        this.isBodyweight = isBodyweight;
     }
 
     public Exercise(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType) {
