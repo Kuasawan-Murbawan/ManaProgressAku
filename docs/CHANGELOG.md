@@ -11,6 +11,12 @@ All notable changes to ManaProgressAku will be here.
 - add user's weight and height to profile
 - gmail registration and login
 
+## [v1.4.0] - 2026-08-30
+
+### Added
+
+- Profile page (`Profile.jsx`) with user information and settings.
+
 ## [v1.3.0] - 2026-08-20
 
 ### Added
