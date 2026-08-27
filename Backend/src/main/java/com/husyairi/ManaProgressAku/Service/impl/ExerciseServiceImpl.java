@@ -29,7 +29,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public InsertExerciseResponse insertExercise(InsertExerciseRequest req){
 
-        Exercise newExercise = new Exercise(req.getExerciseName(), req.getGeneralInfo(), req.getExerciseType());
+        Exercise newExercise = new Exercise(req.getExerciseName(), req.getExerciseType(), req.getGeneralInfo(), false);
 
         if(req.getExerciseName() == null || req.getExerciseType() == null){
             throw new BadRequestException(400, "Please fill in all details", new HashMap<>());

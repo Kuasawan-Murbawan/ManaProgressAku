@@ -1,10 +1,7 @@
 package com.husyairi.ManaProgressAku.Entity.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,8 +20,12 @@ public class Session {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
+    private User user;
+
 
     // ACTIVE or COMPLETED
     @Column(name = "status", nullable = false)
@@ -69,12 +70,17 @@ public class Session {
         this.date = date;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getUser() {
+        return user != null ? user.getId() : null;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // Convenience getter for existing call sites that only ever wanted the raw ID
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     public String getStatus() {

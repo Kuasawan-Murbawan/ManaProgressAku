@@ -1,7 +1,6 @@
 package com.husyairi.ManaProgressAku.Controller;
 
 import com.husyairi.ManaProgressAku.DTO.User.CustomUserDetails;
-import com.husyairi.ManaProgressAku.DTO.User.UserProfile;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Service.impl.UserService;
 import org.springframework.http.ResponseEntity;

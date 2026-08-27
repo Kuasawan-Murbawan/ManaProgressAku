@@ -2,6 +2,7 @@ package com.husyairi.ManaProgressAku.Entity.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
@@ -30,6 +31,7 @@ public class ActivitySet{
             nullable = false
     )
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @org.hibernate.annotations.OnDelete(action = OnDeleteAction.CASCADE)
     private Activity activity;
 
 

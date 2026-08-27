@@ -18,6 +18,7 @@ public class Activity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessionid", referencedColumnName = "sessionid", nullable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
     private Session session;
 
     @Column(nullable = false)

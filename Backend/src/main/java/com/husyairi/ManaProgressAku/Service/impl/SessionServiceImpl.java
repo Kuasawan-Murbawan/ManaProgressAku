@@ -33,15 +33,17 @@ public class SessionServiceImpl implements SessionService {
     @Autowired
     private ActivityServiceImpl activityServiceImpl;
 
-    private Long getCurrentUserId() {
+    private User getCurrentUser() {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
                 "User not found"
         ));
+    }
 
-        return currentUser.getId();
+    private Long getCurrentUserId(){
+        return getCurrentUser().getId();
     }
 
     private String generateSessionID(){
@@ -87,7 +89,7 @@ public class SessionServiceImpl implements SessionService {
 
         // generate new Session ID
         newSession.setSessionID(generateSessionID());
-        newSession.setUserId(getCurrentUserId());
+        newSession.setUser(getCurrentUser());
 
         try {
             Session savedSession = sessionRepository.save(newSession);
@@ -177,7 +179,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<Session> getUserSessions(){
-        return sessionRepository.findByUserId(getCurrentUserId());
+        return sessionRepository.findByUser_Id(getCurrentUserId());
     }
 
     @Override
