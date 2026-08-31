@@ -53,6 +53,10 @@ public class ActivitySetServiceImpl implements ActivitySetService {
         Activity currentActivity = activityRepository.findById(req.getActivityID())
                 .orElseThrow(() -> new BadRequestException(404, "Activity not found", new HashMap<>()));
 
+        if(!currentActivity.getSession().getUserId().equals(getCurrentUserId())){
+            throw new BadRequestException(403, "Not authorized to insert this activity", new HashMap<>());
+        }
+
         ActivitySet newSet = new ActivitySet(
                 req.getWeight(),
                 req.getReps(),
