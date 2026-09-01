@@ -52,7 +52,32 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public GetProfileResponse updateProfile(UpdateProfileRequest request) {
-        return null;
+
+        UserProfile currentUser = userProfileRepository.findByUserId(getCurrentUserId()).orElseThrow(()-> new BadRequestException(
+                404,
+                "User not found",
+                new HashMap<>()
+        ));
+
+        // 3. update the new info
+        currentUser.setWeightKg(request.getWeightKg());
+        currentUser.setHeightCm(request.getHeightCm());
+        currentUser.setDateOfBirth(request.getDateOfBirth());
+        currentUser.setGender(request.getGender());
+
+        // 4. save the new details
+        try{
+            userProfileRepository.save(currentUser);
+        }catch(Exception e){
+            throw new BadRequestException(500, e.getMessage(), new HashMap<>());
+        }
+
+        return new GetProfileResponse(
+                currentUser.getWeightKg(),
+                currentUser.getHeightCm(),
+                currentUser.getDateOfBirth(),
+                currentUser.getGender()
+        );
     }
 
     @Override
