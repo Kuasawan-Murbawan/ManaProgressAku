@@ -53,19 +53,20 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public GetProfileResponse updateProfile(UpdateProfileRequest request) {
 
+        // 1. fetched current user's profile
         UserProfile currentUser = userProfileRepository.findByUserId(getCurrentUserId()).orElseThrow(()-> new BadRequestException(
                 404,
                 "User not found",
                 new HashMap<>()
         ));
 
-        // 3. update the new info
+        // 2. update the new info
         currentUser.setWeightKg(request.getWeightKg());
         currentUser.setHeightCm(request.getHeightCm());
         currentUser.setDateOfBirth(request.getDateOfBirth());
         currentUser.setGender(request.getGender());
 
-        // 4. save the new details
+        // 3. save the new details
         try{
             userProfileRepository.save(currentUser);
         }catch(Exception e){
