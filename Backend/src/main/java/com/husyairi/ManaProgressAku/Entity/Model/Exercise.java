@@ -76,4 +76,12 @@ public class Exercise {
     public void setExerciseType(String exerciseType) {
         this.exerciseType = exerciseType;
     }
+
+    public Boolean getBodyweight() {
+        return isBodyweight;
+    }
+
+    public void setBodyweight(Boolean bodyweight) {
+        isBodyweight = bodyweight;
+    }
 }

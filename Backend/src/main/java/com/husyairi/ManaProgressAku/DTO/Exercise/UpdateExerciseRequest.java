@@ -5,15 +5,17 @@ public class UpdateExerciseRequest {
     private String exerciseName;
     private String exerciseType;
     private String generalInfo;
+    private Boolean isBodyweight;
 
     public UpdateExerciseRequest() {
     }
 
-    public UpdateExerciseRequest(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType) {
+    public UpdateExerciseRequest(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight) {
         this.exerciseID = exerciseID;
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
         this.exerciseType = exerciseType;
+        this.isBodyweight = isBodyweight;
     }
 
     public Integer getExerciseID() {
@@ -46,5 +48,13 @@ public class UpdateExerciseRequest {
 
     public void setExerciseType(String exerciseType) {
         this.exerciseType = exerciseType;
+    }
+
+    public Boolean getBodyweight() {
+        return isBodyweight;
+    }
+
+    public void setBodyweight(Boolean bodyweight) {
+        isBodyweight = bodyweight;
     }
 }
