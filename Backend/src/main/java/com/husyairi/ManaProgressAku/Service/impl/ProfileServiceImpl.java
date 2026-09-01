@@ -12,6 +12,7 @@ import com.husyairi.ManaProgressAku.Service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,18 +21,24 @@ import java.util.HashMap;
 public class ProfileServiceImpl implements ProfileService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserProfileRepository userProfileRepository;
 
-    private Long getCurrentUserId(){
+    private User getCurrentUser(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User currentUser = userRepository.findByEmail(email).orElseThrow(() ->
+        return userRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("User not found"));
 
-        return currentUser.getId();
+    }
+
+    private Long getCurrentUserId(){
+        return getCurrentUser().getId();
     }
 
     @Override
@@ -83,6 +90,12 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void deleteAccount(DeleteAccountRequest request) {
+        User currentUser = getCurrentUser();
 
+        if(!passwordEncoder.matches(request.getPassword(), currentUser.getPassword())){
+            throw new BadRequestException(401, "Incorrect password", new HashMap<>());
+        }
+
+        userRepository.delete(currentUser);
     }
 }

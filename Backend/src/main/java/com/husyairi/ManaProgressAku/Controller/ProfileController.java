@@ -2,6 +2,7 @@ package com.husyairi.ManaProgressAku.Controller;
 
 import com.husyairi.ManaProgressAku.DTO.Profile.GetProfileResponse;
 import com.husyairi.ManaProgressAku.DTO.Profile.UpdateProfileRequest;
+import com.husyairi.ManaProgressAku.DTO.User.DeleteAccountRequest;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.ProfileService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Tag(name = "Profile", description = "CRUD for user profile")
 @CrossOrigin("*")
@@ -46,5 +49,10 @@ public class ProfileController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity<?> deleteAccount(@RequestBody DeleteAccountRequest request){
+        profileService.deleteAccount(request);
 
+        return ResponseEntity.ok(Map.of("message", "Account deleted successfully"));
+    }
 }
