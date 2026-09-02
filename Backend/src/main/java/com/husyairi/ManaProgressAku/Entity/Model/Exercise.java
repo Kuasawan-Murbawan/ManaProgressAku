@@ -25,12 +25,6 @@ public class Exercise {
     public Exercise() {
     }
 
-//    public Exercise(String exerciseName, String generalInfo, String exerciseType) {
-//        this.exerciseName = exerciseName;
-//        this.generalInfo = generalInfo;
-//        this.exerciseType = exerciseType;
-//    }
-
     public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight) {
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
@@ -77,11 +71,11 @@ public class Exercise {
         this.exerciseType = exerciseType;
     }
 
-    public Boolean getBodyweight() {
+    public Boolean getIsBodyweight() {
         return isBodyweight;
     }
 
-    public void setBodyweight(Boolean bodyweight) {
-        isBodyweight = bodyweight;
+    public void setIsBodyweight(Boolean isBodyweight) {
+        this.isBodyweight = isBodyweight;
     }
 }

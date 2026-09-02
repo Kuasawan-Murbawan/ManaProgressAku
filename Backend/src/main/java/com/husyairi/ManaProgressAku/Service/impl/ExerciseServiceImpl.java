@@ -41,7 +41,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                     savedExercise.getExerciseName(),
                     savedExercise.getExerciseType(),
                     savedExercise.getGeneralInfo(),
-                    savedExercise.getBodyweight()
+                    savedExercise.getIsBodyweight()
             );
         } catch (Exception e) {
             throw new BadRequestException(400, e.getMessage(), new HashMap<>());
@@ -54,15 +54,13 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         if(fetchExercise.isPresent()){
             Exercise exercise = fetchExercise.get();
-            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo(), exercise.getBodyweight());
+            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo(), exercise.getIsBodyweight());
         }else{
             throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
         }
     }
 
     @Override
-    // TODO: decide whether to create UpdateResponse
-    // or can return the updated Session itself
     public InsertExerciseResponse updateExercise(UpdateExerciseRequest req){
 
         // Check if ID exist
@@ -75,6 +73,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         updatedExercise.setExerciseName(req.getExerciseName());
         updatedExercise.setGeneralInfo(req.getGeneralInfo());
         updatedExercise.setExerciseType(req.getExerciseType());
+        updatedExercise.setIsBodyweight(req.getIsBodyweight());
 
         try {
             // Save inside database
@@ -87,7 +86,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 updatedExercise.getExerciseName(),
                 updatedExercise.getExerciseType(),
                 updatedExercise.getGeneralInfo(),
-                updatedExercise.getBodyweight()
+                updatedExercise.getIsBodyweight()
         );
     }
 

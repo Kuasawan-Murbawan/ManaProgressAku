@@ -50,11 +50,11 @@ public class UpdateExerciseRequest {
         this.exerciseType = exerciseType;
     }
 
-    public Boolean getBodyweight() {
+    public Boolean getIsBodyweight() {
         return isBodyweight;
     }
 
-    public void setBodyweight(Boolean bodyweight) {
-        isBodyweight = bodyweight;
+    public void setIsBodyweight(Boolean isBodyweight) {
+        this.isBodyweight = isBodyweight;
     }
 }
