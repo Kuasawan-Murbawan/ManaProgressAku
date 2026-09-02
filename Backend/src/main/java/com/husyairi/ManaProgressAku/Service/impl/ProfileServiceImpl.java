@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 
 @Service
@@ -44,28 +45,30 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public GetProfileResponse getProfile(){
         Long currentUserId = getCurrentUserId();
-        UserProfile user =  userProfileRepository.findByUserId(currentUserId).orElseThrow(() -> new BadRequestException(
-                404,
-                "User not found",
-                new HashMap<>()
-        ));
+        UserProfile user = userProfileRepository.findByUserId(currentUserId).orElse(null);
+
+        if (user == null) {
+            return new GetProfileResponse(null, null, null, null);
+        }
 
         return new GetProfileResponse(
                 user.getWeightKg(),
                 user.getHeightCm(),
                 user.getDateOfBirth(),
-                user.getGender() );
+                user.getGender());
     }
 
     @Override
     public GetProfileResponse updateProfile(UpdateProfileRequest request) {
 
         // 1. fetched current user's profile
-        UserProfile currentUser = userProfileRepository.findByUserId(getCurrentUserId()).orElseThrow(()-> new BadRequestException(
-                404,
-                "User not found",
-                new HashMap<>()
-        ));
+        UserProfile currentUser = userProfileRepository.findByUserId(getCurrentUserId()).orElse(null);
+
+
+        if (currentUser == null) {
+            currentUser = new UserProfile();
+            currentUser.setUser(getCurrentUser());
+        }
 
         // 2. update the new info
         currentUser.setWeightKg(request.getWeightKg());
