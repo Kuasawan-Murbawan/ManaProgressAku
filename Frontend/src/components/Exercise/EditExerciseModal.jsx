@@ -12,6 +12,9 @@ import {
 	Select,
 	VStack,
 	Box,
+	Switch,
+	FormControl,
+	FormLabel,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useExerciseStore } from "../../store/exercise";
@@ -25,12 +28,14 @@ const EditExerciseModal = ({
 	const [exerciseName, setExerciseName] = useState("");
 	const [generalInfo, setgeneralInfo] = useState("");
 	const [exerciseType, setExerciseType] = useState("");
+	const [isBodyweight, setIsBodyweight] = useState(false);
 
 	useEffect(() => {
 		if (currentExercise) {
 			setExerciseName(currentExercise.exerciseName || "");
 			setgeneralInfo(currentExercise.generalInfo || "");
 			setExerciseType(currentExercise.exerciseType || "");
+			setIsBodyweight(currentExercise.isBodyweight || false);
 		}
 	}, [currentExercise]);
 
@@ -40,6 +45,7 @@ const EditExerciseModal = ({
 		setExerciseName(currentExercise?.exerciseName || "");
 		setgeneralInfo(currentExercise?.generalInfo || "");
 		setExerciseType(currentExercise?.exerciseType || "");
+		setIsBodyweight(currentExercise?.isBodyweight || false);
 	};
 
 	const handleCancel = () => {
@@ -53,8 +59,8 @@ const EditExerciseModal = ({
 			exerciseName: exerciseName,
 			generalInfo: generalInfo,
 			exerciseType: Number(exerciseType),
+			isBodyweight: isBodyweight,
 		};
-		console.log(updatedExercise);
 
 		const result = await editExercise(updatedExercise);
 		if (result.success) {
@@ -94,6 +100,23 @@ const EditExerciseModal = ({
 										<option value="1">Upper Body</option>
 										<option value="2">Lower Body</option>
 									</Select>
+
+									<FormControl display="flex" alignItems="center" mt={2}>
+										<FormLabel
+											htmlFor="isBodyweightEdit"
+											mb="0"
+											fontSize="sm"
+											color="tiber.700"
+										>
+											Bodyweight exercise
+										</FormLabel>
+										<Switch
+											id="isBodyweightEdit"
+											isChecked={isBodyweight}
+											onChange={(e) => setIsBodyweight(e.target.checked)}
+											colorScheme="green"
+										/>
+									</FormControl>
 								</VStack>
 							</Box>
 						</VStack>

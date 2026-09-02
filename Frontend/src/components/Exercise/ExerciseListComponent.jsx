@@ -113,6 +113,17 @@ const ExerciseListComponent = () => {
 									>
 										{isLowerBody ? "Lower Body" : "Upper Body"}
 									</Tag>
+
+									{exercise.isBodyweight && (
+										<Tag
+											size="sm"
+											borderRadius="full"
+											bg="mist.100"
+											color="tiber.700"
+										>
+											Bodyweight
+										</Tag>
+									)}
 								</VStack>
 							</CardBody>
 						</Card>
