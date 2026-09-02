@@ -1,10 +1,11 @@
 import { Button, VStack, Text, Box, Icon, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SetComponent from "../components/Activity/SetComponent";
 import { useActivityStore } from "../store/activity";
 import { useSessionStore } from "../store/session";
 import { useSetStore } from "../store/set";
+import { useProfileStore } from "../store/profile";
 
 // Simple placeholder glyph — no external icon package needed.
 // Swap this block for a real <Image src={exercise.imageUrl} /> in v1.2.1.
@@ -25,6 +26,7 @@ const CurrentActivityPage = () => {
 	const [activityID, setActivityID] = useState(null);
 	const { sessionID } = useSessionStore();
 	const { addSet } = useSetStore();
+	const { profile, fetchProfile } = useProfileStore();
 
 	const { exercise } = location.state || {};
 	const [started, setStarted] = useState(false);
@@ -34,6 +36,28 @@ const CurrentActivityPage = () => {
 	// Source of truth for "how many sets have actually been POSTed."
 	// Not derived from array length/index — that breaks once a set can be deleted.
 	const [savedCount, setSavedCount] = useState(0);
+
+	useEffect(() => {
+		fetchProfile();
+	}, []);
+
+	// Whether this exercise's weight should autofill from the profile.
+	// Two-part check: the exercise must be flagged bodyweight AND the user
+	// must actually have a weight on file — falls back to a normal editable
+	// field, with a prompt, when the profile hasn't been filled in.
+	const hasBodyweightAutofill = Boolean(
+		exercise?.isBodyweight && profile?.weightKg,
+	);
+	const bodyweightNoProfile = Boolean(
+		exercise?.isBodyweight && !profile?.weightKg,
+	);
+
+	const getInitialSetWeight = () => {
+		if (hasBodyweightAutofill) {
+			return String(profile.weightKg);
+		}
+		return "";
+	};
 
 	const isAllFieldsFilled = () =>
 		sets.every(
@@ -57,7 +81,7 @@ const CurrentActivityPage = () => {
 		});
 		if (result?.success) {
 			setActivityID(result.activityID);
-			setSets([{ weight: "", reps: "" }]);
+			setSets([{ weight: getInitialSetWeight(), reps: "" }]);
 			setSavedCount(0);
 			setStarted(true);
 		} else {
@@ -93,7 +117,7 @@ const CurrentActivityPage = () => {
 		}
 
 		setSavedCount(currentSetNumber);
-		setSets([...sets, { weight: "", reps: "" }]);
+		setSets([...sets, { weight: getInitialSetWeight(), reps: "" }]);
 	};
 
 	const handleDeleteSet = (index) => {
@@ -303,6 +327,9 @@ const CurrentActivityPage = () => {
 								onDelete={
 									index >= savedCount ? () => handleDeleteSet(index) : undefined
 								}
+								weightLocked={hasBodyweightAutofill}
+								weightLockedValue={profile?.weightKg}
+								bodyweightNoProfile={bodyweightNoProfile}
 							/>
 						))}
 

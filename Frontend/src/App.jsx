@@ -16,13 +16,15 @@ function App() {
 		onClose: activeSessionOnClose,
 	} = useDisclosure();
 
+	const ACTIVE_SESSION_PROMPT_EXCLUDED_ROUTES = [
+		"/createSession",
+		"/currentActivity",
+		"/newExercise",
+	];
+
 	useEffect(() => {
 		// don't re-prompt the user about the session they're already in.
-		if (
-			location.pathname === "/createSession" ||
-			location.pathname === "/currentActivity" ||
-			location.pathname === "/newExercise"
-		)
+		if (ACTIVE_SESSION_PROMPT_EXCLUDED_ROUTES.includes(location.pathname))
 			return;
 
 		const checkActiveSession = async () => {
@@ -34,7 +36,6 @@ function App() {
 
 		checkActiveSession();
 	}, [location.pathname]);
-
 	return (
 		<Box minH="100vh" pt={{ base: 0, md: "64px" }} pb={{ base: "64px", md: 0 }}>
 			<NavBar />

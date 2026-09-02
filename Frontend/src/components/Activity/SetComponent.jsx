@@ -10,9 +10,11 @@ import {
 	Badge,
 	HStack,
 	IconButton,
+	Link,
 } from "@chakra-ui/react";
-import { CheckIcon, DeleteIcon } from "@chakra-ui/icons";
+import { CheckIcon, DeleteIcon, LockIcon } from "@chakra-ui/icons";
 import { React, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SetComponent = ({
 	currentNumber,
@@ -21,8 +23,14 @@ const SetComponent = ({
 	onChange,
 	isDisabled = false,
 	onDelete,
+	weightLocked = false,
+	weightLockedValue,
+	bodyweightNoProfile = false,
 }) => {
 	const [weightError, setWeightError] = useState("");
+	const navigate = useNavigate();
+
+	const weightFieldDisabled = isDisabled || weightLocked;
 
 	return (
 		<Box
@@ -85,6 +93,26 @@ const SetComponent = ({
 						</Badge>
 					)}
 
+					{!isDisabled && weightLocked && (
+						<Badge
+							display="flex"
+							alignItems="center"
+							gap={1}
+							bg="lime.100"
+							color="tiber.900"
+							fontSize="2xs"
+							fontWeight="700"
+							textTransform="uppercase"
+							letterSpacing="0.05em"
+							px={2}
+							py={1}
+							borderRadius="md"
+						>
+							<LockIcon boxSize={2} />
+							Bodyweight
+						</Badge>
+					)}
+
 					{onDelete && !isDisabled && (
 						<IconButton
 							aria-label="Remove set"
@@ -101,7 +129,7 @@ const SetComponent = ({
 
 			{/* Fields */}
 			<Stack direction={{ base: "column", sm: "row" }} spacing={4}>
-				<FormControl isDisabled={isDisabled}>
+				<FormControl isDisabled={weightFieldDisabled}>
 					<FormLabel
 						fontSize="xs"
 						fontWeight="700"
@@ -113,7 +141,7 @@ const SetComponent = ({
 						Weight (kg)
 					</FormLabel>
 					<NumberInput
-						isDisabled={isDisabled}
+						isDisabled={weightFieldDisabled}
 						value={weight}
 						min={0}
 						max={500}
@@ -148,9 +176,30 @@ const SetComponent = ({
 							}}
 						/>
 					</NumberInput>
+
 					{weightError && (
 						<Text color="red.500" fontSize="xs" mt={1}>
 							{weightError}
+						</Text>
+					)}
+
+					{!isDisabled && weightLocked && !weightError && (
+						<Text fontSize="xs" color="tiber.600" opacity={0.7} mt={1}>
+							Using your profile weight ({weightLockedValue}kg)
+						</Text>
+					)}
+
+					{!isDisabled && bodyweightNoProfile && (
+						<Text fontSize="xs" color="tiber.600" opacity={0.8} mt={1}>
+							Add your weight in your{" "}
+							<Link
+								color="tiber.800"
+								fontWeight="700"
+								textDecoration="underline"
+							>
+								profile
+							</Link>{" "}
+							for automatic tracking.
 						</Text>
 					)}
 				</FormControl>
