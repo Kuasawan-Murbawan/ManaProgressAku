@@ -14,6 +14,7 @@ import SessionActivitiesDetails from "./components/Session/SessionActivitiesDeta
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 import theme from "./theme";
 
 const router = createBrowserRouter([
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
 			{ path: "currentActivity", element: <CurrentActivityPage /> },
 			{ path: "pastSessions", element: <PastSessionsPage /> },
 			{ path: "session/:sessionID", element: <SessionActivitiesDetails /> },
-			{ path: "profile", element: <div>Coming soon</div> }, // placeholder until feature/v1.4.0-profile
+			{ path: "profile", element: <ProfilePage /> }, // placeholder until feature/v1.4.0-profile
 		],
 	},
 ]);
