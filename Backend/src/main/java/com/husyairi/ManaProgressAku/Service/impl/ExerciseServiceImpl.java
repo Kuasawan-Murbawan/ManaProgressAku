@@ -40,7 +40,8 @@ public class ExerciseServiceImpl implements ExerciseService {
             return new InsertExerciseResponse(
                     savedExercise.getExerciseName(),
                     savedExercise.getExerciseType(),
-                    savedExercise.getGeneralInfo()
+                    savedExercise.getGeneralInfo(),
+                    savedExercise.getBodyweight()
             );
         } catch (Exception e) {
             throw new BadRequestException(400, e.getMessage(), new HashMap<>());
@@ -53,7 +54,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         if(fetchExercise.isPresent()){
             Exercise exercise = fetchExercise.get();
-            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo());
+            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo(), exercise.getBodyweight());
         }else{
             throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
         }
@@ -85,7 +86,8 @@ public class ExerciseServiceImpl implements ExerciseService {
         return new InsertExerciseResponse(
                 updatedExercise.getExerciseName(),
                 updatedExercise.getExerciseType(),
-                updatedExercise.getGeneralInfo()
+                updatedExercise.getGeneralInfo(),
+                updatedExercise.getBodyweight()
         );
     }
 

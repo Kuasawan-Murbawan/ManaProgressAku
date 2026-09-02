@@ -5,12 +5,14 @@ public class GetExerciseResponse {
 
     private String info;
 
-    public GetExerciseResponse() {
-    }
+    private Boolean isBodyweight;
 
-    public GetExerciseResponse(String exerciseName, String info) {
+    // TODO: configure fetching exercise to accommodate isBodyweight
+
+    public GetExerciseResponse(String exerciseName, String info, Boolean isBodyweight) {
         this.exerciseName = exerciseName;
         this.info = info;
+        this.isBodyweight = isBodyweight;
     }
 
     public String getExerciseName() {
@@ -27,5 +29,13 @@ public class GetExerciseResponse {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public Boolean getIsBodyweight() {
+        return isBodyweight;
+    }
+
+    public void setIsBodyweight(Boolean isBodyweight) {
+        this.isBodyweight = isBodyweight;
     }
 }

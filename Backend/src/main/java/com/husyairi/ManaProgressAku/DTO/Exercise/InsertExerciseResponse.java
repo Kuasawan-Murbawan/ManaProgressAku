@@ -4,14 +4,16 @@ public class InsertExerciseResponse {
     private String exerciseName;
     private String exerciseType;
     private String info;
+    private Boolean isBodyweight;
 
-    public InsertExerciseResponse() {
-    }
+    // TODO: configure response of inserting exercise to accommodate isBodyweight
 
-    public InsertExerciseResponse(String exerciseName, String exerciseType, String info) {
+
+    public InsertExerciseResponse(String exerciseName, String exerciseType, String info, Boolean isBodyweight) {
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
         this.info = info;
+        this.isBodyweight = isBodyweight;
     }
 
     public String getExerciseName() {
@@ -36,5 +38,13 @@ public class InsertExerciseResponse {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public Boolean getBodyweight() {
+        return isBodyweight;
+    }
+
+    public void setBodyweight(Boolean bodyweight) {
+        isBodyweight = bodyweight;
     }
 }
