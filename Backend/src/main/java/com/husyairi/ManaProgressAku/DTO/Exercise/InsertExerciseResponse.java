@@ -1,19 +1,26 @@
 package com.husyairi.ManaProgressAku.DTO.Exercise;
 
 public class InsertExerciseResponse {
+    private Integer exerciseID;
     private String exerciseName;
     private String exerciseType;
     private String info;
     private Boolean isBodyweight;
 
-    // TODO: configure response of inserting exercise to accommodate isBodyweight
-
-
-    public InsertExerciseResponse(String exerciseName, String exerciseType, String info, Boolean isBodyweight) {
+    public InsertExerciseResponse(Integer exerciseID, String exerciseName, String exerciseType, String info, Boolean isBodyweight) {
+        this.exerciseID = exerciseID;
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
         this.info = info;
         this.isBodyweight = isBodyweight;
+    }
+
+    public Integer getExerciseID() {
+        return exerciseID;
+    }
+
+    public void setExerciseID(Integer exerciseID) {
+        this.exerciseID = exerciseID;
     }
 
     public String getExerciseName() {

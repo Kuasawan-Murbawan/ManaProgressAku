@@ -38,6 +38,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         try {
             Exercise savedExercise = exerciseRepository.save(newExercise);
             return new InsertExerciseResponse(
+                    savedExercise.getExerciseID(),
                     savedExercise.getExerciseName(),
                     savedExercise.getExerciseType(),
                     savedExercise.getGeneralInfo(),
@@ -83,6 +84,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         }
 
         return new InsertExerciseResponse(
+                updatedExercise.getExerciseID(),
                 updatedExercise.getExerciseName(),
                 updatedExercise.getExerciseType(),
                 updatedExercise.getGeneralInfo(),

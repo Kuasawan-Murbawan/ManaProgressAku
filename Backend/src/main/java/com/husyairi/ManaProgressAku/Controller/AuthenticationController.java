@@ -9,6 +9,7 @@ import com.husyairi.ManaProgressAku.Service.impl.AuthenticationService;
 import com.husyairi.ManaProgressAku.Service.impl.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,14 +37,11 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> registerUser(@RequestBody RegisterUser registerUserDetail){
         User registeredUser = authenticationService.signUp(registerUserDetail);
-
-//        String jwtToken = jwtService.generateToken((UserDetails) registeredUser);
         String jwtToken =jwtService.generateToken(new CustomUserDetails(registeredUser));
 
         LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
 
-
-        return ResponseEntity.ok(loginResponse);
+        return new ResponseEntity<>(loginResponse, HttpStatus.CREATED);
     }
 
     @Operation(

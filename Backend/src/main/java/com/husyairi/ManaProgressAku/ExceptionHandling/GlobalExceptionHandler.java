@@ -2,8 +2,13 @@ package com.husyairi.ManaProgressAku.ExceptionHandling;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,6 +38,34 @@ public class GlobalExceptionHandler {
         }
 
         return new ResponseEntity<>(errorResponse, status);
+    }
+    // Handles @Valid failures on @RequestBody DTOs — e.g. @DecimalMin, @DecimalMax, @Past
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, Object> fieldErrors = new HashMap<>();
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                fieldErrors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                400,
+                "Validation failed",
+                fieldErrors
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    // Handles malformed JSON or an invalid enum value (e.g. gender: "MAN")
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> handleUnreadableBody(HttpMessageNotReadableException exception) {
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                400,
+                "Malformed request body",
+                new HashMap<>()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
 

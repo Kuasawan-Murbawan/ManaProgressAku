@@ -7,6 +7,7 @@ import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import com.husyairi.ManaProgressAku.Service.ProfileService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class ProfileController {
     }
 
     @PutMapping("/updateProfile")
-    public ResponseEntity<ApiSuccessResponse<GetProfileResponse>> updateProfile(@RequestBody UpdateProfileRequest request){
+    public ResponseEntity<ApiSuccessResponse<GetProfileResponse>> updateProfile(@Valid @RequestBody UpdateProfileRequest request){
         GetProfileResponse data = profileService.updateProfile(request);
 
         ApiSuccessResponse<GetProfileResponse> response = new ApiSuccessResponse<>(

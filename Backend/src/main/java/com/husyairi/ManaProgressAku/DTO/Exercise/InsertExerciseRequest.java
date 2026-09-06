@@ -4,9 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class InsertExerciseRequest {
 
-    // TODO: configure inserting exercise to accommodate isBodyweight
-
-
     @Schema(example = "Preacher Curl", description = "Name of the exercise")
     private String exerciseName;
 

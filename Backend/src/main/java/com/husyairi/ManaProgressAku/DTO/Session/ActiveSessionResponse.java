@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class ActiveSessionResponse {
 
-    private boolean hasActiveSession;
+    private Boolean hasActiveSession;
 
     private String sessionID;
 
@@ -15,18 +15,18 @@ public class ActiveSessionResponse {
     public ActiveSessionResponse() {
     }
 
-    public ActiveSessionResponse(boolean hasActiveSession, String sessionID, LocalDate startedAt, String status) {
+    public ActiveSessionResponse(Boolean hasActiveSession, String sessionID, LocalDate startedAt, String status) {
         this.hasActiveSession = hasActiveSession;
         this.sessionID = sessionID;
         this.startedAt = startedAt;
         this.status = status;
     }
 
-    public boolean isHasActiveSession() {
+    public Boolean isHasActiveSession() {
         return hasActiveSession;
     }
 
-    public void setHasActiveSession(boolean hasActiveSession) {
+    public void setHasActiveSession(Boolean hasActiveSession) {
         this.hasActiveSession = hasActiveSession;
     }
 
