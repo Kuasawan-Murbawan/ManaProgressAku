@@ -6,16 +6,35 @@ All notable changes to ManaProgressAku will be here.
 
 # Unreleased
 
-- profile page
 - better exercise information
-- add user's weight and height to profile
 - gmail registration and login
 
-## [v1.4.0] - 2026-08-30
+## [v1.4.0] - 2026-09-06
 
 ### Added
 
-- Profile page (`Profile.jsx`) with user information and settings.
+- User profile page (`/profile`) — users can optionally set weight, height, date of birth, and gender. All fields are optional; empty fields are visually flagged rather than blocking use of the app.
+- Delete account flow, with password re-verification and an explicit warning that the action is permanent and irreversible. Deleting an account cascades to remove all of that user's sessions, activities, and sets at the database level.
+- Bodyweight exercise support: exercises can be flagged `isBodyweight` by an admin (new toggle in Insert/Edit Exercise modals). When logging a set for a bodyweight exercise, weight autofills from the user's profile weight and is locked (reps remain editable); if no profile weight is on file, the field falls back to a normal editable input with a prompt linking to the profile page.
+- Delete exercise, with confirmation dialog (admin only).
+- `user_profile` table (1:1 with `users`), added via new `UserProfile` entity, repository, service, and `/getProfile`, `/updateProfile`, `/deleteAccount` endpoints.
+- `is_bodyweight` column added to `exercise`.
+- Expanded Postman/Newman API test suite covering profile CRUD and validation, the bodyweight admin toggle, account deletion (including token invalidation after delete), cross-user session access, unauthenticated access, and duplicate-active-session handling.
+
+### Changed
+
+- `Session.userId` changed from a raw column to a proper `@ManyToOne User` relationship, closing a gap where sessions could silently reference a deleted or nonexistent user with no database-level enforcement.
+- Foreign keys across `session → users`, `activity → session`, `activityset → activity`, and `user_profile → users` now cascade on delete (`ON DELETE CASCADE`), so removing a user or a session cleanly removes everything beneath it.
+- Admin-authenticated Postman requests now source credentials from a local `.env.local` file at test-run time instead of being stored in any committed or exported file.
+
+### Fixed
+
+- `GlobalExceptionHandler` was missing handlers for validation failures (`MethodArgumentNotValidException`) and malformed request bodies (`HttpMessageNotReadableException`); both previously went unhandled and were misreported as generic 401 Unauthorized responses instead of 400 Bad Request.
+- `updateExercise`'s bodyweight flag was silently dropped on every request due to a getter/setter naming mismatch (`getBodyweight`/`setBodyweight` vs. the `isBodyweight` JSON key), so Jackson never bound the incoming value.
+- `updateProfile` threw a NullPointerException on a user's first save (no existing profile row) instead of creating one; upsert logic corrected.
+- `getProfile` returned 404 for any user without a profile yet instead of a valid empty response, breaking the profile page for all first-time visitors.
+- Removed an orphaned `deleteExercise` code path that never refreshed the exercise list after a successful delete.
+- Cleaned up pre-existing orphaned rows in `session` (and cascade-affected `activity`/`activityset` rows) that had accumulated due to the missing foreign key, across local and other environments.
 
 ## [v1.3.0] - 2026-08-20
 
