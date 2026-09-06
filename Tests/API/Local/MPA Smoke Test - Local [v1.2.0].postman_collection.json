@@ -1,0 +1,1485 @@
+{
+	"info": {
+		"_postman_id": "38aa19d3-bea4-4b32-93d1-ada09b7125cc",
+		"name": "MPA Smoke Test - Local [v1.2.0]",
+		"description": "Smoke testing before deployment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42753199"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login success\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const json = pm.response.json();\r",
+							"pm.environment.set(\"token\", json.token);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"testis@example.com\",\r\n    \"password\": \"testis123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": ["{{baseUrl}}"],
+					"path": ["auth", "login"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Exercise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetched all exercises\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getAllExercises",
+					"host": ["{{baseUrl}}"],
+					"path": ["getAllExercises"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Session",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// full ISO Date (e.g., \"2026-05-19T16:55:34.000Z\")\r",
+							"const today = new Date().toISOString().split('T')[0];\r",
+							"pm.variables.set(\"currentDate\", today);\r",
+							"\r",
+							"// \"00:00:00 GMT+0000\"\r",
+							"const time = new Date().toTimeString().split(' ')[0];\r",
+							"pm.variables.set(\"currentTime\", time);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create Session Success\", function(){\r",
+							"    pm.response.to.have.status(201)\r",
+							"\r",
+							"});\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.expect(res.data.sessionID).to.not.be.null;\r",
+							"pm.environment.set(\"sessionID\", res.data.sessionID);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"date\": \"{{currentDate}}\",\r\n  \"time\": \"{{currentTime}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertSession",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertSession"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Insert Activity Success\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})\r",
+							"\r",
+							"const res = pm.response.json();\r",
+							"pm.environment.set(\"activityID\", res.data.activityID);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sessionID\" : \"{{sessionID}}\",\r\n    \"exerciseID\" : 6\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertActivity",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertActivity"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Set 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Insert Activity Success\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"setNumber\" : 1,\r\n    \"weight\" : 10,\r\n    \"reps\" : 5,\r\n    \"activityID\": \"{{activityID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertSet",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertSet"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Set 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Insert Activity Success\", function(){\r",
+							"    pm.response.to.have.status(201);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"setNumber\" : 2,\r\n    \"weight\" : 15,\r\n    \"reps\" : 10,\r\n    \"activityID\": \"{{activityID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertSet",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertSet"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Session While Active - Conflict",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Rejects duplicate active session\", function(){",
+							"    pm.response.to.have.status(409);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"date\": \"{{currentDate}}\",\n  \"time\": \"{{currentTime}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertSession",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertSession"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Finish Current Session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Session finished successfully\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/finishSession/{{sessionID}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["finishSession", "{{sessionID}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Current Session Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetch Session Success\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sessions/{{sessionID}}/details",
+					"host": ["{{baseUrl}}"],
+					"path": ["sessions", "{{sessionID}}", "details"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check for active sessions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"",
+							"pm.test(\"Active session checked successfully\", function(){",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(response.data.hasActiveSession).to.be.false;",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/session/active",
+					"host": ["{{baseUrl}}"],
+					"path": ["session", "active"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Past Sessions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetch Session Activities\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"if(response.data?.length > 0){\r",
+							"    const lastSessionID = response.data.length -1;\r",
+							"    pm.environment.set(\"sessionID\", response.data[lastSessionID].sessionID);\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getUserSessions",
+					"host": ["{{baseUrl}}"],
+					"path": ["getUserSessions"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Past Session Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetch Session Success\", function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"if(response.data?.activities?.length > 0){\r",
+							"    pm.environment.set(\"activityID\", response.data.activities[0].activityID);\r",
+							"    pm.environment.set(\"setID\", response.data.activities[0].sets[0].setID)\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sessions/{{sessionID}}/details",
+					"host": ["{{baseUrl}}"],
+					"path": ["sessions", "{{sessionID}}", "details"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Activity Set",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Edit Activity Success\", function() {\r",
+							"pm.response.to.have.status(200);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"activityID\": \"{{activityID}}\",\r\n    \"activitySetList\": [\r\n        {\r\n            \"setID\": {{setID}},\r\n            \"setNumber\": 901,\r\n            \"weight\": 45,\r\n            \"reps\": \"90\"\r\n        }        \r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/editActivitySet",
+					"host": ["{{baseUrl}}"],
+					"path": ["editActivitySet"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Delete Activity Success\", function() {\r",
+							"pm.response.to.have.status(200);\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/deleteActivity/{{activityID}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["deleteActivity", "{{activityID}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Session Deleted Successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/deleteSession/{{sessionID}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["deleteSession", "{{sessionID}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register New User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Register success\", function(){\n    pm.response.to.have.status(201);\n});\n\nconst json = pm.response.json();\npm.environment.set(\"token\", json.token);\n"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Smoke Test User\",\n    \"email\": \"smoketest@example.com\",\n    \"password\": \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": ["{{baseUrl}}"],
+					"path": ["auth", "signup"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unauthorized Access - No Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Rejects request with no token\", function(){",
+							"    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getAllExercises",
+					"host": ["{{baseUrl}}"],
+					"path": ["getAllExercises"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile (New User, Empty)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetched empty profile successfully\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"pm.test(\"All fields are null for a new profile\", function(){",
+							"    pm.expect(res.data.weightKg).to.be.null;",
+							"    pm.expect(res.data.heightCm).to.be.null;",
+							"    pm.expect(res.data.dateOfBirth).to.be.null;",
+							"    pm.expect(res.data.gender).to.be.null;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["getProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Full",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Profile updated successfully\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"pm.test(\"Values echoed back match what was sent\", function(){",
+							"    pm.expect(res.data.weightKg).to.eql(74.5);",
+							"    pm.expect(res.data.heightCm).to.eql(178.0);",
+							"    pm.expect(res.data.gender).to.eql(\"MALE\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": 74.50,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"1998-01-15\",\n    \"gender\": \"MALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Profile (After Update, Persisted)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetched updated profile successfully\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"pm.test(\"Profile reflects the last save (proves upsert persisted, not just echoed in-memory)\", function(){",
+							"    pm.expect(res.data.weightKg).to.eql(74.5);",
+							"    pm.expect(res.data.gender).to.eql(\"MALE\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["getProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Clear One Field (null)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update with explicit nulls succeeds\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"pm.test(\"weightKg cleared, other fields untouched by this request still resend correctly\", function(){",
+							"    pm.expect(res.data.weightKg).to.be.null;",
+							"    pm.expect(res.data.heightCm).to.eql(178.0);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": null,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"1998-01-15\",\n    \"gender\": \"MALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Restore Weight (for later bodyweight tests)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Weight restored\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": 74.50,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"1998-01-15\",\n    \"gender\": \"MALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Invalid Weight (Over Max)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Rejects unrealistic weight\", function(){\n    pm.response.to.have.status(400);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": 900.50,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"1998-01-15\",\n    \"gender\": \"MALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Invalid Date of Birth (Future)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Rejects a future date of birth\", function(){\n    pm.response.to.have.status(400);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": 74.50,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"2030-01-01\"\n    \"gender\": \"MALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile - Invalid Gender Enum",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Rejects a gender value outside the enum\", function(){\n    pm.response.to.have.status(400);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"weightKg\": 74.50,\n    \"heightCm\": 178.00,\n    \"dateOfBirth\": \"1998-01-15\",\n    \"gender\": \"M0ALE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateProfile"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Login success\", function(){\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\npm.environment.set(\"adminToken\", json.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{adminEmail}}\",\r\n    \"password\": \"{{adminPw}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": ["{{baseUrl}}"],
+					"path": ["auth", "login"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Exercise - Bodyweight Flag True (Admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Exercise inserted successfully\", function(){",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"if (res.data?.exerciseID) {",
+							"    pm.environment.set(\"bodyweightExerciseID\", res.data.exerciseID);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"exerciseName\": \"Smoke Test Push Up\",\n    \"generalInfo\": \"Created by smoke test\",\n    \"exerciseType\": \"1\",\n    \"isBodyweight\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/insertExercise",
+					"host": ["{{baseUrl}}"],
+					"path": ["insertExercise"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Exercise - Toggle Bodyweight Off",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Exercise updated successfully\", function(){\n    pm.response.to.have.status(200);\n});\n\nconst res = pm.response.json();\npm.test(\"isBodyweight reflects the new value sent\", function(){\n    pm.expect(res.data.bodyweight).to.eql(false);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"exerciseID\": {{bodyweightExerciseID}},\n    \"exerciseName\": \"Smoke Test Push Up\",\n    \"generalInfo\": \"Created by smoke test\",\n    \"exerciseType\": 1,\n    \"isBodyweight\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/updateExercise",
+					"host": ["{{baseUrl}}"],
+					"path": ["updateExercise"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Exercises - Verify Bodyweight Flag Present",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Fetched all exercises\", function(){",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const res = pm.response.json();",
+							"const created = res.data.find(e => e.exerciseID == pm.environment.get(\"bodyweightExerciseID\"));",
+							"pm.test(\"Created exercise is present with isBodyweight = false\", function(){",
+							"    pm.expect(created).to.not.be.undefined;",
+							"    pm.expect(created.isBodyweight).to.eql(false);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getAllExercises",
+					"host": ["{{baseUrl}}"],
+					"path": ["getAllExercises"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Newly Created Exercise",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Exercise deleted successfully\", function(){\n    pm.response.to.have.status(200);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/deleteExercise/{{bodyweightExerciseID}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["deleteExercise", "{{bodyweightExerciseID}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Access Other User's Session - Forbidden",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Rejects access to a session owned by a different user\", function(){\n    pm.response.to.have.status(401);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{otherUserToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/sessions/{{sessionID}}/details",
+					"host": ["{{baseUrl}}"],
+					"path": ["sessions", "{{sessionID}}", "details"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Account - Wrong Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Rejects deletion with an incorrect password\", function(){\n    pm.response.to.have.status(401);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"totally-the-wrong-password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/deleteAccount",
+					"host": ["{{baseUrl}}"],
+					"path": ["deleteAccount"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Account - Correct Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Account deleted successfully\", function(){\n    pm.response.to.have.status(200);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"password\": \"password123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/deleteUser",
+					"host": ["{{baseUrl}}"],
+					"path": ["deleteUser"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Deleted User's Token No Longer Works",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Token for a deleted user is rejected on the next call\", function(){\n    pm.expect(pm.response.code).to.be.oneOf([401, 403, 404]);\n});"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/getProfile",
+					"host": ["{{baseUrl}}"],
+					"path": ["getProfile"]
+				}
+			},
+			"response": []
+		}
+	]
+}

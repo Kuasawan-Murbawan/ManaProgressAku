@@ -1,6 +1,12 @@
 {
-  "scripts": {
-    "test:api:local": "newman run \"Tests/API/Local/MPA Smoke Test - Local.postman_collection.json\" -e \"Tests/API/Local/ManaProgressAku Local.postman_environment.json\"",
-    "test:api:prod": "newman run \"Tests/API/Production/MPA Smoke Test - Production.postman_collection.json\" -e \"Tests/API/Production/ManaProgressAku Production.postman_environment.json\""
-  }
+	"scripts": {
+		"test:api:local": "node scripts/run-api-tests.js",
+		"test:api:prod": "node scripts/run-api-tests.js prod"
+	},
+	"devDependencies": {
+		"dotenv": "^17.4.2"
+	},
+	"dependencies": {
+		"newman": "^6.2.2"
+	}
 }

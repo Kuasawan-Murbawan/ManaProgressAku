@@ -1,0 +1,37 @@
+{
+	"info": {
+		"name": "Local Vault",
+		"_postman_id": "local"
+	},
+	"encryption": {
+		"enabled": true,
+		"type": "custom_password",
+		"salt": "EBB0/xSEBnhpsZuhyk+Ltn3l3DvZoteRazLB2MNN8yc=",
+		"iv": "8p2tJBJ2HIhFMV3F",
+		"version": "1.0.0",
+		"sampleText": "LeMPj2h+Hv3eJEIRdijUEUDvKz+JYAn7UFyQuHg="
+	},
+	"items": [
+		{
+			"enabled": true,
+			"key": "5q+clLsW+hKvTyIbcmTl78hgmX6yX8xHIk0=",
+			"value": "5q+clLsT8gunTvzjRdbqhfnc4iiPsJM4GjqhjiR6LawB",
+			"description": "",
+			"domains": [],
+			"salt": "d2t4CGwQk09IxMBgy+H7W6VMzg5c4Qzc2Zf04Cj+Z3s=",
+			"iv": "FUWjpsysh4EkGlbq"
+		},
+		{
+			"enabled": true,
+			"key": "zA5MgPVQymkxLDmAuz7oQgri8LRzMEY=",
+			"value": "zA5MgPUxj3dt9WqbcYM68GQ1vWbSO6zx",
+			"description": "",
+			"domains": [],
+			"salt": "uDL5/+dHIJCKm0/odcwAA6uF+SMEOjmlwHUXkYN3qtc=",
+			"iv": "h7SGpEMCd0xJuD2I"
+		}
+	],
+	"_postman_variable_scope": "vault",
+	"_postman_exported_at": "2026-09-06T17:32:17.977Z",
+	"_postman_exported_using": "Postman/12.26.5"
+}
