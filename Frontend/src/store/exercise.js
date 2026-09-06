@@ -36,6 +36,7 @@ export const useExerciseStore = create(
 			deleteExercise: async (exerciseID) => {
 				try {
 					const res = await API.delete(`/deleteExercise/${exerciseID}`);
+					await get().fetchAllExercises();
 					return {
 						success: true,
 						message: "Exercise deleted successfully",
@@ -43,7 +44,8 @@ export const useExerciseStore = create(
 				} catch (error) {
 					return {
 						success: false,
-						message: error,
+						message:
+							error.response?.data?.errorMessage || "Failed to delete exercise",
 					};
 				}
 			},
