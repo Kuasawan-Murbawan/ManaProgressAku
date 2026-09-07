@@ -9,6 +9,10 @@ All notable changes to ManaProgressAku will be here.
 - better exercise information
 - gmail registration and login
 
+## [v1.5.0] - 2026-09-08
+
+- use AscendAPI's exerciseDB V2 to fetch exercise information, including images and videos
+
 ## [v1.4.0] - 2026-09-06
 
 ### Added
