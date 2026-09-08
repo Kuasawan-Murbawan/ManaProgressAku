@@ -22,6 +22,12 @@ public class Exercise {
     @Column(name = "is_bodyweight", nullable = false)
     private Boolean isBodyweight = false;
 
+    @Column(name = "ascend_exercise_id", length = 50)
+    private String ascendExerciseId;
+
+    @Column(name = "equipment", length = 50)
+    private String equipment;
+
     public Exercise() {
     }
 
@@ -77,5 +83,29 @@ public class Exercise {
 
     public void setIsBodyweight(Boolean isBodyweight) {
         this.isBodyweight = isBodyweight;
+    }
+
+    public Boolean getBodyweight() {
+        return isBodyweight;
+    }
+
+    public void setBodyweight(Boolean bodyweight) {
+        isBodyweight = bodyweight;
+    }
+
+    public String getAscendExerciseId() {
+        return ascendExerciseId;
+    }
+
+    public void setAscendExerciseId(String ascendExerciseId) {
+        this.ascendExerciseId = ascendExerciseId;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
     }
 }
