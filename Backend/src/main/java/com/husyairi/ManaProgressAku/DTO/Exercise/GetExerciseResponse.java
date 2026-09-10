@@ -1,13 +1,12 @@
 package com.husyairi.ManaProgressAku.DTO.Exercise;
 
 public class GetExerciseResponse {
+
     private String exerciseName;
-
     private String info;
-
     private Boolean isBodyweight;
-
-    // TODO: configure fetching exercise to accommodate isBodyweight
+    private String equipment;
+    private String ascendExerciseId;
 
     public GetExerciseResponse(String exerciseName, String info, Boolean isBodyweight) {
         this.exerciseName = exerciseName;
@@ -37,5 +36,21 @@ public class GetExerciseResponse {
 
     public void setIsBodyweight(Boolean isBodyweight) {
         this.isBodyweight = isBodyweight;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
+
+    public String getAscendExerciseId() {
+        return ascendExerciseId;
+    }
+
+    public void setAscendExerciseId(String ascendExerciseId) {
+        this.ascendExerciseId = ascendExerciseId;
     }
 }

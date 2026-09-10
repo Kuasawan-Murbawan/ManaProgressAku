@@ -71,6 +71,7 @@ public class ExerciseController {
 
         // We use InsertExerciseResponse, and not Exercise as to not exposed sensitive data (ID)
         InsertExerciseResponse data = exerciseService.updateExercise(request);
+
         // Reuse insertResponse as to not make new response dto specifically for update
         ApiSuccessResponse<InsertExerciseResponse> response = new ApiSuccessResponse<>(
                 "Exercise updated successfully",
