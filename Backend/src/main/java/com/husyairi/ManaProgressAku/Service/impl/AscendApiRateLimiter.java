@@ -60,6 +60,8 @@ public class AscendApiRateLimiter {
         }
 
         // No issue, can proceed with the call
+        // update the usage row to increment by 1
+        // we only UPDATE the 1 and only row, we don't INSERT new row
         usage.setMonthlyCount(usage.getMonthlyCount() + 1);
         usage.setHourlyCount(usage.getHourlyCount() + 1);
         ascendApiUsageRepository.save(usage);
