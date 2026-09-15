@@ -2,7 +2,7 @@
 
 **ManaProgressAku** is a full-stack fitness progress tracking application designed to help users record, manage, and review their workout sessions in a clean and intuitive way.
 
-The project was built to simulate a real-world production application — covering not only frontend and backend development, but also authentication, deployment, cloud infrastructure, state management, API communication, and documentation.
+The project was built to simulate a real-world production application, covering not only frontend and backend development, but also authentication, deployment, cloud infrastructure, state management, API communication, and documentation.
 
 ---
 
@@ -131,11 +131,11 @@ Instead of focusing only on CRUD operations, the project also emphasizes:
 
 This repository also contains additional technical documentation:
 
-| Document               | Purpose                                                    |
-| ---------------------- | ---------------------------------------------------------- |
+| Document                                                                                                      | Purpose                                                    |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md) | High-level system architecture and infrastructure overview |
-| [docs/CHANGELOG.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/CHANGELOG.md)    | Project release history and planned improvements           |
-| Swagger UI             | Detailed API endpoint documentation                        |
+| [docs/CHANGELOG.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/CHANGELOG.md)       | Project release history and planned improvements           |
+| Swagger UI                                                                                                    | Detailed API endpoint documentation                        |
 
 ---
 
