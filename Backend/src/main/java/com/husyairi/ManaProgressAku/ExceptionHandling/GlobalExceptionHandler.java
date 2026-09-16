@@ -34,6 +34,8 @@ public class GlobalExceptionHandler {
             case 401 -> status = HttpStatus.UNAUTHORIZED;
             case 409 -> status = HttpStatus.CONFLICT;
             case 500 -> status = HttpStatus.INTERNAL_SERVER_ERROR;
+            case 429 -> status = HttpStatus.TOO_MANY_REQUESTS;
+            case 502 -> status = HttpStatus.BAD_GATEWAY;
             default -> status = HttpStatus.BAD_REQUEST; // fallback
         }
 
