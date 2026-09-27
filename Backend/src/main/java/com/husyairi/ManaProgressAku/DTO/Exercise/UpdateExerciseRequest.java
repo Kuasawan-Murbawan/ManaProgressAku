@@ -1,17 +1,19 @@
 package com.husyairi.ManaProgressAku.DTO.Exercise;
 
+import com.husyairi.ManaProgressAku.Enums.Equipment;
+
 public class UpdateExerciseRequest {
     private Integer exerciseID;
     private String exerciseName;
     private String exerciseType;
     private String generalInfo;
     private Boolean isBodyweight;
-    private String equipment;
+    private Equipment equipment;
 
     public UpdateExerciseRequest() {
     }
 
-    public UpdateExerciseRequest(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight, String equipment) {
+    public UpdateExerciseRequest(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight, Equipment equipment) {
         this.exerciseID = exerciseID;
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
@@ -60,11 +62,11 @@ public class UpdateExerciseRequest {
         this.isBodyweight = isBodyweight;
     }
 
-    public String getEquipment() {
+    public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(String equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 }

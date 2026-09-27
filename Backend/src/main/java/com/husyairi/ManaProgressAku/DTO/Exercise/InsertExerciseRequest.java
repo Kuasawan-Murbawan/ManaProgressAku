@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.DTO.Exercise;
 
+import com.husyairi.ManaProgressAku.Enums.Equipment;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public class InsertExerciseRequest {
@@ -15,9 +16,9 @@ public class InsertExerciseRequest {
 
     private Boolean isBodyweight;
 
-    private String equipment;
+    private Equipment equipment;
 
-    public InsertExerciseRequest(String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight, String equipment) {
+    public InsertExerciseRequest(String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight, Equipment equipment) {
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
         this.exerciseType = exerciseType;
@@ -57,11 +58,11 @@ public class InsertExerciseRequest {
         isBodyweight = bodyweight;
     }
 
-    public String getEquipment() {
+    public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(String equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 }

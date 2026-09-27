@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.Entity.Model;
 
+import com.husyairi.ManaProgressAku.Enums.Equipment;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,12 +27,12 @@ public class Exercise {
     private String ascendExerciseId;
 
     @Column(name = "equipment", length = 50)
-    private String equipment;
+    private Equipment equipment;
 
     public Exercise() {
     }
 
-    public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight, String equipment) {
+    public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight, Equipment equipment) {
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
         this.generalInfo = generalInfo;
@@ -102,11 +103,11 @@ public class Exercise {
         this.ascendExerciseId = ascendExerciseId;
     }
 
-    public String getEquipment() {
+    public Equipment getEquipment() {
         return equipment;
     }
 
-    public void setEquipment(String equipment) {
+    public void setEquipment(Equipment equipment) {
         this.equipment = equipment;
     }
 }
