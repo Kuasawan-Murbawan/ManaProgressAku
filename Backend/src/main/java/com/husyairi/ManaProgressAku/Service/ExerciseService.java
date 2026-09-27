@@ -1,9 +1,6 @@
 package com.husyairi.ManaProgressAku.Service;
 
-import com.husyairi.ManaProgressAku.DTO.Exercise.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseRequest;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 
 import java.util.List;
@@ -15,6 +12,8 @@ public interface ExerciseService {
     GetExerciseResponse getExercise(Integer exerciseID);
 
     InsertExerciseResponse updateExercise(UpdateExerciseRequest req);
+
+    InsertExerciseResponse linkExerciseToDb(Integer exerciseID, LinkExerciseDbRequest request);
 
     void deleteExercise(Integer exerciseID);
 

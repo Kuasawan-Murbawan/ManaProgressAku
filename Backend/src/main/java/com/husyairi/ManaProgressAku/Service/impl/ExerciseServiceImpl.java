@@ -1,9 +1,6 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
-import com.husyairi.ManaProgressAku.DTO.Exercise.GetExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseRequest;
-import com.husyairi.ManaProgressAku.DTO.Exercise.InsertExerciseResponse;
-import com.husyairi.ManaProgressAku.DTO.Exercise.UpdateExerciseRequest;
+import com.husyairi.ManaProgressAku.DTO.Exercise.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
@@ -29,7 +26,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public InsertExerciseResponse insertExercise(InsertExerciseRequest req){
 
-        Exercise newExercise = new Exercise(req.getExerciseName(), req.getExerciseType(), req.getGeneralInfo(), false);
+        Exercise newExercise = new Exercise(req.getExerciseName(), req.getExerciseType(), req.getGeneralInfo(), req.getBodyweight(), req.getEquipment());
 
         if(req.getExerciseName() == null || req.getExerciseType() == null){
             throw new BadRequestException(400, "Please fill in all details", new HashMap<>());
@@ -42,7 +39,9 @@ public class ExerciseServiceImpl implements ExerciseService {
                     savedExercise.getExerciseName(),
                     savedExercise.getExerciseType(),
                     savedExercise.getGeneralInfo(),
-                    savedExercise.getIsBodyweight()
+                    savedExercise.getIsBodyweight(),
+                    savedExercise.getEquipment(),
+                    savedExercise.getAscendExerciseId()
             );
         } catch (Exception e) {
             throw new BadRequestException(400, e.getMessage(), new HashMap<>());
@@ -55,7 +54,13 @@ public class ExerciseServiceImpl implements ExerciseService {
 
         if(fetchExercise.isPresent()){
             Exercise exercise = fetchExercise.get();
-            return new GetExerciseResponse(exercise.getExerciseName(), exercise.getGeneralInfo(), exercise.getIsBodyweight());
+            return new GetExerciseResponse(
+                    exercise.getExerciseName(),
+                    exercise.getExerciseType(),
+                    exercise.getGeneralInfo(),
+                    exercise.getIsBodyweight(),
+                    exercise.getEquipment(),
+                    exercise.getAscendExerciseId());
         }else{
             throw new BadRequestException(404, "Exercise ID not found", new HashMap<>());
         }
@@ -75,6 +80,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         updatedExercise.setGeneralInfo(req.getGeneralInfo());
         updatedExercise.setExerciseType(req.getExerciseType());
         updatedExercise.setIsBodyweight(req.getIsBodyweight());
+        updatedExercise.setEquipment(req.getEquipment());
 
         try {
             // Save inside database
@@ -88,7 +94,35 @@ public class ExerciseServiceImpl implements ExerciseService {
                 updatedExercise.getExerciseName(),
                 updatedExercise.getExerciseType(),
                 updatedExercise.getGeneralInfo(),
-                updatedExercise.getIsBodyweight()
+                updatedExercise.getIsBodyweight(),
+                updatedExercise.getEquipment(),
+                updatedExercise.getAscendExerciseId()
+        );
+    }
+
+    @Override
+    public InsertExerciseResponse linkExerciseToDb(Integer exerciseID, LinkExerciseDbRequest req){
+        Optional<Exercise> isExist = exerciseRepository.findById(exerciseID);
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Exercise with ID " + exerciseID + " not found", new HashMap<>());
+        }
+        Exercise exercise = isExist.get();
+        exercise.setAscendExerciseId(req.getAscendExerciseId());
+
+        try {
+            exerciseRepository.save(exercise);
+        } catch (Exception e) {
+            throw new BadRequestException(500, "Failed to link exercise", new HashMap<>());
+        }
+
+        return new InsertExerciseResponse(
+                exercise.getExerciseID(),
+                exercise.getExerciseName(),
+                exercise.getExerciseType(),
+                exercise.getGeneralInfo(),
+                exercise.getIsBodyweight(),
+                exercise.getEquipment(),
+                exercise.getAscendExerciseId()
         );
     }
 

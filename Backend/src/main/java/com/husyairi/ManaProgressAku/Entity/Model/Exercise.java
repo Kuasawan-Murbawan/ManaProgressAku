@@ -31,11 +31,12 @@ public class Exercise {
     public Exercise() {
     }
 
-    public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight) {
+    public Exercise(String exerciseName, String exerciseType, String generalInfo, Boolean isBodyweight, String equipment) {
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
         this.generalInfo = generalInfo;
         this.isBodyweight = isBodyweight;
+        this.equipment = equipment;
     }
 
     public Exercise(Integer exerciseID, String exerciseName, String generalInfo, String exerciseType) {

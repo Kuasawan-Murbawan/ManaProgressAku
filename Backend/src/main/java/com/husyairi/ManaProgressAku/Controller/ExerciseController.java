@@ -81,6 +81,26 @@ public class ExerciseController {
     }
 
     @Operation(
+            summary = "Link exercise to ExerciseDB",
+            description = "Sets the ExerciseDB ID for an exercise, enabling enrichment data (image, muscles, overview)"
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/linkExerciseToDb/{exerciseID}")
+    public ResponseEntity<ApiSuccessResponse<InsertExerciseResponse>> linkExerciseToDb(
+            @PathVariable Integer exerciseID,
+            @RequestBody LinkExerciseDbRequest request
+    ) {
+        InsertExerciseResponse data = exerciseService.linkExerciseToDb(exerciseID, request);
+
+        ApiSuccessResponse<InsertExerciseResponse> response = new ApiSuccessResponse<>(
+                "Exercise linked to ExerciseDB successfully",
+                data
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Operation(
             summary = "Delete exercise",
             description = "Delete exercise using exercise ID"
     )

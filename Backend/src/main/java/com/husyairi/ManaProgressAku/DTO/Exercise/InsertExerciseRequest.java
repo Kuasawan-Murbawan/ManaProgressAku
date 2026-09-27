@@ -15,11 +15,14 @@ public class InsertExerciseRequest {
 
     private Boolean isBodyweight;
 
-    public InsertExerciseRequest(String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight) {
+    private String equipment;
+
+    public InsertExerciseRequest(String exerciseName, String generalInfo, String exerciseType, Boolean isBodyweight, String equipment) {
         this.exerciseName = exerciseName;
         this.generalInfo = generalInfo;
         this.exerciseType = exerciseType;
         this.isBodyweight = isBodyweight;
+        this.equipment = equipment;
     }
 
     public String getExerciseName() {
@@ -52,6 +55,14 @@ public class InsertExerciseRequest {
 
     public void setBodyweight(Boolean bodyweight) {
         isBodyweight = bodyweight;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
     }
 }
 

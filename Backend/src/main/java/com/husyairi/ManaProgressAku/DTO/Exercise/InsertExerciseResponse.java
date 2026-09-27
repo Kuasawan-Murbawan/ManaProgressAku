@@ -6,13 +6,17 @@ public class InsertExerciseResponse {
     private String exerciseType;
     private String info;
     private Boolean isBodyweight;
+    private String equipment;
+    private String ascendExerciseId;
 
-    public InsertExerciseResponse(Integer exerciseID, String exerciseName, String exerciseType, String info, Boolean isBodyweight) {
+    public InsertExerciseResponse(Integer exerciseID, String exerciseName, String exerciseType, String info, Boolean isBodyweight, String equipment, String ascendExerciseId) {
         this.exerciseID = exerciseID;
         this.exerciseName = exerciseName;
         this.exerciseType = exerciseType;
         this.info = info;
         this.isBodyweight = isBodyweight;
+        this.equipment = equipment;
+        this.ascendExerciseId = ascendExerciseId;
     }
 
     public Integer getExerciseID() {
@@ -53,5 +57,21 @@ public class InsertExerciseResponse {
 
     public void setBodyweight(Boolean bodyweight) {
         isBodyweight = bodyweight;
+    }
+
+    public String getEquipment() {
+        return equipment;
+    }
+
+    public void setEquipment(String equipment) {
+        this.equipment = equipment;
+    }
+
+    public String getAscendExerciseId() {
+        return ascendExerciseId;
+    }
+
+    public void setAscendExerciseId(String ascendExerciseId) {
+        this.ascendExerciseId = ascendExerciseId;
     }
 }
