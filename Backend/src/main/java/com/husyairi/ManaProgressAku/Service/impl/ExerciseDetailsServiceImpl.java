@@ -2,8 +2,10 @@ package com.husyairi.ManaProgressAku.Service.impl;
 
 import com.husyairi.ManaProgressAku.DTO.Exercise.ExerciseDetailsResponse;
 import com.husyairi.ManaProgressAku.DTO.Exercise.External.AscendExerciseDTO;
+import com.husyairi.ManaProgressAku.DTO.Exercise.External.ExerciseDbSearchResult;
 import com.husyairi.ManaProgressAku.DTO.Exercise.External.SearchMultipleAscendExerciseResponse;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
+import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
 import com.husyairi.ManaProgressAku.ExceptionHandling.RateLimitExceededException;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseDetailsService;
@@ -11,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +49,7 @@ public class ExerciseDetailsServiceImpl implements ExerciseDetailsService {
             return ExerciseDetailsResponse.unavailable();
         }
 
-        // extract the already matchinge ascendExerciseID
+        // extract the already matching ascendExerciseID
         String ascendExerciseId = exerciseOpt.get().getAscendExerciseId();
 
         // If we did not match them yet, we return unavailable
@@ -83,7 +86,16 @@ public class ExerciseDetailsServiceImpl implements ExerciseDetailsService {
     }
 
     @Override
-    public List<SearchMultipleAscendExerciseResponse> searchForAdminMatching(String query) {
-        return List.of();
+    public List<ExerciseDbSearchResult> searchForAdminMatching(String query) {
+        if(!rateLimiter.tryConsumeCall()){
+            throw new BadRequestException(429, "AscendAPI rate limit reached, try again later.", new HashMap<>());
+        }
+
+        try{
+            return ascendApiClient.searchExercises(query);
+        }catch (Exception e){
+            log.error("AscendAPI search failed for query '{}': {}", query, e.getMessage());
+            throw new BadRequestException(502, "ExerciseDB is currently unavailable", new HashMap<>());
+        }
     }
 }
