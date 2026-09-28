@@ -31,7 +31,7 @@ public class ExerciseDetailsController {
             summary = "Get exercise enrichment details",
             description = "Returns image, overview, and targeted muscles for an exercise, if linked to ExerciseDB. Returns available=false if not linked or if the lookup fails."
     )
-    @GetMapping
+    @GetMapping("/getExerciseDetails/{exerciseID}")
     public ResponseEntity<ApiSuccessResponse<ExerciseDetailsResponse>> getExerciseDetails(@PathVariable Integer exerciseID){
         ExerciseDetailsResponse data = exerciseDetailsService.getDetailsForExercise(exerciseID);
 
