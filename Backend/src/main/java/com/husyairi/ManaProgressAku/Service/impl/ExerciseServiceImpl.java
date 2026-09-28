@@ -3,6 +3,7 @@ package com.husyairi.ManaProgressAku.Service.impl;
 import com.husyairi.ManaProgressAku.DTO.Exercise.*;
 import com.husyairi.ManaProgressAku.Entity.Model.Exercise;
 import com.husyairi.ManaProgressAku.ExceptionHandling.BadRequestException;
+import com.husyairi.ManaProgressAku.Repository.ActivityRepository;
 import com.husyairi.ManaProgressAku.Repository.ExerciseRepository;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,13 @@ import java.util.Optional;
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final ActivityRepository activityRepository;
+
 
     @Autowired
-    public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, ActivityRepository activityRepository) {
         this.exerciseRepository = exerciseRepository;
+        this.activityRepository = activityRepository;
     }
 
     @Override
@@ -129,6 +133,14 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public void deleteExercise (Integer exerciseID){
         Optional<Exercise> isExist = exerciseRepository.findById(exerciseID);
+
+        // Activity.exerciseID is a plain column, not a foreign key, so the database
+        // would happily delete an exercise that logged workouts still point at.
+        if(activityRepository.existsByExerciseID(exerciseID)){
+            throw new BadRequestException(409,
+                    "\"" + isExist.get().getExerciseName() + "\" has been used in logged workouts, so it can't be deleted.",
+                    new HashMap<>());
+        }
 
         if(isExist.isEmpty()){
             throw new BadRequestException(404, "Exercise ID " + exerciseID + " not found.", new HashMap<>());

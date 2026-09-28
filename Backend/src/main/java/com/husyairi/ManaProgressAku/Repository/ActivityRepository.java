@@ -26,4 +26,6 @@ public interface ActivityRepository extends JpaRepository<Activity, String> {
     LIMIT 1
      */
     Activity findTopByOrderByActivityIDDesc();
+
+    Boolean existsByExerciseID(Integer exerciseID);
 }
