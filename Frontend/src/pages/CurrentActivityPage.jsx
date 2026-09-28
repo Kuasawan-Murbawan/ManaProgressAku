@@ -1,4 +1,15 @@
-import { Button, VStack, Text, Box, Icon, useToast } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Flex,
+	Icon,
+	Image,
+	Skeleton,
+	Tag,
+	Text,
+	VStack,
+	useToast,
+} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import SetComponent from "../components/Activity/SetComponent";
@@ -6,9 +17,10 @@ import { useActivityStore } from "../store/activity";
 import { useSessionStore } from "../store/session";
 import { useSetStore } from "../store/set";
 import { useProfileStore } from "../store/profile";
+import { useExerciseDetailsStore } from "../store/exerciseDetails";
 
-// Simple placeholder glyph — no external icon package needed.
-// Swap this block for a real <Image src={exercise.imageUrl} /> in v1.2.1.
+// Fallback glyph, shown when an exercise has no ExerciseDB image
+// (not linked, lookup failed, or the image itself failed to load).
 const ImagePlaceholderIcon = (props) => (
 	<Icon viewBox="0 0 24 24" {...props}>
 		<path
@@ -16,6 +28,24 @@ const ImagePlaceholderIcon = (props) => (
 			d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 12H4V7h16v10zM8.5 11a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM5 16l3.5-4.5 2.5 3.01L14.5 10 19 16H5z"
 		/>
 	</Icon>
+);
+
+const MuscleTags = ({ muscles, primary = false }) => (
+	<Flex wrap="wrap" gap={2}>
+		{muscles.map((muscle) => (
+			<Tag
+				key={muscle}
+				size="sm"
+				borderRadius="full"
+				textTransform="capitalize"
+				bg={primary ? "tiber.100" : "white"}
+				color="tiber.800"
+				fontWeight="600"
+			>
+				{muscle.toLowerCase()}
+			</Tag>
+		))}
+	</Flex>
 );
 
 const CurrentActivityPage = () => {
@@ -32,19 +62,51 @@ const CurrentActivityPage = () => {
 	const [started, setStarted] = useState(false);
 	const [sets, setSets] = useState([]);
 	const [isSaving, setIsSaving] = useState(false);
+	const [imageFailed, setImageFailed] = useState(false);
 
 	// Source of truth for "how many sets have actually been POSTed."
-	// Not derived from array length/index — that breaks once a set can be deleted.
+	// Not derived from array length or index, because that breaks once a set can be deleted.
 	const [savedCount, setSavedCount] = useState(0);
+
+	// ExerciseDB enrichment. Selectors are keyed by exerciseID, so this page only
+	// re-renders when its own exercise's data changes.
+	const exerciseID = exercise?.exerciseID;
+	const isLinked = Boolean(exercise?.ascendExerciseId);
+	const fetchDetails = useExerciseDetailsStore((state) => state.fetchDetails);
+	const details = useExerciseDetailsStore(
+		(state) => state.detailsByExerciseId[exerciseID],
+	);
+	const detailsLoading = useExerciseDetailsStore(
+		(state) => state.loadingByExerciseId[exerciseID],
+	);
 
 	useEffect(() => {
 		fetchProfile();
 	}, []);
 
+	// Unlinked exercises never make a request. The backend would answer
+	// available:false anyway, but there is no reason to spend the round trip.
+	useEffect(() => {
+		if (!exerciseID || !isLinked) return;
+		fetchDetails(exerciseID);
+	}, [exerciseID, isLinked]);
+
+	// Skeleton only while a first result is genuinely pending. If the fetch
+	// finished without data (loading === false, details undefined), fall through
+	// to the placeholder instead of shimmering forever.
+	const showSkeleton =
+		isLinked && details === undefined && detailsLoading !== false;
+	const enriched = details?.available ? details : null;
+	const showRealImage = Boolean(enriched?.imageUrl) && !imageFailed;
+	const hasMuscles =
+		enriched &&
+		(enriched.targetMuscles?.length > 0 ||
+			enriched.secondaryMuscles?.length > 0);
+
 	// Whether this exercise's weight should autofill from the profile.
 	// Two-part check: the exercise must be flagged bodyweight AND the user
-	// must actually have a weight on file — falls back to a normal editable
-	// field, with a prompt, when the profile hasn't been filled in.
+	// must actually have a weight on file. Otherwise it falls back to a normal
+	// editable field, with a prompt, when the profile hasn't been filled in.
 	const hasBodyweightAutofill = Boolean(
 		exercise?.isBodyweight && profile?.weightKg,
 	);
@@ -200,7 +262,7 @@ const CurrentActivityPage = () => {
 		>
 			<Box w="100%" maxW="600px" mx="auto">
 				<VStack spacing={5} align="stretch">
-					{/* Before starting: full hero + placeholder info */}
+					{/* Before starting: full hero with image and muscles */}
 					{!started && (
 						<Box
 							bg="white"
@@ -219,39 +281,68 @@ const CurrentActivityPage = () => {
 								{exercise.exerciseName}
 							</Text>
 
-							{/* Image placeholder — v1.2.1 */}
-							<Box
-								w="100%"
-								aspectRatio={16 / 9}
-								bg="mist.400"
-								border="1px dashed"
-								borderColor="mist.300"
-								borderRadius="lg"
-								display="flex"
-								flexDirection="column"
-								alignItems="center"
-								justifyContent="center"
-								mb={4}
-							>
-								<Icon
-									as={ImagePlaceholderIcon}
-									boxSize={7}
-									color="tiber.400"
-									mb={2}
+							{/* Image: skeleton while loading, real image when available, placeholder otherwise */}
+							{showSkeleton ? (
+								<Skeleton
+									w="100%"
+									aspectRatio={16 / 9}
+									borderRadius="lg"
+									mb={4}
 								/>
-								<Text fontSize="xs" color="tiber.600" opacity={0.6}>
-									Exercise image — coming in v1.2.1
-								</Text>
-							</Box>
+							) : showRealImage ? (
+								<Box
+									w="100%"
+									aspectRatio={16 / 9}
+									bg="white"
+									border="1px solid"
+									borderColor="mist.200"
+									borderRadius="lg"
+									overflow="hidden"
+									mb={4}
+								>
+									<Image
+										src={enriched.imageUrl}
+										alt={exercise.exerciseName}
+										w="100%"
+										h="100%"
+										objectFit="contain"
+										onError={() => setImageFailed(true)}
+									/>
+								</Box>
+							) : (
+								<Box
+									w="100%"
+									aspectRatio={16 / 9}
+									bg="mist.400"
+									border="1px dashed"
+									borderColor="mist.300"
+									borderRadius="lg"
+									display="flex"
+									flexDirection="column"
+									alignItems="center"
+									justifyContent="center"
+									mb={4}
+								>
+									<Icon
+										as={ImagePlaceholderIcon}
+										boxSize={7}
+										color="tiber.400"
+										mb={2}
+									/>
+									<Text fontSize="xs" color="tiber.600" opacity={0.6}>
+										No image available
+									</Text>
+								</Box>
+							)}
 
-							{/* Muscle info placeholder — v1.2.1 */}
+							{/* Muscles */}
 							<Box
 								bg="mist.400"
 								border="1px solid"
 								borderColor="mist.300"
 								borderRadius="lg"
 								p={4}
-								mb={5}
+								mb={enriched ? 3 : 5}
 							>
 								<Text
 									fontSize="xs"
@@ -259,14 +350,50 @@ const CurrentActivityPage = () => {
 									color="tiber.700"
 									textTransform="uppercase"
 									letterSpacing="0.05em"
-									mb={1}
+									mb={2}
 								>
 									Muscles Targeted
 								</Text>
-								<Text fontSize="sm" color="tiber.600" opacity={0.6}>
-									Coming in v1.2.1
-								</Text>
+
+								{showSkeleton ? (
+									<Skeleton h="24px" w="60%" borderRadius="full" />
+								) : hasMuscles ? (
+									<VStack align="stretch" spacing={3}>
+										{enriched.targetMuscles?.length > 0 && (
+											<Box>
+												<Text fontSize="xs" color="tiber.600" mb={1.5}>
+													Target
+												</Text>
+												<MuscleTags muscles={enriched.targetMuscles} primary />
+											</Box>
+										)}
+										{enriched.secondaryMuscles?.length > 0 && (
+											<Box>
+												<Text fontSize="xs" color="tiber.600" mb={1.5}>
+													Secondary
+												</Text>
+												<MuscleTags muscles={enriched.secondaryMuscles} />
+											</Box>
+										)}
+									</VStack>
+								) : (
+									<Text fontSize="sm" color="tiber.600" opacity={0.6}>
+										Not available for this exercise
+									</Text>
+								)}
 							</Box>
+
+							{enriched && (
+								<Text
+									fontSize="xs"
+									color="tiber.600"
+									opacity={0.6}
+									textAlign="center"
+									mb={5}
+								>
+									Images and muscle data from ExerciseDB
+								</Text>
+							)}
 
 							<Button
 								bg="tiber.800"
@@ -292,17 +419,33 @@ const CurrentActivityPage = () => {
 							boxShadow="sm"
 							p={4}
 						>
-							<Box
-								boxSize="48px"
-								bg="mist.400"
-								borderRadius="lg"
-								display="flex"
-								alignItems="center"
-								justifyContent="center"
-								flexShrink={0}
-							>
-								<Icon as={ImagePlaceholderIcon} boxSize={5} color="tiber.400" />
-							</Box>
+							{showRealImage ? (
+								<Image
+									src={enriched.imageUrl}
+									alt={exercise.exerciseName}
+									boxSize="48px"
+									objectFit="cover"
+									borderRadius="lg"
+									flexShrink={0}
+									onError={() => setImageFailed(true)}
+								/>
+							) : (
+								<Box
+									boxSize="48px"
+									bg="mist.400"
+									borderRadius="lg"
+									display="flex"
+									alignItems="center"
+									justifyContent="center"
+									flexShrink={0}
+								>
+									<Icon
+										as={ImagePlaceholderIcon}
+										boxSize={5}
+										color="tiber.400"
+									/>
+								</Box>
+							)}
 							<Text
 								fontFamily="heading"
 								fontWeight="700"

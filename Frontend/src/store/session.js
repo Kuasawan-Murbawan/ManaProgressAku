@@ -150,7 +150,3 @@ export const useSessionStore = create(
 		},
 	),
 );
-
-if (typeof window !== "undefined") {
-	window.useSessionStore = useSessionStore;
-}
