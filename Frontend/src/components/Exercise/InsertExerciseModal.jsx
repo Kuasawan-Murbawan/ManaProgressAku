@@ -20,12 +20,14 @@ import {
 } from "@chakra-ui/react";
 import { React, useState } from "react";
 import { useExerciseStore } from "../../store/exercise";
+import { EQUIPMENT_OPTIONS } from "../../constants/equipment";
 
 const InsertExerciseModal = ({ isOpen, onClose }) => {
 	const [exerciseName, setExerciseName] = useState("");
 	const [generalInfo, setgeneralInfo] = useState("");
 	const [exerciseType, setExerciseType] = useState("");
 	const [isBodyweight, setIsBodyweight] = useState(false);
+	const [equipment, setEquipment] = useState("");
 
 	const { insertExercise } = useExerciseStore();
 
@@ -34,6 +36,7 @@ const InsertExerciseModal = ({ isOpen, onClose }) => {
 		setgeneralInfo("");
 		setExerciseType("");
 		setIsBodyweight(false);
+		setEquipment("");
 	};
 
 	const handleSave = async () => {
@@ -47,6 +50,7 @@ const InsertExerciseModal = ({ isOpen, onClose }) => {
 			generalInfo,
 			exerciseType,
 			isBodyweight,
+			equipment: equipment || null,
 		};
 
 		await insertExercise(newExercise);
@@ -89,6 +93,18 @@ const InsertExerciseModal = ({ isOpen, onClose }) => {
 									>
 										<option value="1">Upper Body</option>
 										<option value="2">Lower Body</option>
+									</Select>
+
+									<Select
+										placeholder="Equipment (optional)"
+										value={equipment}
+										onChange={(e) => setEquipment(e.target.value)}
+									>
+										{EQUIPMENT_OPTIONS.map((opt) => (
+											<option key={opt.value} value={opt.value}>
+												{opt.label}
+											</option>
+										))}
 									</Select>
 
 									<FormControl display="flex" alignItems="center" mt={2}>

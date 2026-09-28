@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useExerciseStore } from "../../store/exercise";
+import { EQUIPMENT_OPTIONS } from "../../constants/equipment";
 
 const EditExerciseModal = ({
 	isOpen,
@@ -29,6 +30,7 @@ const EditExerciseModal = ({
 	const [generalInfo, setgeneralInfo] = useState("");
 	const [exerciseType, setExerciseType] = useState("");
 	const [isBodyweight, setIsBodyweight] = useState(false);
+	const [equipment, setEquipment] = useState("");
 
 	useEffect(() => {
 		if (currentExercise) {
@@ -36,6 +38,7 @@ const EditExerciseModal = ({
 			setgeneralInfo(currentExercise.generalInfo || "");
 			setExerciseType(currentExercise.exerciseType || "");
 			setIsBodyweight(currentExercise.isBodyweight || false);
+			setEquipment(currentExercise.equipment || "");
 		}
 	}, [currentExercise]);
 
@@ -46,6 +49,7 @@ const EditExerciseModal = ({
 		setgeneralInfo(currentExercise?.generalInfo || "");
 		setExerciseType(currentExercise?.exerciseType || "");
 		setIsBodyweight(currentExercise?.isBodyweight || false);
+		setEquipment(currentExercise?.equipment || "");
 	};
 
 	const handleCancel = () => {
@@ -60,6 +64,7 @@ const EditExerciseModal = ({
 			generalInfo: generalInfo,
 			exerciseType: Number(exerciseType),
 			isBodyweight: isBodyweight,
+			equipment: equipment || null,
 		};
 
 		const result = await editExercise(updatedExercise);
@@ -99,6 +104,18 @@ const EditExerciseModal = ({
 									>
 										<option value="1">Upper Body</option>
 										<option value="2">Lower Body</option>
+									</Select>
+
+									<Select
+										placeholder="Equipment (optional)"
+										value={equipment}
+										onChange={(e) => setEquipment(e.target.value)}
+									>
+										{EQUIPMENT_OPTIONS.map((opt) => (
+											<option key={opt.value} value={opt.value}>
+												{opt.label}
+											</option>
+										))}
 									</Select>
 
 									<FormControl display="flex" alignItems="center" mt={2}>
