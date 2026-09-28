@@ -61,6 +61,25 @@ export const useExerciseStore = create(
 					console.error("Failed to add new exercise", error);
 				}
 			},
+			linkExerciseToDb: async (exerciseID, ascendExerciseId) => {
+				try {
+					const res = await API.put(`/linkExerciseToDb/${exerciseID}`, {
+						ascendExerciseId,
+					});
+					await get().fetchAllExercises();
+					return {
+						success: true,
+						message: res.data.message,
+						data: res.data.data,
+					};
+				} catch (error) {
+					return {
+						success: false,
+						message:
+							error.response?.data?.errorMessage || "Failed to link exercise",
+					};
+				}
+			},
 		}),
 		{
 			name: "exercise-storage",
