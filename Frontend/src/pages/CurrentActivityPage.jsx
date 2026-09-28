@@ -18,6 +18,7 @@ import { useSessionStore } from "../store/session";
 import { useSetStore } from "../store/set";
 import { useProfileStore } from "../store/profile";
 import { useExerciseDetailsStore } from "../store/exerciseDetails";
+import ExerciseInstruction from "../components/Exercise/ExerciseInstruction";
 
 // Fallback glyph, shown when an exercise has no ExerciseDB image
 // (not linked, lookup failed, or the image itself failed to load).
@@ -102,6 +103,8 @@ const CurrentActivityPage = () => {
 		enriched &&
 		(enriched.targetMuscles?.length > 0 ||
 			enriched.secondaryMuscles?.length > 0);
+
+	const hasInstructions = enriched?.instructions?.length > 0;
 
 	// Whether this exercise's weight should autofill from the profile.
 	// Two-part check: the exercise must be flagged bodyweight AND the user
@@ -382,6 +385,22 @@ const CurrentActivityPage = () => {
 									</Text>
 								)}
 							</Box>
+
+							{hasInstructions && (
+								<Box
+									bg="mist.400"
+									border="1px solid"
+									borderColor="mist.300"
+									borderRadius="lg"
+									p={4}
+									mb={3}
+								>
+									<ExerciseInstruction
+										steps={enriched.instructions}
+										collapsible
+									/>
+								</Box>
+							)}
 
 							{enriched && (
 								<Text

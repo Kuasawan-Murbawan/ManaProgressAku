@@ -32,6 +32,7 @@ import { useExerciseStore } from "../../store/exercise";
 import { useExerciseDetailsStore } from "../../store/exerciseDetails";
 import { EQUIPMENT_OPTIONS } from "../../constants/equipment";
 import EditExerciseModal from "./EditExerciseModal";
+import ExerciseInstruction from "./ExerciseInstruction";
 
 const SectionCard = ({ title, accent, children }) => (
 	<Box
@@ -192,6 +193,8 @@ const ExerciseDetailModal = ({ isOpen, onClose, currentExercise }) => {
 		(enriched.targetMuscles?.length > 0 ||
 			enriched.secondaryMuscles?.length > 0);
 
+	const hasInstructions = enriched?.instructions?.length > 0;
+
 	return (
 		<div>
 			<Modal
@@ -323,6 +326,12 @@ const ExerciseDetailModal = ({ isOpen, onClose, currentExercise }) => {
 											</Box>
 										)}
 									</VStack>
+								</SectionCard>
+							)}
+
+							{hasInstructions && (
+								<SectionCard>
+									<ExerciseInstruction steps={enriched.instructions} />
 								</SectionCard>
 							)}
 
