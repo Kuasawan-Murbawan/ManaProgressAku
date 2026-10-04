@@ -20,7 +20,7 @@ const envFile =
 
 const collectionFile = path.join(
 	projectRoot,
-	"Tests/API/Local/MPA Smoke Test - Local [v1.2.0].postman_collection.json",
+	"Tests/API/Local/MPA Smoke Test - Local [v1.5.0].postman_collection.json",
 );
 
 newman.run(
