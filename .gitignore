@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .env.local
+/.env.prod
 node_modules
 
 

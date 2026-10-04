@@ -32,7 +32,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"testis@example.com\",\r\n    \"password\": \"testis123\"\r\n}",
+					"raw": "{\r\n    \"email\": \"{{testUserEmail}}\",\r\n    \"password\": \"{{testUserPw}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
