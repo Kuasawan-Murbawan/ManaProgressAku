@@ -10,6 +10,7 @@ public class AscendExerciseDTO {
     private String name;
     private String imageUrl;
     private String overview;
+    private String videoUrl;
     private List<String> targetMuscles;
     private List<String> secondaryMuscles;
     private List<String> instructions;
@@ -71,5 +72,13 @@ public class AscendExerciseDTO {
 
     public void setOverview(String overview) {
         this.overview = overview;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

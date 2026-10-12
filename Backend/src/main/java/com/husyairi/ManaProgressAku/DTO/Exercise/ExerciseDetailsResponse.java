@@ -15,6 +15,7 @@ public class ExerciseDetailsResponse {
     private List<String> targetMuscles;
     private List<String> secondaryMuscles;
     private List<String> instructions;
+    private String videoUrl;
 
     public ExerciseDetailsResponse() {
     }
@@ -24,7 +25,8 @@ public class ExerciseDetailsResponse {
             String overview,
             List<String> targetMuscles,
             List<String> secondaryMuscles,
-            List<String> instructions
+            List<String> instructions,
+            String videoUrl
     ) {
         ExerciseDetailsResponse response = new ExerciseDetailsResponse();
         response.available = true;
@@ -33,6 +35,7 @@ public class ExerciseDetailsResponse {
         response.targetMuscles = targetMuscles;
         response.secondaryMuscles = secondaryMuscles;
         response.instructions = instructions;
+        response.videoUrl = videoUrl;
         return response;
     }
 
@@ -68,4 +71,7 @@ public class ExerciseDetailsResponse {
         return instructions;
     }
 
+    public String getVideoUrl() {
+        return videoUrl;
+    }
 }

@@ -75,7 +75,8 @@ public class ExerciseDetailsServiceImpl implements ExerciseDetailsService {
                             dto.getOverview(),
                             dto.getTargetMuscles(),
                             dto.getSecondaryMuscles(),
-                            dto.getInstructions()
+                            dto.getInstructions(),
+                            dto.getVideoUrl()
                     ))
                     .orElse(ExerciseDetailsResponse.unavailable());
 
