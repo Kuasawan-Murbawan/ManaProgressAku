@@ -38,12 +38,13 @@ public class ExerciseDetailsCache {
 
     // ConcurrentHashMap will make sure if there is .put and .get request at the same time,
     // the data will not be lost or corrupted
-    private final Map<String, CacheEntry> cache = new ConcurrentHashMap<>();
+    private final Map<String, CacheEntry> cacheMap = new ConcurrentHashMap<>();
     private final Map<String, Object> locks = new ConcurrentHashMap<>();
 
         public Optional<AscendExerciseDTO> getOrFetch(String ascendExerciseId, Supplier<Optional<AscendExerciseDTO>> fetcher){
-            CacheEntry existingCache = cache.get(ascendExerciseId);
+            CacheEntry existingCache = cacheMap.get(ascendExerciseId);
 
+            // The exercise exists in the cache (recently fetched from db)
             if(existingCache != null && !existingCache.isExpired()){
                 return existingCache.value;
             }
@@ -55,10 +56,12 @@ public class ExerciseDetailsCache {
                     SYNCHRONIZED BLOCK
 
                     If there are two request of the same exercise, second req will wait for the first one to finish
+                    we specifically lock this object, not the whole locks map
 
              */
             synchronized (lock){
-                CacheEntry recheck = cache.get(ascendExerciseId);
+                // We recheck because what if when making duplicate checks, the other had finished fetching
+                CacheEntry recheck = cacheMap.get(ascendExerciseId);
                 if(recheck != null && !recheck.isExpired()){
                     return recheck.value;
                 }
@@ -66,7 +69,7 @@ public class ExerciseDetailsCache {
                 // we will send he function to call API in the parameter of this method
                 // so when fetcher.get run, it will call the api
                 Optional<AscendExerciseDTO> result = fetcher.get();
-                cache.put(ascendExerciseId, new CacheEntry(result));
+                cacheMap.put(ascendExerciseId, new CacheEntry(result));
                 return result;
             }
 
