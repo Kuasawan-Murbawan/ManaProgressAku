@@ -6,12 +6,14 @@ import {
 	Text,
 	VStack,
 	useDisclosure,
+	AspectRatio,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import React from "react";
 
 export const ExerciseInstruction = ({
 	steps,
+	videoUrl,
 	collapsible = false,
 	defaultOpen = false,
 }) => {
@@ -57,6 +59,20 @@ export const ExerciseInstruction = ({
 					m={0}
 					p={0}
 				>
+					<AspectRatio maxW="560px" ratio={16 / 9}>
+						{/* <iframe title="naruto" src={videoUrl} allowFullScreen autoPlay /> */}
+						<video
+							autoPlay
+							muted
+							loop
+							playsInline
+							controls
+							style={{ width: "100%", borderRadius: "8px" }}
+						>
+							<source src={videoUrl} type="video/mp4" />
+							Your browser does not support the video tag.
+						</video>
+					</AspectRatio>
 					{steps.map((step, index) => (
 						<Flex as="li" key={index} gap={3} align="flex-start">
 							<Flex

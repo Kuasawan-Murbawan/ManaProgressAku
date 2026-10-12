@@ -331,7 +331,10 @@ const ExerciseDetailModal = ({ isOpen, onClose, currentExercise }) => {
 
 							{hasInstructions && (
 								<SectionCard>
-									<ExerciseInstruction steps={enriched.instructions} />
+									<ExerciseInstruction
+										steps={enriched.instructions}
+										videoUrl={enriched.videoUrl}
+									/>
 								</SectionCard>
 							)}
 

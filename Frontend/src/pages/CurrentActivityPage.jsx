@@ -397,6 +397,7 @@ const CurrentActivityPage = () => {
 								>
 									<ExerciseInstruction
 										steps={enriched.instructions}
+										videoUrl={enriched.videoUrl}
 										collapsible
 									/>
 								</Box>
