@@ -2,6 +2,8 @@ package com.husyairi.ManaProgressAku.Service.impl;
 
 import com.husyairi.ManaProgressAku.DTO.Profile.GetProfileResponse;
 import com.husyairi.ManaProgressAku.DTO.Profile.UpdateProfileRequest;
+import com.husyairi.ManaProgressAku.DTO.User.ChangePasswordRequest;
+import com.husyairi.ManaProgressAku.DTO.User.ChangePasswordResponse;
 import com.husyairi.ManaProgressAku.DTO.User.DeleteAccountRequest;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import com.husyairi.ManaProgressAku.Entity.Model.UserProfile;
@@ -15,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 @Service
@@ -100,5 +102,35 @@ public class ProfileServiceImpl implements ProfileService {
         }
 
         userRepository.delete(currentUser);
+    }
+
+    @Override
+    public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
+
+        User currentUser = getCurrentUser();
+
+        /* Return false if
+            1. current password is wrong
+            2. new password and confirm new password is different
+            3. current and new password is the same
+        */
+
+        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
+
+        if(!passwordEncoder.matches(request.getCurrentPassword(), currentUser.getPassword()) ||
+                !request.getNewPassword().equals(request.getConfirmNewPassword()) ||
+                passwordEncoder.matches(request.getCurrentPassword(), request.getNewPassword())
+        ){
+            return new ChangePasswordResponse(false, LocalDateTime.now());
+        }
+
+        currentUser.setPassword(request.getNewPassword());
+        try{
+            userRepository.save(currentUser);
+        }catch (Exception e){
+            throw new BadRequestException(500, "Internal Server Error", new HashMap<>());
+        }
+
+        return new ChangePasswordResponse(true, LocalDateTime.now());
     }
 }

@@ -2,6 +2,8 @@ package com.husyairi.ManaProgressAku.Controller;
 
 import com.husyairi.ManaProgressAku.DTO.Profile.GetProfileResponse;
 import com.husyairi.ManaProgressAku.DTO.Profile.UpdateProfileRequest;
+import com.husyairi.ManaProgressAku.DTO.User.ChangePasswordRequest;
+import com.husyairi.ManaProgressAku.DTO.User.ChangePasswordResponse;
 import com.husyairi.ManaProgressAku.DTO.User.DeleteAccountRequest;
 import com.husyairi.ManaProgressAku.ExceptionHandling.ApiSuccessResponse;
 import com.husyairi.ManaProgressAku.Service.ExerciseService;
@@ -55,5 +57,13 @@ public class ProfileController {
         profileService.deleteAccount(request);
 
         return ResponseEntity.ok(Map.of("message", "Account deleted successfully"));
+    }
+
+    @PutMapping("/changepw")
+    public ResponseEntity<ApiSuccessResponse<ChangePasswordResponse>>
+        changePassword(@Valid @RequestBody ChangePasswordRequest request)
+    {
+        ChangePasswordResponse data = profileService.changePassword(request);
+
     }
 }
