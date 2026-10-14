@@ -64,6 +64,11 @@ public class ProfileController {
         changePassword(@Valid @RequestBody ChangePasswordRequest request)
     {
         ChangePasswordResponse data = profileService.changePassword(request);
+        ApiSuccessResponse<ChangePasswordResponse> response = new ApiSuccessResponse<>(
+                "Password have been changed.",
+                data
+        );
 
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
