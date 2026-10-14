@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -106,7 +107,6 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ChangePasswordResponse changePassword(ChangePasswordRequest request) {
-
         User currentUser = getCurrentUser();
 
         /* Return false if
@@ -115,22 +115,25 @@ public class ProfileServiceImpl implements ProfileService {
             3. current and new password is the same
         */
 
-        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
-
-        if(!passwordEncoder.matches(request.getCurrentPassword(), currentUser.getPassword()) ||
-                !request.getNewPassword().equals(request.getConfirmNewPassword()) ||
-                passwordEncoder.matches(request.getCurrentPassword(), request.getNewPassword())
+        // Use the hashmap to handle each request error
+        if(!passwordEncoder.matches(request.getCurrentPassword(), currentUser.getPassword()) ){
+            throw new BadRequestException(400, "Password change failed",
+                    Map.of("currentPassword", "Current password is incorrect"));
+        }
+        if(request.getCurrentPassword().equals(request.getNewPassword())){
+            throw new BadRequestException(400, "Password change failed",
+                    Map.of("newPassword", "New password cannot be the same as old password"));
+        }
+        if(!request.getNewPassword().equals(request.getConfirmNewPassword())
         ){
-            return new ChangePasswordResponse(false, LocalDateTime.now());
+            throw new BadRequestException(400, "Password change failed",
+                    Map.of("confirmNewPassword", "Password does not match"));
         }
 
-        currentUser.setPassword(request.getNewPassword());
-        try{
-            userRepository.save(currentUser);
-        }catch (Exception e){
-            throw new BadRequestException(500, "Internal Server Error", new HashMap<>());
-        }
+        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
+        currentUser.setPassword(newPasswordEncoded);
+        userRepository.save(currentUser);
 
-        return new ChangePasswordResponse(true, LocalDateTime.now());
+        return new ChangePasswordResponse("Password have been changed successfully", LocalDateTime.now());
     }
 }

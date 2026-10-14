@@ -3,20 +3,20 @@ package com.husyairi.ManaProgressAku.DTO.User;
 import java.time.LocalDateTime;
 
 public class ChangePasswordResponse {
-    private boolean isSuccessful;
+    private String message;
     private LocalDateTime changedAt;
 
-    public ChangePasswordResponse(boolean isSuccessful, LocalDateTime changedAt) {
-        this.isSuccessful = isSuccessful;
+    public ChangePasswordResponse(String message, LocalDateTime changedAt) {
+        this.message = message;
         this.changedAt = changedAt;
     }
 
-    public boolean getSuccessful() {
-        return isSuccessful;
+    public String getMessage() {
+        return message;
     }
 
-    public void setSuccessful(Boolean successful) {
-        isSuccessful = successful;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public LocalDateTime getChangedAt() {
