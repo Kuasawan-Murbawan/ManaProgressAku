@@ -1,12 +1,13 @@
 package com.husyairi.ManaProgressAku.DTO.User;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class ChangePasswordResponse {
     private String message;
-    private LocalDateTime changedAt;
+    private Instant changedAt;
 
-    public ChangePasswordResponse(String message, LocalDateTime changedAt) {
+    public ChangePasswordResponse(String message, Instant changedAt) {
         this.message = message;
         this.changedAt = changedAt;
     }
@@ -19,11 +20,11 @@ public class ChangePasswordResponse {
         this.message = message;
     }
 
-    public LocalDateTime getChangedAt() {
+    public Instant getChangedAt() {
         return changedAt;
     }
 
-    public void setChangedAt(LocalDateTime changedAt) {
+    public void setChangedAt(Instant changedAt) {
         this.changedAt = changedAt;
     }
 }

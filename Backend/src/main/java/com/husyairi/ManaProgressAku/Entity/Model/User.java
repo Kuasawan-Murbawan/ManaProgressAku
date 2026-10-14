@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.husyairi.ManaProgressAku.Enums.Role;
+
+import java.time.Instant;
 import java.util.Date;
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +41,9 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @Column(name = "password_changed_at")
+    private Instant passwordChangedAt;
 
     public User() {
     }
@@ -105,5 +110,13 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Instant getPasswordChangedAt() {
+        return passwordChangedAt;
+    }
+
+    public void setPasswordChangedAt(Instant passwordChangedAt) {
+        this.passwordChangedAt = passwordChangedAt;
     }
 }

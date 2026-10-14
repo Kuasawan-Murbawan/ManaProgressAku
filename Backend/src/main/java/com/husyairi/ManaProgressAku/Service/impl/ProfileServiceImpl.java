@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,10 +131,11 @@ public class ProfileServiceImpl implements ProfileService {
                     Map.of("confirmNewPassword", "Password does not match"));
         }
 
-        String newPasswordEncoded = passwordEncoder.encode(request.getNewPassword());
-        currentUser.setPassword(newPasswordEncoded);
+        Instant now = Instant.now();
+        currentUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        currentUser.setPasswordChangedAt(now);
         userRepository.save(currentUser);
 
-        return new ChangePasswordResponse("Password have been changed successfully", LocalDateTime.now());
+        return new ChangePasswordResponse("Password have been changed successfully", now);
     }
 }
