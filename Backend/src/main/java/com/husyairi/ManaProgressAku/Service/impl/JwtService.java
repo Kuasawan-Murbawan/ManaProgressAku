@@ -7,6 +7,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +68,17 @@ public class JwtService {
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()))
+                && !isTokenExpired(token)
+                && isIssuedAfterPasswordChanged(token, (CustomUserDetails) userDetails);
+    }
+
+    public boolean isIssuedAfterPasswordChanged(String token, CustomUserDetails user){
+        Instant changedAt = user.getPasswordChangedAt();
+        if(changedAt == null) return true;
+
+        Instant issuedAt = extractClaim(token, Claims::getIssuedAt).toInstant();
+        return !issuedAt.isBefore(changedAt.truncatedTo(ChronoUnit.SECONDS));
     }
 
     private boolean isTokenExpired(String token) {
