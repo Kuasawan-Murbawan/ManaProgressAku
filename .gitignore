@@ -38,3 +38,4 @@ build/
 
 ### Sensitive-Info ###
 src/main/resources/application.properties
+.DS_Store
