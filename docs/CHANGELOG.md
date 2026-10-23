@@ -7,6 +7,30 @@ All notable changes to ManaProgressAku will be here.
 # Unreleased
 
 - gmail registration and login
+- data analytics
+- exercise routines
+
+## [v1.6.0] - 2026-10-23
+
+### Added
+
+- Change password for logged-in users, from the profile page. One request does it all: the user enters their current password, the new password and a confirmation, and the backend checks them before updating the stored hash.
+- `PUT /changepw` endpoint taking `currentPassword`, `newPassword` and `confirmNewPassword`. Failures come back in the standard error format, with `errorDetails` keyed by field name (`currentPassword`, `newPassword`, `confirmNewPassword`) for a wrong current password, a confirmation mismatch and a new password that matches the current one.
+- Old tokens stop working after a password change. The `users` table has a new nullable `password_changed_at` column, set whenever the password changes, and `JwtService.isTokenValid` now rejects any token issued before that moment (`isIssuedAfterPasswordChanged`, compared to the second). Users who have never changed their password have `NULL` here and are not affected.
+- `ChangePasswordCard` component on the profile page. It is collapsed by default and opens from a header toggle. Closing it clears the form. The toggle is locked while a request is running or after a successful change.
+- Validation before anything is sent to the backend: current password required, new password required and between 8 and 72 characters, new password different from the current one, confirmation required and matching. Errors show per field once the field has been touched.
+- Backend errors are shown on the field they belong to, and focus moves to the first field with an error. A server error clears as soon as that field is edited. Network failures and errors with no field show in an alert at the top of the card.
+- Show/hide toggle on each password field, a password strength meter and a live checklist of the requirements.
+
+### Changed
+
+- After a successful change the user gets a confirmation, then is logged out about two seconds later and sent to the login page. The old flow only navigated to `/login` and left the now-dead token in local storage.
+- `ProfilePage` now renders `ChangePasswordCard` in place of the inline password form, along with its state and handler.
+- The `changePassword` action in the profile store now returns `{ success, message, fieldErrors }`, using the backend's `errorMessage` and `errorDetails`, and a separate message when the server cannot be reached.
+
+### Fixed
+
+- The `changePassword` store action fell back to "Failed to delete account" when a request failed. It now says "Failed to change password".
 
 ## [v1.5.0] - 2026-09-08
 
