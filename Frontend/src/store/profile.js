@@ -51,6 +51,26 @@ export const useProfileStore = create((set, get) => ({
 		}
 	},
 
+	// Returns { success, message, fieldErrors }.
+	// fieldErrors is the backend's errorDetails, for example
+	// { currentPassword: "Current password is incorrect" }, so the form can
+	// show each message under the right input.
+	changePassword: async (passwords) => {
+		try {
+			const res = await API.put("/changepw", passwords);
+			return { success: true, message: res.data.message, fieldErrors: {} };
+		} catch (error) {
+			const data = error.response?.data;
+			return {
+				success: false,
+				message: error.response
+					? data?.errorMessage || "Failed to change password"
+					: "Could not reach the server. Check your connection and try again.",
+				fieldErrors: data?.errorDetails ?? {},
+			};
+		}
+	},
+
 	clearProfile: () => {
 		set({ profile: null });
 	},

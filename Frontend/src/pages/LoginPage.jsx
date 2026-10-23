@@ -11,7 +11,11 @@ import {
 	FormLabel,
 	Alert,
 	AlertIcon,
+	InputRightElement,
+	InputGroup,
+	IconButton,
 } from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
@@ -20,6 +24,8 @@ export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [show, setShow] = useState(false);
+
 	const navigate = useNavigate();
 	const setToken = useAuthStore((state) => state.setToken);
 
@@ -118,20 +124,33 @@ export default function LoginPage() {
 								<FormLabel fontSize="sm" color="tiber.700">
 									Password
 								</FormLabel>
-								<Input
-									type="password"
-									placeholder="Enter your password"
-									value={password}
-									onChange={(e) => setPassword(e.target.value)}
-									bg="white"
-									borderColor="mist.300"
-									borderRadius="lg"
-									_hover={{ borderColor: "tiber.400" }}
-									_focus={{
-										borderColor: "tiber.600",
-										boxShadow: "0 0 0 1px #146059",
-									}}
-								/>
+								<InputGroup>
+									<Input
+										type={show ? "text" : "password"}
+										placeholder="Enter your password"
+										value={password}
+										onChange={(e) => setPassword(e.target.value)}
+										bg="white"
+										borderColor="mist.300"
+										borderRadius="lg"
+										_hover={{ borderColor: "tiber.400" }}
+										_focus={{
+											borderColor: "tiber.600",
+											boxShadow: "0 0 0 1px #146059",
+										}}
+									/>
+									<InputRightElement width="4.5rem">
+										<IconButton
+											type="button"
+											size="sm"
+											variant="ghost"
+											color="tiber.700"
+											aria-label={show ? `Hide Password` : `Show Password`}
+											icon={show ? <ViewOffIcon /> : <ViewIcon />}
+											onClick={() => setShow((s) => !s)}
+										/>
+									</InputRightElement>
+								</InputGroup>
 							</FormControl>
 
 							<Button

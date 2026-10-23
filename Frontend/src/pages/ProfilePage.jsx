@@ -21,6 +21,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useProfileStore } from "../store/profile";
 import DeleteAccountModal from "../components/Profile/DeleteAccountModal";
+import ChangePasswordCard from "../components/Profile/ChangePasswordCard";
 
 const GENDER_OPTIONS = [
 	{ value: "MALE", label: "Male" },
@@ -43,10 +44,6 @@ const ProfilePage = () => {
 	const [dateOfBirth, setDateOfBirth] = useState("");
 	const [gender, setGender] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
-
-	const [currentPassword, setCurrentPassword] = useState("");
-	const [newPassword, setNewPassword] = useState("");
-	const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
 	useEffect(() => {
 		fetchProfile();
@@ -233,76 +230,7 @@ const ProfilePage = () => {
 					</VStack>
 				</Box>
 
-				<Box
-					bg="white"
-					borderRadius="xl"
-					border="1px solid"
-					borderColor="red.200"
-					p={{ base: 5, md: 6 }}
-					mb={6}
-				>
-					<VStack spacing={4} align={"stretch"}>
-						<Text
-							fontFamily="heading"
-							fontWeight="700"
-							color="yellow.600"
-							mb={2}
-						>
-							Change Password
-						</Text>
-
-						<Box>
-							<FormControl>
-								<FormLabel>Current Password</FormLabel>
-								<Input
-									type="password"
-									value={currentPassword}
-									size={"sm"}
-									onChange={(input) => setCurrentPassword(input.target.value)}
-								></Input>
-								<FormErrorMessage>Can't be empty</FormErrorMessage>
-							</FormControl>
-						</Box>
-
-						<Box>
-							<FormControl>
-								<FormLabel>New Password</FormLabel>
-								<Input
-									type="password"
-									value={newPassword}
-									size={"sm"}
-									onChange={(input) => setNewPassword(input.target.value)}
-								></Input>
-								<FormErrorMessage>Can't be empty</FormErrorMessage>
-							</FormControl>
-						</Box>
-
-						<Box>
-							<FormControl>
-								<FormLabel>Confirm New Password</FormLabel>
-								<Input
-									type="password"
-									value={confirmNewPassword}
-									size={"sm"}
-									onChange={(input) =>
-										setConfirmNewPassword(input.target.value)
-									}
-								></Input>
-								<FormErrorMessage>Can't be empty</FormErrorMessage>
-							</FormControl>
-						</Box>
-					</VStack>
-
-					<Button
-						mt={6}
-						borderColor={"yellow.300"}
-						color={"yellow.500"}
-						variant={"outline"}
-						_hover={{ bg: "yellow.400" }}
-					>
-						Submit
-					</Button>
-				</Box>
+				<ChangePasswordCard />
 
 				{/* Danger zone */}
 				<Box
