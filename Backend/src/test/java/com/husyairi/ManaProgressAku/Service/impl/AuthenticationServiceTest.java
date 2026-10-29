@@ -115,7 +115,7 @@ class AuthenticationServiceTest {
 
         assertThat(response.getToken()).isEqualTo("abc13");
         assertThat(response.getExpiresIn()).isEqualTo(360000L);
-  }
+    }
 
 
     @Test
@@ -132,5 +132,24 @@ class AuthenticationServiceTest {
         assertThat(sent.getValue().getCredentials()).isEqualTo("PlainPass1!");
     }
 
+    @Test
+    void aunthenticateWithWrongCredentialsGives401AndNoToken(){
+
+        /* Test this line:
+            }catch (BadCredentialsException e){
+                throw new BadRequestException(401, "Invalid email or password", new HashMap<>());
+            }
+         */
+
+        when(authenticationManager.authenticate(any(Authentication.class))).thenThrow(new BadCredentialsException("Bad"));
+
+        BadRequestException error = thrownBadRequest(() -> authenticationService.authenticateUser(login(
+                "Afiq@email.com", "wrongpasswprd"
+        )));
+
+        assertThat(error.getErrorId()).isEqualTo(401);
+        assertThat(error.getErrorMessage()).isEqualTo("Invalid email or password");
+        verifyNoInteractions(jwtService);
+    }
 
 }
