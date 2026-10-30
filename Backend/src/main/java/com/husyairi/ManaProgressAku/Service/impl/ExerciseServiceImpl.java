@@ -134,16 +134,16 @@ public class ExerciseServiceImpl implements ExerciseService {
     public void deleteExercise (Integer exerciseID){
         Optional<Exercise> isExist = exerciseRepository.findById(exerciseID);
 
+        if(isExist.isEmpty()){
+            throw new BadRequestException(404, "Exercise ID " + exerciseID + " not found.", new HashMap<>());
+        }
+
         // Activity.exerciseID is a plain column, not a foreign key, so the database
         // would happily delete an exercise that logged workouts still point at.
         if(activityRepository.existsByExerciseID(exerciseID)){
             throw new BadRequestException(409,
                     "\"" + isExist.get().getExerciseName() + "\" has been used in logged workouts, so it can't be deleted.",
                     new HashMap<>());
-        }
-
-        if(isExist.isEmpty()){
-            throw new BadRequestException(404, "Exercise ID " + exerciseID + " not found.", new HashMap<>());
         }
 
         try{
