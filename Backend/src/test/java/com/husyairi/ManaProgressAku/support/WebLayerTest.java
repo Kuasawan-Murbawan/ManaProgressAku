@@ -39,7 +39,7 @@ public abstract class WebLayerTest {
         }
     }
 
-    private static final String TOKEN = "valid-test=token";
+    private static final String TOKEN = "valid-test-token";
 
     @Autowired
     protected MockMvc mockMvc;
@@ -67,8 +67,7 @@ public abstract class WebLayerTest {
 
         when(jwtService.extractUsername(TOKEN)).thenReturn(user.getEmail());
         when(customUserDetailsService.loadUserByUsername(user.getEmail())).thenReturn(details);
-        when(jwtService.isTokenValid(TOKEN, any(UserDetails.class))).thenReturn(true);
-
+        when(jwtService.isTokenValid(TOKEN, details)).thenReturn(true);
         return "Bearer " + TOKEN;
     }
 
