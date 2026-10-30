@@ -47,6 +47,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        final String requestPath = request.getServletPath();
+
+        // public paths: login, register and Swagger
+        if (requestPath.startsWith("/auth")
+                || requestPath.startsWith("/swagger-ui")
+                || requestPath.startsWith("/v3")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -54,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String jwt = authHeader.substring(7);
+        final String jwt = authHeader.substring(7);
 
         try {
             String userEmail = jwtService.extractUsername(jwt);
@@ -73,8 +82,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (JwtException | IllegalArgumentException | UsernameNotFoundException e) {
-            // bad signature, expired, malformed, or the user no longer exists
-            writeUnauthorized(response, INVALID_TOKEN);
+            // JwtException: garbage, expired or forged token.
+            // IllegalArgumentException: an empty token.
+            // UsernameNotFoundException: a valid token for an account that no longer exists.
+            writeUnauthorized(response, "Invalid or expired token");
             return;
         }
 

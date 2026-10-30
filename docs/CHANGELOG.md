@@ -10,6 +10,12 @@ All notable changes to ManaProgressAku will be here.
 - data analytics
 - exercise routines
 
+## [v1.7.0] - Unreleased
+
+### Fixed
+
+- `JwtAuthenticationFilter` now returns a 401 JSON response for a missing, invalid, expired or stale token and for a token whose user no longer exists. Before, invalid or expired tokens got 403, a token issued before a password change got status 200 with a 403 body, and a deleted user's token caused an unhandled exception.
+
 ## [v1.6.0] - 2026-10-23
 
 ### Added

@@ -39,3 +39,4 @@ build/
 ### Sensitive-Info ###
 src/main/resources/application.properties
 .DS_Store
+/Users/dinjel/afiq/manaprogressaku/ManaProgressAku/Frontend/manaprogressaku-2026-10-30.sql
