@@ -18,9 +18,26 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcBuilderCustomizer;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@Import({SecurityConfiguration.class, JwtAuthenticationEntryPoint.class})
+@Import({SecurityConfiguration.class, JwtAuthenticationEntryPoint.class, WebLayerTest.ServletPathFix.class})
 public abstract class WebLayerTest {
+
+
+    @TestConfiguration(proxyBeanMethods = false)
+    public static class ServletPathFix {
+        @Bean
+        MockMvcBuilderCustomizer servletPathCustomizer() {
+            return builder -> builder.defaultRequest(
+                    MockMvcRequestBuilders.get("/").with(request -> {
+                        request.setServletPath(request.getRequestURI());
+                        return request;
+                    }));
+        }
+    }
 
     private static final String TOKEN = "valid-test=token";
 
