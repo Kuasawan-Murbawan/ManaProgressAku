@@ -17,8 +17,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class JwtServiceTest {
-    private static final String SECRET = "i5d6IrdxfxxRiOfZ7mtaFjMvxbh58JNX73EGXlzB7T0=";
-    private static final String OTHER_SECRET = "l5qY0mv1XCWQekhTwY0leW+hJzwsLvcLioPq9hUEUdU=";
+    // Fake keys generated only for tests. Safe to commit.
+    private static final String SECRET = "iTqLydlqudFotqmlkg2w9rrIN3Z+Xm4b7x2lUX7BidU=";
+    private static final String OTHER_SECRET = "M8AAv31zShWGdtVkkVnqR+4Az5t59RjA6xB5F+dc5zo=";
     private static final String EMAIL = "user@example.com";
     private static final long ONE_HOUR = 3_600_000L;
 
