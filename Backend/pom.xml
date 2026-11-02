@@ -167,6 +167,13 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>com/husyairi/ManaProgressAku/Entity/**</exclude>
+								<exclude>com/husyairi/ManaProgressAku/DTO/**</exclude>
+								<exclude>com/husyairi/ManaProgressAku/ManaProgressAkuApplication.class</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
