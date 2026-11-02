@@ -798,7 +798,7 @@
           "script": {
             "exec": [
               "pm.test(\"Rejects request with no token\", function(){",
-              "    pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+              "    pm.response.to.have.status(401);",
               "});"
             ],
             "type": "text/javascript",
@@ -1683,23 +1683,23 @@
               "    pm.response.to.have.status(200);",
               "});",
               "",
-              "const data = pm.response.json().data;",
+              "const matches = pm.response.json().data;",
               "",
               "pm.test(\"Returns at least one candidate\", function () {",
-              "    pm.expect(data).to.be.an(\"array\").that.is.not.empty;",
+              "    pm.expect(matches).to.be.an(\"array\").that.is.not.empty;",
               "});",
               "",
               "pm.test(\"Every candidate has an id, a name and an image\", function () {",
-              "    data.forEach(function (m) {",
+              "    matches.forEach(function (m) {",
               "        pm.expect(m.exerciseId).to.match(/^exr_/);",
               "        pm.expect(m.name).to.be.a(\"string\");",
               "        pm.expect(m.imageUrl).to.be.a(\"string\");",
               "    });",
               "});",
               "",
-              "if (data && data.length > 0) {",
-              "    pm.environment.set(\"ascendMatchId\", data[0].exerciseId);",
-              "    console.log(\"Using ExerciseDB match: \" + data[0].name + \" (\" + data[0].exerciseId + \")\");",
+              "if (matches && matches.length > 0) {",
+              "    pm.environment.set(\"ascendMatchId\", matches[0].exerciseId);",
+              "    console.log(\"Using ExerciseDB match: \" + matches[0].name + \" (\" + matches[0].exerciseId + \")\");",
               "}"
             ],
             "packages": {},
@@ -2562,12 +2562,12 @@
           }
         },
         "url": {
-          "raw": "{{baseUrl}}/deleteAccount",
+          "raw": "{{baseUrl}}/deleteUser",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "deleteAccount"
+            "deleteUser"
           ]
         }
       },
@@ -2628,7 +2628,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Token for a deleted user is rejected on the next call\", function(){\n    pm.expect(pm.response.code).to.be.oneOf([401, 403, 404]);\n});"
+              "pm.test(\"Token for a deleted user is rejected on the next call\", function(){\n    pm.response.to.have.status(401);\n});"
             ]
           }
         }
