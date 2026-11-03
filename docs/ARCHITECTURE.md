@@ -14,7 +14,7 @@ ManaProgressAku is a full-stack fitness tracking application that allows users t
 
 Admins can also manage the exercise library: create, edit and delete exercises, set equipment, flag bodyweight exercises, and link an exercise to its ExerciseDB entry.
 
-The application follows a client-server architecture and has one external dependency, the ExerciseDB v1 API (built by AscendAPI, sold through RapidAPI).
+The application follows a client-server architecture and has one external dependency, the ExerciseDB API (built by AscendAPI, sold through RapidAPI).
 
 ---
 
@@ -23,7 +23,7 @@ The application follows a client-server architecture and has one external depend
 ```text
 Browser -> CloudFront -> S3                         React single page app
 Browser -> Elastic Beanstalk (Spring Boot API) -> RDS MySQL
-                                               -> ExerciseDB v2 via RapidAPI (HTTPS)
+                                               -> ExerciseDB via RapidAPI (HTTPS)
 Browser -> cdn.exercisedb.dev                       exercise images, loaded directly
 ```
 
@@ -132,7 +132,7 @@ Backend deployment:
 
 ### Structure
 
-Requests flow Controller -> Service (interface plus implementation) -> Repository -> Entity. DTOs are grouped per feature (`DTO.Exercise`, `DTO.Profile`, `DTO.Activity`, `DTO.User`).
+Requests flow Controller -> Service (interface plus implementation) -> Repository -> Entity. DTOs are grouped per feature (`DTO.Exercise`, `DTO.Profile`, `DTO.Session`, `DTO.Activity`, `DTO.ActivitySet`, `DTO.User`).
 
 - Successful responses use `ApiSuccessResponse` (`status`, `message`, `data`).
 - Errors are thrown as `BadRequestException(statusCode, message, details)` and turned into `ApiErrorResponse` (`errorCode`, `errorMessage`, `errorDetails`) by `GlobalExceptionHandler`. It maps the code to an HTTP status (400, 401, 403, 404, 409, 429, 500, 502) and also returns 400 for bean validation failures and malformed request bodies.
@@ -207,6 +207,7 @@ Main tables:
 - activityset
 - exercise
 - ascend_api_usage
+- users_seq
 
 ```text
 users --1:1-- user_profile      shared primary key (user_profile.user_id)
@@ -220,8 +221,9 @@ ascend_api_usage                a single row, id = 1
 Table notes:
 
 - `user_profile` has no row until the user saves something. A missing row is a normal state, and the API returns empty fields for it.
-- `exercise` has `is_bodyweight` (not null), `ascend_exercise_id` (nullable, the ExerciseDB ID) and `equipment` (nullable enum name: BARBELL, DUMBBELL, KETTLEBELL, MACHINE, CABLE, RESISTANCE_BAND, BODYWEIGHT, OTHER).
+- `exercise` has `is_bodyweight` (not null), `ascend_exercise_id` (nullable, the ExerciseDB ID) and `equipment` (nullable). The `equipment` column is a `tinyint` and the entity has no `@Enumerated`, so each value is stored as its position in the `Equipment` enum: BARBELL, DUMBBELL, KETTLEBELL, MACHINE, CABLE, RESISTANCE_BAND, BODYWEIGHT, OTHER. Reordering the enum would change the meaning of stored values.
 - `ascend_api_usage` holds the monthly and hourly call counters for the ExerciseDB quota.
+- `users_seq` is where Hibernate keeps the next user id.
 
 Deleting data:
 
@@ -277,7 +279,7 @@ Roles are `USER` and `ADMIN`. Deleting an account requires the password again. T
 
 ## ExerciseDB Integration
 
-Exercise reference data (image, muscles, instructions) comes from ExerciseDB v2 by AscendAPI, accessed through RapidAPI on the free Hobby plan: about 200 exercises, 2,000 calls per month and 1,000 per hour.
+Exercise reference data (image, muscles, instructions) comes from ExerciseDB by AscendAPI, accessed through RapidAPI on the free Hobby plan: about 200 exercises, 2,000 calls per month and 1,000 per hour.
 
 ### Rules that shape the design
 
@@ -314,17 +316,23 @@ On the frontend, `ExerciseDetailModal` and `CurrentActivityPage` ask for details
 ### Configuration
 
 - `RAPIDAPI_KEY` environment variable (the key itself is never committed)
-- `rapidapi.exercisedb.host` and `rapidapi.exercisedb.base-url` properties
+- `rapidapi.exercisedb.host` and `rapidapi.exercisedb.base-url` properties (the client calls the `/api/v1` paths of the API)
 
 ---
 
 ## Testing
 
+Automated backend tests run from the `Backend` folder. See the [README testing section](../README.md#testing-1) for what they cover.
+
+- `mvn test` runs the unit and web tests.
+- `mvn clean verify` runs those tests and the database tests against a real MySQL 8 container, then writes the coverage report.
+- Docker must be running for `mvn clean verify`. `mvn test` does not need it.
+
 API tests are a Postman collection run by Newman from the repository root.
 
 - `npm run test:api:local` runs the collection against the local environment file.
 - `npm run test:api:prod` runs it against the production environment file. It creates and deletes real rows, so run it deliberately.
-- `scripts/run-api-tests.js` reads the admin credentials from `.env.local` (gitignored) and injects them at run time, so no credentials sit in the committed collection or environment files.
+- `scripts/run-api-tests.js` reads `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` from `.env.local` (`.env.prod` for production, both gitignored) and injects them at run time, so no credentials sit in the committed collection or environment files.
 - The collection covers authentication, sessions, activities and sets, profile validation, bodyweight exercises, ExerciseDB enrichment, cross-user access and account deletion.
 
 ---

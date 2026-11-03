@@ -118,6 +118,10 @@ Instead of focusing only on CRUD operations, the project also emphasizes:
 
 ## Testing
 
+- JUnit 5
+- Mockito
+- Testcontainers (MySQL 8)
+- JaCoCo
 - Postman collection run with Newman
 
 ## Cloud & Infrastructure
@@ -199,14 +203,19 @@ npm run dev
 
 ## Backend
 
-`application.properties` is gitignored, so create it under `src/main/resources` and supply the environment variables below.
+`application.properties` is committed in `src/main/resources`, so there is nothing to create. It holds no secrets: they come from the environment variables below. `JWT_SECRET_KEY`, `RAPIDAPI_KEY` and `RDS_PASSWORD` have no default, so they must be set.
+
+For local runs they can go in `Backend/config/application.properties`, which is gitignored. Spring reads that file when the app starts from the `Backend` folder.
 
 | Variable                                                  | Purpose                                                                                                         |
 | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `JWT_SECRET_KEY`                                          | Secret used to sign JWTs                                                                                        |
-| `RAPIDAPI_KEY`                                            | RapidAPI key for the ExerciseDB v2 subscription                                                                 |
-| `RDS_HOSTNAME`, `RDS_PORT`, `RDS_DB_NAME`, `RDS_USERNAME` | Database connection. They default to a local MySQL (`localhost:3306`, database `progress_tracker`, user `root`) |
+| `JWT_SECRET_KEY`                                          | Secret used to sign JWTs (no default)                                                                           |
+| `RAPIDAPI_KEY`                                            | RapidAPI key for the ExerciseDB v2 subscription (no default)                                                    |
 | `RDS_PASSWORD`                                            | Database password (no default)                                                                                  |
+| `RDS_HOSTNAME`, `RDS_PORT`, `RDS_DB_NAME`, `RDS_USERNAME` | Database connection. They default to a local MySQL (`localhost:3306`, database `progress_tracker`, user `root`) |
+| `PORT`                                                    | HTTP port. It defaults to `8080`                                                                                |
+
+The committed file:
 
 ```properties
 spring.application.name=ManaProgressAku
@@ -215,7 +224,9 @@ server.port=${PORT:8080}
 spring.datasource.url=jdbc:mysql://${RDS_HOSTNAME:localhost}:${RDS_PORT:3306}/${RDS_DB_NAME:progress_tracker}
 spring.datasource.username=${RDS_USERNAME:root}
 spring.datasource.password=${RDS_PASSWORD}
-spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+#spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 spring.jpa.hibernate.ddl-auto=update
 security.jwt.secret-key=${JWT_SECRET_KEY}
@@ -230,8 +241,6 @@ cd Backend
 mvn spring-boot:run
 ```
 
-The app reads `RDS_PASSWORD` (database password), `RAPIDAPI_KEY` and `JWT_SECRET_KEY` (JWT secret) from environment variables. For local runs they can go in `Backend/config/application.properties`, which is gitignored. Spring reads that file when the app starts from the `Backend` folder.
-
 Hibernate creates missing tables and columns on startup, but foreign key delete rules and the single seed row in `ascend_api_usage` must be applied by hand. See [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md).
 
 ## Testing
@@ -245,7 +254,7 @@ Run these in the `Backend` folder.
 
 Reports: `target/surefire-reports` (unit and web), `target/failsafe-reports` (database), `target/site/jacoco/index.html` (coverage). The test schema is in `src/test/resources/db/migration`.
 
-What is covered: the authentication, profile and exercise services, JWT handling, the exercise cache and the API rate limiter; the status code of every protected endpoint with no token (401) and of every admin endpoint for a normal user (403); the security filter; and a real database for the schema, the delete cascades and the quota row lock. ExerciseDB is always faked, so no test spends API quota. Not covered yet: the session, activity and set services and controllers (the workout code), which are the next area to test. The Newman collection in `Tests/API` stays as the black-box check of the running app.
+What is covered: the authentication, profile and exercise services, JWT handling, the exercise cache and the API rate limiter; the status code of every protected endpoint with no token (401) and of every admin endpoint for a normal user (403); the security filter; and a real database for the schema, the delete cascades and the quota row lock. ExerciseDB is always faked, so no test spends API quota. Not covered yet: the session, activity and set services and controllers (the workout code), which are the next area to test, and the handler bodies in `ProfileController` and `ExerciseDetailsController`, which only have access checks. The Newman collection in `Tests/API` stays as the black-box check of the running app.
 
 Rules: every bug fix comes with a regression test that fails without the fix. A new endpoint outside `/auth` needs a row in `EndpointSecurityTest`, which fails until you add it. Never put a real secret in a test or in `application-test.properties`.
 
@@ -258,4 +267,4 @@ npm install
 npm run test:api:local
 ```
 
-Put `ADMIN_EMAIL` and `ADMIN_PW` in a gitignored `.env.local` file at the repository root. `npm run test:api:prod` runs the same collection against production and creates and deletes real rows, so run it deliberately.
+Put `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` in a gitignored `.env.local` file at the repository root. `npm run test:api:prod` reads the same variables from `.env.prod` and runs the same collection against production. It creates and deletes real rows, so run it deliberately.
