@@ -10,7 +10,7 @@ All notable changes to ManaProgressAku will be here.
 - data analytics
 - exercise routines
 
-## [v1.7.0] - Unreleased
+## [v1.7.0] - 2026-11-03
 
 ### Added
 
