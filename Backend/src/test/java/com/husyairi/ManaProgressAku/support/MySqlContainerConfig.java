@@ -11,6 +11,6 @@ public class MySqlContainerConfig {
     @Bean
     @ServiceConnection
     MySQLContainer<?> mysql() {
-        return new MySQLContainer<>("mysql:8.0");
+        return new MySQLContainer<>("mysql:8.4");
     }
 }
