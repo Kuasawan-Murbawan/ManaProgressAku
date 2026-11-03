@@ -1,6 +1,7 @@
 package com.husyairi.ManaProgressAku.Service.impl;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import java.time.Clock;
 import com.husyairi.ManaProgressAku.Entity.Model.AscendApiUsage;
 import com.husyairi.ManaProgressAku.Repository.AscendApiUsageRepository;
 import jakarta.transaction.Transactional;
@@ -23,10 +24,18 @@ public class AscendApiRateLimiter {
     private static final int HOURLY_SAFETY_THRESHOLD = 900;
 
     private final AscendApiUsageRepository ascendApiUsageRepository;
+    private final Clock clock;
 
+    @Autowired
     public AscendApiRateLimiter(AscendApiUsageRepository ascendApiUsageRepository) {
-        this.ascendApiUsageRepository = ascendApiUsageRepository;
+        this(ascendApiUsageRepository, Clock.systemDefaultZone());
     }
+
+    AscendApiRateLimiter(AscendApiUsageRepository ascendApiUsageRepository, Clock clock) {
+        this.ascendApiUsageRepository = ascendApiUsageRepository;
+        this.clock = clock;
+    }
+
 
     /*
         Main purpose for this function is to decide whether we still can send ascend api key or not
@@ -38,8 +47,8 @@ public class AscendApiRateLimiter {
                 "ascend_api row missing - check the migration"
         ));
 
-        LocalDate today = LocalDate.now();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate today = LocalDate.now(clock);
+        LocalDateTime now = LocalDateTime.now(clock);
 
         // Reset the api count every hour and month
         resetMonthlyIfNewMonth(usage, today);

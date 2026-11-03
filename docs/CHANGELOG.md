@@ -10,6 +10,38 @@ All notable changes to ManaProgressAku will be here.
 - data analytics
 - exercise routines
 
+## [v1.7.0] - Unreleased
+
+### Added
+
+- 197 automated backend tests (183 unit and web tests, 14 database tests), plus 1 parked test: unit tests for services, JWT, the exercise cache and the rate limiter; web layer tests for every endpoint; database tests against a real MySQL 8 container (JUnit 5, Mockito, MockMvc, Testcontainers).
+- Test schema as Flyway files (`src/test/resources/db/migration`), checked against the entities with `ddl-auto=validate`.
+- JaCoCo coverage report at `target/site/jacoco/index.html`, no minimum yet. Overall line coverage is 60.9% on a clean checkout.
+- README testing section, and a complete endpoint list in ARCHITECTURE.md.
+
+### Changed
+
+- `application.properties` is now committed. Secrets come from `${ENV_VAR}` placeholders with no default, so a fresh clone builds and passes its tests with no environment variables set. Running the app needs them. The database password has no default any more: set `RDS_PASSWORD`.
+- The five configuration and security classes (`SecurityConfiguration`, `JwtAuthenticationEntryPoint`, `ApplicationConfiguration`, `AscendApiConfig`, `OpenAPIConfiguration`) are now tracked in Git. Master's `.gitignore` used to hide them.
+- `ExerciseDetailsCache` and `AscendApiRateLimiter` accept a `Clock` (production still uses the system clock), so tests do not need to sleep.
+- The release build command is now `mvn clean verify` (needs Docker) instead of `mvn clean package`.
+
+### Fixed
+
+- `JwtAuthenticationFilter` now returns a 401 JSON response for a missing, invalid, expired or stale token and for a token whose user no longer exists. Before, invalid or expired tokens got 403, a token issued before a password change got status 200 with a 403 body, and a deleted user's token caused an unhandled exception.
+- Deleting an exercise that no longer exists but still has stray activities now returns 404 instead of a 500.
+- `GET /users/kawe` and `GET /users/all` no longer include the password hash in their JSON. Before, a logged-in user got their own hash and an admin got every user's hash. A regression test covers both endpoints.
+
+### Known issues, not fixed in this release
+
+- The session, activity and set services and controllers (the workout code) have almost no tests: 1 or 2 lines of each service run in a test.
+- `activity.exerciseID` is a plain column, not a foreign key, so the database does not stop an exercise that a workout uses from being deleted. Only the application check (409) does. One database test for this is parked with `@Disabled`.
+- The exercise list has no `ORDER BY`, so its order is whatever MySQL returns (in practice the order of creation).
+- `insertExercise` sends `null` over the default when the bodyweight flag is missing, so the admin gets a 400 with a raw Hibernate error message.
+- `Exercise.equipment` is stored as a position number (`tinyint`), because the entity has no `@Enumerated(EnumType.STRING)`. Reordering the `Equipment` enum would change the meaning of stored rows.
+- The test schema is a copy of the local database. It does not prove the production database matches.
+- Some error responses return raw exception text (for example the 400 from `insertExercise` and several 500s), which can show internal details. `GET /users/kawe` also returns `passwordChangedAt`.
+
 ## [v1.6.0] - 2026-10-23
 
 ### Added

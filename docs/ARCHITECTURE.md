@@ -14,7 +14,7 @@ ManaProgressAku is a full-stack fitness tracking application that allows users t
 
 Admins can also manage the exercise library: create, edit and delete exercises, set equipment, flag bodyweight exercises, and link an exercise to its ExerciseDB entry.
 
-The application follows a client-server architecture and has one external dependency, the ExerciseDB v1 API (built by AscendAPI, sold through RapidAPI).
+The application follows a client-server architecture and has one external dependency, the ExerciseDB API (built by AscendAPI, sold through RapidAPI).
 
 ---
 
@@ -23,7 +23,7 @@ The application follows a client-server architecture and has one external depend
 ```text
 Browser -> CloudFront -> S3                         React single page app
 Browser -> Elastic Beanstalk (Spring Boot API) -> RDS MySQL
-                                               -> ExerciseDB v2 via RapidAPI (HTTPS)
+                                               -> ExerciseDB via RapidAPI (HTTPS)
 Browser -> cdn.exercisedb.dev                       exercise images, loaded directly
 ```
 
@@ -132,25 +132,62 @@ Backend deployment:
 
 ### Structure
 
-Requests flow Controller -> Service (interface plus implementation) -> Repository -> Entity. DTOs are grouped per feature (`DTO.Exercise`, `DTO.Profile`, `DTO.Activity`, `DTO.User`).
+Requests flow Controller -> Service (interface plus implementation) -> Repository -> Entity. DTOs are grouped per feature (`DTO.Exercise`, `DTO.Profile`, `DTO.Session`, `DTO.Activity`, `DTO.ActivitySet`, `DTO.User`).
 
 - Successful responses use `ApiSuccessResponse` (`status`, `message`, `data`).
 - Errors are thrown as `BadRequestException(statusCode, message, details)` and turned into `ApiErrorResponse` (`errorCode`, `errorMessage`, `errorDetails`) by `GlobalExceptionHandler`. It maps the code to an HTTP status (400, 401, 403, 404, 409, 429, 500, 502) and also returns 400 for bean validation failures and malformed request bodies.
 - Admin-only endpoints use `@PreAuthorize("hasRole('ADMIN')")`. Method security is enabled in `SecurityConfiguration`.
 - Security is stateless. `/auth/**` and the Swagger paths are public, everything else requires a valid JWT.
 
-### Main endpoints
+### Endpoints
 
-Swagger UI is the source of truth. The main endpoints are:
+Built from the controllers and checked against `SecurityConfiguration` and `EndpointSecurityTest`. Swagger UI has the request and response details, and its own paths (`/swagger-ui/**`, `/v3/**`) are public.
 
-| Area                | Endpoints                                                                                                                                                                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Auth                | `POST /auth/signup`, `POST /auth/login`                                                                                                                                                     |
-| Sessions            | `POST /insertSession`, `GET /session/active`, `PATCH /finishSession/{id}`, `DELETE /deleteSession/{id}`, `GET /getUserSessions`, `GET /sessions/{id}/details`                               |
-| Activities and sets | `POST /insertActivity`, `DELETE /deleteActivity/{id}`, `DELETE /deleteActivitiesBySessionID/{id}`, `POST /insertSet`, `PUT /editActivitySet`                                                |
-| Exercises           | `GET /getAllExercises`, `GET /getExercise/{id}`, `POST /insertExercise` (admin), `PUT /updateExercise` (admin), `DELETE /deleteExercise/{id}` (admin), `PUT /linkExerciseToDb/{id}` (admin) |
-| ExerciseDB          | `GET /getExerciseDetails/{id}`, `GET /searchExerciseDbMatches` (admin)                                                                                                                      |
-| Profile             | `GET /getProfile`, `PUT /updateProfile`, `DELETE /deleteAccount`                                                                                                                            |
+| Method | Path                               | Who may call it    | Purpose                                                                                   |
+| ------ | ---------------------------------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| POST   | `/auth/signup`                     | Public             | Register a new user                                                                       |
+| POST   | `/auth/login`                      | Public             | Log in and receive a JWT                                                                  |
+| POST   | `/insertSession`                   | Any logged-in user | Start a new workout session                                                               |
+| GET    | `/getSession/{sessionID}`          | Any logged-in user | Get one of your sessions                                                                  |
+| PUT    | `/updateSession`                   | Any logged-in user | Change the date and time of one of your sessions                                          |
+| DELETE | `/deleteSession/{sessionID}`       | Any logged-in user | Delete one of your sessions with its activities and sets                                  |
+| GET    | `/getUserSessions`                 | Any logged-in user | List your sessions                                                                        |
+| PATCH  | `/finishSession/{sessionID}`       | Any logged-in user | Mark one of your sessions as completed                                                    |
+| GET    | `/session/active`                  | Any logged-in user | Get your active session, if there is one                                                  |
+| GET    | `/sessions/{sessionID}/details`    | Any logged-in user | Get a session with its activities and sets                                                |
+| GET    | `/getAllSessions`                  | Admin only         | Meant to list all sessions. The service call is commented out, so `data` is always `null` |
+| POST   | `/insertActivity`                  | Any logged-in user | Add an exercise to one of your sessions                                                   |
+| GET    | `/getActivity/{activityID}`        | Any logged-in user | Get one of your activities                                                                |
+| PUT    | `/updateActivity`                  | Any logged-in user | Change the exercise of one of your activities                                             |
+| DELETE | `/deleteActivity/{activityID}`     | Any logged-in user | Delete one of your activities and its sets                                                |
+| GET    | `/sessionActivities/{sessionID}`   | Any logged-in user | List the activities in one of your sessions                                               |
+| GET    | `/admin/getAllActivity`            | Admin only         | List all activities                                                                       |
+| GET    | `/admin/test`                      | Admin only         | Returns a fixed text. leftover test endpoint, to be reviewed                              |
+| POST   | `/insertSet`                       | Any logged-in user | Add a set to one of your activities                                                       |
+| GET    | `/getSet/{setID}`                  | Any logged-in user | Get one of your sets                                                                      |
+| PUT    | `/editSet/{setID}`                 | Any logged-in user | Edit one of your sets                                                                     |
+| DELETE | `/deleteSet/{setID}`               | Any logged-in user | Delete one of your sets                                                                   |
+| GET    | `/getSetByActivity/{activityID}`   | Any logged-in user | List the sets of one of your activities                                                   |
+| PUT    | `/editActivitySet`                 | Any logged-in user | Edit several sets of one of your activities                                               |
+| GET    | `/getAllExercises`                 | Any logged-in user | List the exercise catalogue                                                               |
+| GET    | `/getExercise/{exerciseID}`        | Any logged-in user | Get one exercise                                                                          |
+| POST   | `/insertExercise`                  | Admin only         | Create an exercise                                                                        |
+| PUT    | `/updateExercise`                  | Admin only         | Edit an exercise, not its ExerciseDB link                                                 |
+| DELETE | `/deleteExercise/{exerciseID}`     | Admin only         | Delete an exercise that no workout uses (409 if one does)                                 |
+| PUT    | `/linkExerciseToDb/{exerciseID}`   | Admin only         | Link an exercise to its ExerciseDB entry                                                  |
+| GET    | `/getExerciseDetails/{exerciseID}` | Any logged-in user | Get the ExerciseDB details of a linked exercise                                           |
+| GET    | `/searchExerciseDbMatches`         | Admin only         | Search ExerciseDB by the `query` parameter                                                |
+| GET    | `/getProfile`                      | Any logged-in user | Get your profile                                                                          |
+| PUT    | `/updateProfile`                   | Any logged-in user | Update your profile                                                                       |
+| PUT    | `/changepw`                        | Any logged-in user | Change your password                                                                      |
+| DELETE | `/deleteUser`                      | Any logged-in user | Delete your account, after checking your password                                         |
+| GET    | `/users/me`                        | Any logged-in user | Get your display name                                                                     |
+| GET    | `/users/kawe`                      | Any logged-in user | Returns the logged-in user. leftover test endpoint, to be reviewed                        |
+| GET    | `/users/all`                       | Admin only         | List all users                                                                            |
+
+"Your" means the service checks that the row belongs to the logged-in user and returns 403 if it does not.
+
+`SecurityConfiguration` lists `/users/**` under `permitAll`, but `JwtAuthenticationFilter` still answers 401 when there is no token, so those endpoints need a login. `/users/all` also has `@PreAuthorize`.
 
 ---
 
@@ -170,6 +207,7 @@ Main tables:
 - activityset
 - exercise
 - ascend_api_usage
+- users_seq
 
 ```text
 users --1:1-- user_profile      shared primary key (user_profile.user_id)
@@ -183,8 +221,9 @@ ascend_api_usage                a single row, id = 1
 Table notes:
 
 - `user_profile` has no row until the user saves something. A missing row is a normal state, and the API returns empty fields for it.
-- `exercise` has `is_bodyweight` (not null), `ascend_exercise_id` (nullable, the ExerciseDB ID) and `equipment` (nullable enum name: BARBELL, DUMBBELL, KETTLEBELL, MACHINE, CABLE, RESISTANCE_BAND, BODYWEIGHT, OTHER).
+- `exercise` has `is_bodyweight` (not null), `ascend_exercise_id` (nullable, the ExerciseDB ID) and `equipment` (nullable). The `equipment` column is a `tinyint` and the entity has no `@Enumerated`, so each value is stored as its position in the `Equipment` enum: BARBELL, DUMBBELL, KETTLEBELL, MACHINE, CABLE, RESISTANCE_BAND, BODYWEIGHT, OTHER. Reordering the enum would change the meaning of stored values.
 - `ascend_api_usage` holds the monthly and hourly call counters for the ExerciseDB quota.
+- `users_seq` is where Hibernate keeps the next user id.
 
 Deleting data:
 
@@ -240,7 +279,7 @@ Roles are `USER` and `ADMIN`. Deleting an account requires the password again. T
 
 ## ExerciseDB Integration
 
-Exercise reference data (image, muscles, instructions) comes from ExerciseDB v2 by AscendAPI, accessed through RapidAPI on the free Hobby plan: about 200 exercises, 2,000 calls per month and 1,000 per hour.
+Exercise reference data (image, muscles, instructions) comes from ExerciseDB by AscendAPI, accessed through RapidAPI on the free Hobby plan: about 200 exercises, 2,000 calls per month and 1,000 per hour.
 
 ### Rules that shape the design
 
@@ -277,17 +316,23 @@ On the frontend, `ExerciseDetailModal` and `CurrentActivityPage` ask for details
 ### Configuration
 
 - `RAPIDAPI_KEY` environment variable (the key itself is never committed)
-- `rapidapi.exercisedb.host` and `rapidapi.exercisedb.base-url` properties
+- `rapidapi.exercisedb.host` and `rapidapi.exercisedb.base-url` properties (the client calls the `/api/v1` paths of the API)
 
 ---
 
 ## Testing
 
+Automated backend tests run from the `Backend` folder. See the [README testing section](../README.md#testing-1) for what they cover.
+
+- `mvn test` runs the unit and web tests.
+- `mvn clean verify` runs those tests and the database tests against a real MySQL 8 container, then writes the coverage report.
+- Docker must be running for `mvn clean verify`. `mvn test` does not need it.
+
 API tests are a Postman collection run by Newman from the repository root.
 
 - `npm run test:api:local` runs the collection against the local environment file.
 - `npm run test:api:prod` runs it against the production environment file. It creates and deletes real rows, so run it deliberately.
-- `scripts/run-api-tests.js` reads the admin credentials from `.env.local` (gitignored) and injects them at run time, so no credentials sit in the committed collection or environment files.
+- `scripts/run-api-tests.js` reads `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` from `.env.local` (`.env.prod` for production, both gitignored) and injects them at run time, so no credentials sit in the committed collection or environment files.
 - The collection covers authentication, sessions, activities and sets, profile validation, bodyweight exercises, ExerciseDB enrichment, cross-user access and account deletion.
 
 ---

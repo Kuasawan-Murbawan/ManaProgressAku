@@ -1,5 +1,6 @@
 package com.husyairi.ManaProgressAku.DTO.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.husyairi.ManaProgressAku.Entity.Model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,6 +39,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getRole().name();
     }
 
+    @JsonIgnore
     @Override
     public String getPassword() {
         return user.getPassword();

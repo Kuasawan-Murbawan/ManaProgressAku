@@ -4,6 +4,7 @@ import com.husyairi.ManaProgressAku.DTO.Exercise.External.AscendExerciseDTO;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
@@ -17,21 +18,33 @@ public class ExerciseDetailsCache {
 
     private static final Duration TTL = Duration.ofMinutes(55);
 
+    private final Clock clock;
+
+    // Spring uses this one: with several constructors and no @Autowired, it picks the no-argument one
+    public ExerciseDetailsCache() {
+        this(Clock.systemUTC());
+    }
+
+    // Tests use this one so they can control time
+    ExerciseDetailsCache(Clock clock) {
+        this.clock = clock;
+    }
+
     /*
         Store the recently fetched exercises
      */
-    private static class CacheEntry {
+    private class CacheEntry {
         final Optional<AscendExerciseDTO> value;
         final Instant fetchedAt;
 
         CacheEntry(Optional<AscendExerciseDTO> value) {
             this.value = value;
-            this.fetchedAt = Instant.now();
+            this.fetchedAt = clock.instant();
         }
 
         // Make sure the cache exercise doesn't stay more than 1 hour
         boolean isExpired() {
-            return Instant.now().isAfter(fetchedAt.plus(TTL));
+            return clock.instant().isAfter(fetchedAt.plus(TTL));
         }
 
     }
