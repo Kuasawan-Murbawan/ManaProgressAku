@@ -230,7 +230,24 @@ cd Backend
 mvn spring-boot:run
 ```
 
+The app reads `RDS_PASSWORD` (database password), `RAPIDAPI_KEY` and `JWT_SECRET_KEY` (JWT secret) from environment variables. For local runs they can go in `Backend/config/application.properties`, which is gitignored. Spring reads that file when the app starts from the `Backend` folder.
+
 Hibernate creates missing tables and columns on startup, but foreign key delete rules and the single seed row in `ascend_api_usage` must be applied by hand. See [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md).
+
+## Testing
+
+Run these in the `Backend` folder.
+
+- `mvn test` runs the unit and web tests (classes ending in `Test`). No Docker needed, about 10 seconds.
+- `mvn clean verify` runs everything: those tests, then the database tests (classes ending in `IT`) against a real MySQL 8 container that Testcontainers starts, then it writes the coverage report. Docker must be running. No environment variables are needed, because the test profile has fake values. The release uses this command.
+- `mvn -Dtest=JwtAuthenticationFilterTest test` runs one unit test class.
+- `mvn -Dtest=NoSuchTest -Dsurefire.failIfNoSpecifiedTests=false -Dit.test=CascadeDeleteIT verify` runs one database test class.
+
+Reports: `target/surefire-reports` (unit and web), `target/failsafe-reports` (database), `target/site/jacoco/index.html` (coverage). The test schema is in `src/test/resources/db/migration`.
+
+What is covered: the authentication, profile and exercise services, JWT handling, the exercise cache and the API rate limiter; the status code of every protected endpoint with no token (401) and of every admin endpoint for a normal user (403); the security filter; and a real database for the schema, the delete cascades and the quota row lock. ExerciseDB is always faked, so no test spends API quota. Not covered yet: the session, activity and set services and controllers (the workout code), which are the next area to test. The Newman collection in `Tests/API` stays as the black-box check of the running app.
+
+Rules: every bug fix comes with a regression test that fails without the fix. A new endpoint outside `/auth` needs a row in `EndpointSecurityTest`, which fails until you add it. Never put a real secret in a test or in `application-test.properties`.
 
 ## API Tests
 

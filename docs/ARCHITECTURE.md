@@ -139,18 +139,55 @@ Requests flow Controller -> Service (interface plus implementation) -> Repositor
 - Admin-only endpoints use `@PreAuthorize("hasRole('ADMIN')")`. Method security is enabled in `SecurityConfiguration`.
 - Security is stateless. `/auth/**` and the Swagger paths are public, everything else requires a valid JWT.
 
-### Main endpoints
+### Endpoints
 
-Swagger UI is the source of truth. The main endpoints are:
+Built from the controllers and checked against `SecurityConfiguration` and `EndpointSecurityTest`. Swagger UI has the request and response details, and its own paths (`/swagger-ui/**`, `/v3/**`) are public.
 
-| Area                | Endpoints                                                                                                                                                                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Auth                | `POST /auth/signup`, `POST /auth/login`                                                                                                                                                     |
-| Sessions            | `POST /insertSession`, `GET /session/active`, `PATCH /finishSession/{id}`, `DELETE /deleteSession/{id}`, `GET /getUserSessions`, `GET /sessions/{id}/details`                               |
-| Activities and sets | `POST /insertActivity`, `DELETE /deleteActivity/{id}`, `DELETE /deleteActivitiesBySessionID/{id}`, `POST /insertSet`, `PUT /editActivitySet`                                                |
-| Exercises           | `GET /getAllExercises`, `GET /getExercise/{id}`, `POST /insertExercise` (admin), `PUT /updateExercise` (admin), `DELETE /deleteExercise/{id}` (admin), `PUT /linkExerciseToDb/{id}` (admin) |
-| ExerciseDB          | `GET /getExerciseDetails/{id}`, `GET /searchExerciseDbMatches` (admin)                                                                                                                      |
-| Profile             | `GET /getProfile`, `PUT /updateProfile`, `DELETE /deleteAccount`                                                                                                                            |
+| Method | Path                               | Who may call it    | Purpose                                                                                   |
+| ------ | ---------------------------------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| POST   | `/auth/signup`                     | Public             | Register a new user                                                                       |
+| POST   | `/auth/login`                      | Public             | Log in and receive a JWT                                                                  |
+| POST   | `/insertSession`                   | Any logged-in user | Start a new workout session                                                               |
+| GET    | `/getSession/{sessionID}`          | Any logged-in user | Get one of your sessions                                                                  |
+| PUT    | `/updateSession`                   | Any logged-in user | Change the date and time of one of your sessions                                          |
+| DELETE | `/deleteSession/{sessionID}`       | Any logged-in user | Delete one of your sessions with its activities and sets                                  |
+| GET    | `/getUserSessions`                 | Any logged-in user | List your sessions                                                                        |
+| PATCH  | `/finishSession/{sessionID}`       | Any logged-in user | Mark one of your sessions as completed                                                    |
+| GET    | `/session/active`                  | Any logged-in user | Get your active session, if there is one                                                  |
+| GET    | `/sessions/{sessionID}/details`    | Any logged-in user | Get a session with its activities and sets                                                |
+| GET    | `/getAllSessions`                  | Admin only         | Meant to list all sessions. The service call is commented out, so `data` is always `null` |
+| POST   | `/insertActivity`                  | Any logged-in user | Add an exercise to one of your sessions                                                   |
+| GET    | `/getActivity/{activityID}`        | Any logged-in user | Get one of your activities                                                                |
+| PUT    | `/updateActivity`                  | Any logged-in user | Change the exercise of one of your activities                                             |
+| DELETE | `/deleteActivity/{activityID}`     | Any logged-in user | Delete one of your activities and its sets                                                |
+| GET    | `/sessionActivities/{sessionID}`   | Any logged-in user | List the activities in one of your sessions                                               |
+| GET    | `/admin/getAllActivity`            | Admin only         | List all activities                                                                       |
+| GET    | `/admin/test`                      | Admin only         | Returns a fixed text. leftover test endpoint, to be reviewed                              |
+| POST   | `/insertSet`                       | Any logged-in user | Add a set to one of your activities                                                       |
+| GET    | `/getSet/{setID}`                  | Any logged-in user | Get one of your sets                                                                      |
+| PUT    | `/editSet/{setID}`                 | Any logged-in user | Edit one of your sets                                                                     |
+| DELETE | `/deleteSet/{setID}`               | Any logged-in user | Delete one of your sets                                                                   |
+| GET    | `/getSetByActivity/{activityID}`   | Any logged-in user | List the sets of one of your activities                                                   |
+| PUT    | `/editActivitySet`                 | Any logged-in user | Edit several sets of one of your activities                                               |
+| GET    | `/getAllExercises`                 | Any logged-in user | List the exercise catalogue                                                               |
+| GET    | `/getExercise/{exerciseID}`        | Any logged-in user | Get one exercise                                                                          |
+| POST   | `/insertExercise`                  | Admin only         | Create an exercise                                                                        |
+| PUT    | `/updateExercise`                  | Admin only         | Edit an exercise, not its ExerciseDB link                                                 |
+| DELETE | `/deleteExercise/{exerciseID}`     | Admin only         | Delete an exercise that no workout uses (409 if one does)                                 |
+| PUT    | `/linkExerciseToDb/{exerciseID}`   | Admin only         | Link an exercise to its ExerciseDB entry                                                  |
+| GET    | `/getExerciseDetails/{exerciseID}` | Any logged-in user | Get the ExerciseDB details of a linked exercise                                           |
+| GET    | `/searchExerciseDbMatches`         | Admin only         | Search ExerciseDB by the `query` parameter                                                |
+| GET    | `/getProfile`                      | Any logged-in user | Get your profile                                                                          |
+| PUT    | `/updateProfile`                   | Any logged-in user | Update your profile                                                                       |
+| PUT    | `/changepw`                        | Any logged-in user | Change your password                                                                      |
+| DELETE | `/deleteUser`                      | Any logged-in user | Delete your account, after checking your password                                         |
+| GET    | `/users/me`                        | Any logged-in user | Get your display name                                                                     |
+| GET    | `/users/kawe`                      | Any logged-in user | Returns the logged-in user. leftover test endpoint, to be reviewed                        |
+| GET    | `/users/all`                       | Admin only         | List all users                                                                            |
+
+"Your" means the service checks that the row belongs to the logged-in user and returns 403 if it does not.
+
+`SecurityConfiguration` lists `/users/**` under `permitAll`, but `JwtAuthenticationFilter` still answers 401 when there is no token, so those endpoints need a login. `/users/all` also has `@PreAuthorize`.
 
 ---
 
