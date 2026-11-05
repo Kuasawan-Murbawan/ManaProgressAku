@@ -203,7 +203,7 @@ class JwtAuthenticationFilterTest {
 
     // Login, register and Swagger must work without any token.
     @ParameterizedTest
-    @ValueSource(strings = {"/auth/login", "/auth/signup", "/swagger-ui/index.html", "/v3/api-docs"})
+    @ValueSource(strings = {"/auth/login", "/auth/signup", "/swagger-ui/index.html", "/v3/api-docs", "/actuator/health"})
     void publicPaths_passWithoutAToken(String path) throws Exception {
         request.setServletPath(path);
 
@@ -213,4 +213,5 @@ class JwtAuthenticationFilterTest {
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(response.getContentAsString()).isEmpty();
     }
+
 }

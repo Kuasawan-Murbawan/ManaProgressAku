@@ -154,7 +154,7 @@ class EndpointSecurityTest extends WebLayerTest {
 
     // Swagger is not part of the web slice, so a 404 is fine. Only 401 and 403 would mean it is blocked.
     @ParameterizedTest
-    @ValueSource(strings = {"/v3/api-docs", "/swagger-ui/index.html"})
+    @ValueSource(strings = {"/v3/api-docs", "/swagger-ui/index.html", "/actuator/health"})
     void swaggerPaths_areNotBlockedBySecurity(String path) throws Exception {
         int status = mockMvc.perform(get(path)).andReturn().getResponse().getStatus();
 
@@ -182,5 +182,13 @@ class EndpointSecurityTest extends WebLayerTest {
         });
 
         assertThat(registered).containsExactlyInAnyOrderElementsOf(covered);
+    }
+
+    // Only /actuator/health is public. Everything else Actuator offers must still need a token.
+    @ParameterizedTest
+    @ValueSource(strings = {"/actuator/env", "/actuator/beans", "/actuator/info"})
+    void otherActuatorPaths_stayProtected(String path) throws Exception {
+        mockMvc.perform(get(path))
+                .andExpect(status().isUnauthorized());
     }
 }
