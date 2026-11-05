@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import API from "../api/axios.js";
 
-export const useProfileStore = create((set, get) => ({
+export const useProfileStore = create((set) => ({
 	profile: null,
 	isLoading: false,
 

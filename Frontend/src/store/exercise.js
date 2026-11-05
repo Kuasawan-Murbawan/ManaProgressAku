@@ -27,7 +27,7 @@ export const useExerciseStore = create(
 			},
 			insertExercise: async (newExercise) => {
 				try {
-					const res = await API.post("/insertExercise", newExercise);
+					await API.post("/insertExercise", newExercise);
 					await get().fetchAllExercises();
 				} catch (error) {
 					console.error("Failed to add new exercise", error);
@@ -35,7 +35,7 @@ export const useExerciseStore = create(
 			},
 			deleteExercise: async (exerciseID) => {
 				try {
-					const res = await API.delete(`/deleteExercise/${exerciseID}`);
+					await API.delete(`/deleteExercise/${exerciseID}`);
 					await get().fetchAllExercises();
 					return {
 						success: true,
@@ -51,7 +51,7 @@ export const useExerciseStore = create(
 			},
 			editExercise: async (updatedExercise) => {
 				try {
-					const res = await API.put("/updateExercise", updatedExercise);
+					await API.put("/updateExercise", updatedExercise);
 					await get().fetchAllExercises();
 					return {
 						success: true,

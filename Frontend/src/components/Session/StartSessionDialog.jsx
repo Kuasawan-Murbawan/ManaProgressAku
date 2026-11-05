@@ -17,7 +17,7 @@ const StartSessionDialog = ({ isOpen, onClose }) => {
 	const navigate = useNavigate();
 	const { createSession } = useSessionStore();
 
-	const [isLoading, setIsLoading] = useState(false);
+	const [_isLoading, setIsLoading] = useState(false);
 
 	const handleConfirm = async () => {
 		setIsLoading(true);

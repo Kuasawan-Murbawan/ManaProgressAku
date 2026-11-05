@@ -16,7 +16,7 @@ import { useActivityStore } from "../../store/activity";
 
 const DeleteSessionDialog = ({ isOpen, onClose, sessionID }) => {
 	const cancelRef = useRef();
-	const { deleteActivitiesBySession, clearActivities } = useActivityStore();
+	const { clearActivities } = useActivityStore();
 
 	const navigate = useNavigate();
 	const { deleteSession, clearSession, clearCurrentSessionDetails } =

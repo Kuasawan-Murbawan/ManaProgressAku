@@ -20,12 +20,11 @@ const SessionActivitiesDetails = () => {
 	const { sessionID } = useParams();
 	const {
 		fetchSessionDetails,
-		currentSessionDetails,
 		isLoading,
 		clearCurrentSessionDetails,
 	} = useSessionStore();
 	const { fetchAllExercises, getExerciseName } = useExerciseStore();
-	const { activities, clearActivities } = useActivityStore();
+	const { activities } = useActivityStore();
 
 	const navigate = useNavigate();
 

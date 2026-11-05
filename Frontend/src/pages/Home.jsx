@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import StartSessionDialog from "../components/Session/StartSessionDialog";
 import { useExerciseStore } from "../store/exercise";
 import { useActivityStore } from "../store/activity";
-import { useSessionStore } from "../store/session";
 import ConfirmLogoutDialog from "../components/ConfirmLogoutDialog";
 import ActiveSessionDialog from "../components/Session/ActiveSessionDialog";
 
@@ -21,7 +20,6 @@ const Home = () => {
 
 	const { exercise, fetchAllExercises } = useExerciseStore();
 	const { clearActivities } = useActivityStore();
-	const { activeSession } = useSessionStore();
 
 	useEffect(() => {
 		const init = async () => {
@@ -42,11 +40,8 @@ const Home = () => {
 		onClose: confirmSessionOnClose,
 	} = useDisclosure();
 
-	const {
-		isOpen: activeSessionIsOpen,
-		onOpen: activeSessionOnOpen,
-		onClose: activeSessionOnClose,
-	} = useDisclosure();
+	const { isOpen: activeSessionIsOpen, onClose: activeSessionOnClose } =
+		useDisclosure();
 
 	// Log Out
 	const {

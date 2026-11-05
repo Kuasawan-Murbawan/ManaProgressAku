@@ -10,27 +10,27 @@ Source: API, /users/me
 */
 
 export const useUserStore = create(
-  persist(
-    (set, get) => ({
-      currentUser: null,
+	persist(
+		(set) => ({
+			currentUser: null,
 
-      fetchCurrentUser: async () => {
-        try {
-          const token = useAuthStore.getState().token;
-          if (!token) return;
+			fetchCurrentUser: async () => {
+				try {
+					const token = useAuthStore.getState().token;
+					if (!token) return;
 
-          const res = await API.get("/users/me");
-          set({ currentUser: res.data });
-        } catch (error) {
-          console.error("Error fetching user", error);
-          set({ currentUser: null });
-        }
-      },
+					const res = await API.get("/users/me");
+					set({ currentUser: res.data });
+				} catch (error) {
+					console.error("Error fetching user", error);
+					set({ currentUser: null });
+				}
+			},
 
-      clearUser: () => set({ currentUser: null }),
-    }),
-    {
-      name: "user-store",
-    },
-  ),
+			clearUser: () => set({ currentUser: null }),
+		}),
+		{
+			name: "user-store",
+		},
+	),
 );
