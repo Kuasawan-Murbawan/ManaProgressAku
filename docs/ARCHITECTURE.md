@@ -232,35 +232,19 @@ Deleting data:
 
 ### Schema management
 
-Hibernate runs with `ddl-auto=update`. It adds missing tables and columns, but it does not change existing constraints and it does not insert data. These are applied by hand on every environment (local, any other dev machine, RDS) and then verified:
+Flyway owns the schema. At start-up it runs the files in `Backend/src/main/resources/db/migration` that the database has not applied yet, in version order, and records each one in the `flyway_schema_history` table. `V1__schema.sql` creates the tables and `V2__seed.sql` inserts the seed data.
 
-- changes to foreign key delete rules
-- the single seed row of `ascend_api_usage`
+Rules:
 
-```sql
-CREATE TABLE IF NOT EXISTS ascend_api_usage (
-    id INT PRIMARY KEY,
-    monthly_count INT NOT NULL DEFAULT 0,
-    monthly_period_start DATE NOT NULL,
-    hourly_count INT NOT NULL DEFAULT 0,
-    hourly_period_start DATETIME NOT NULL
-);
+- Never edit a file that has been applied. Flyway keeps a checksum of every applied file and refuses to start when one changes.
+- Every schema change is a new V file with the next number: `V3`, `V4` and so on.
 
-INSERT IGNORE INTO ascend_api_usage
-    (id, monthly_count, monthly_period_start, hourly_count, hourly_period_start)
-VALUES (1, 0, CURDATE(), 0, NOW());
-```
+How a database gets there:
 
-Check the delete rules (every foreign key listed above should say `CASCADE`):
+- An empty database runs `V1` and `V2`.
+- An existing database (one created before Flyway, such as RDS) is baselined at version 1. Flyway marks `V1` as applied without running it, then runs `V2` and any later files.
 
-```sql
-SELECT tc.table_name, tc.constraint_name, rc.delete_rule
-FROM information_schema.referential_constraints rc
-JOIN information_schema.table_constraints tc
-  ON rc.constraint_name = tc.constraint_name
- AND rc.constraint_schema = tc.constraint_schema
-WHERE tc.table_schema = DATABASE();
-```
+Hibernate runs with `ddl-auto=validate`. It only checks at start-up that the tables and columns match the entities, and stops the app if they do not. It never creates or changes the schema.
 
 ---
 

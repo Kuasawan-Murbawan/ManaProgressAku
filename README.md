@@ -228,12 +228,17 @@ spring.jpa.properties.hibernate.jdbc.time_zone=UTC
 #spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=validate
 security.jwt.secret-key=${JWT_SECRET_KEY}
 security.jwt.expiration-time=3600000
 rapidapi.exercisedb.key=${RAPIDAPI_KEY}
 rapidapi.exercisedb.host=edb-with-videos-and-images-by-ascendapi.p.rapidapi.com
 rapidapi.exercisedb.base-url=https://edb-with-videos-and-images-by-ascendapi.p.rapidapi.com/api/v1
+
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:db/migration
+spring.flyway.baseline-on-migrate=true
+spring.flyway.baseline-version=1
 ```
 
 ```bash
@@ -241,7 +246,7 @@ cd Backend
 mvn spring-boot:run
 ```
 
-Hibernate creates missing tables and columns on startup, but foreign key delete rules and the single seed row in `ascend_api_usage` must be applied by hand. See [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md).
+Flyway applies the schema at start-up from `Backend/src/main/resources/db/migration`, so there is no SQL to run by hand. Hibernate only validates the schema. See [docs/ARCHITECTURE.md](https://github.com/Kuasawan-Murbawan/ManaProgressAku/blob/master/docs/ARCHITECTURE.md).
 
 ## Testing
 
@@ -268,3 +273,48 @@ npm run test:api:local
 ```
 
 Put `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` in a gitignored `.env.local` file at the repository root. `npm run test:api:prod` reads the same variables from `.env.prod` and runs the same collection against production. It creates and deletes real rows, so run it deliberately.
+
+---
+
+# 📦 Deploy
+
+The scripts read their settings from `scripts/config.sh`. That file is private and ignored by Git, so it is never committed. Create it once by copying `scripts/config.example.sh` and filling in the AWS region, the Elastic Beanstalk application, environment and bucket, the frontend bucket, the CloudFront distribution and the API URL. The AWS CLI must be installed and logged in.
+
+## 1. Build the jar from a clean clone
+
+Build from a fresh clone, so the jar contains only committed code. A tag is the normal choice for a release, so the build always matches what was released.
+
+```bash
+git clone --branch <tag or branch> https://github.com/Kuasawan-Murbawan/ManaProgressAku.git ManaProgressAku-release
+cd ManaProgressAku-release
+cp <your working copy>/scripts/config.sh scripts/config.sh
+cd Backend
+mvn clean verify
+cd ..
+```
+
+`mvn clean verify` runs every test (Docker must be running) and leaves the jar in `Backend/target`.
+
+## 2. Deploy the backend
+
+```bash
+scripts/deploy-backend.sh v1.8.0
+```
+
+It uploads the jar, creates a new Elastic Beanstalk version labelled `<version>-<date>-<time>`, and waits until `/actuator/health` answers. Before it starts, it prints the label that is currently running. Keep it: that is your rollback target.
+
+## 3. Deploy the frontend
+
+```bash
+scripts/deploy-frontend.sh
+```
+
+It runs `npm ci`, `npm run lint` and `npm run build` in `Frontend` (Node 22), uploads the build to S3 and invalidates CloudFront.
+
+## Roll back the backend
+
+```bash
+scripts/rollback-backend.sh <version label>
+```
+
+Use the label printed by `deploy-backend.sh`. The comment at the top of `scripts/rollback-backend.sh` shows how to list every label. A rollback changes only the code. Flyway migrations that already ran stay in the database.

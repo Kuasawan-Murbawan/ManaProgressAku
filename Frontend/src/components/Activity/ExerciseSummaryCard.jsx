@@ -23,12 +23,10 @@ import {
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useActivityStore } from "../../store/activity";
 import { useRef } from "react";
-import { useSessionStore } from "../../store/session";
 import EditActivityModal from "./EditActivityModal";
 
 const ExerciseSummaryCard = ({ exerciseName, activity }) => {
 	const { deleteActivity, setActivities, activities } = useActivityStore();
-	const { fetchSessionDetails, sessionID } = useSessionStore();
 
 	const { activityID, sets = [] } = activity;
 	const {

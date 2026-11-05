@@ -10,6 +10,20 @@ All notable changes to ManaProgressAku will be here.
 - data analytics
 - exercise routines
 
+## [v1.8.0] - 2026-11-05
+
+### Added
+
+- Flyway migrations on RDS. The schema lives in `Backend/src/main/resources/db/migration` and runs at start-up. An existing database is baselined at version 1.
+- A public `/actuator/health` endpoint. It needs no login and shows no details.
+- Deploy and rollback scripts: `scripts/deploy-backend.sh`, `scripts/deploy-frontend.sh` and `scripts/rollback-backend.sh`, with settings in a private `scripts/config.sh` copied from `scripts/config.example.sh`.
+
+### Changed
+
+- `ddl-auto` is now `validate`. Hibernate checks the schema and never changes it.
+- Integration tests run on MySQL 8.4.
+- Frontend lint passes, and Node is pinned to 22.
+
 ## [v1.7.0] - 2026-11-03
 
 ### Added

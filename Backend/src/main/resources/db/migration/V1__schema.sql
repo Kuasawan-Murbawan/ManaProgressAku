@@ -44,8 +44,8 @@ CREATE TABLE `session` (
   `user_id` bigint NOT NULL,
   `status` varchar(255) NOT NULL,
   PRIMARY KEY (`sessionid`),
-  KEY `fk_session_user` (`user_id`),
-  CONSTRAINT `fk_session_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+  KEY `FKj3ffkfbfbdoh9uon462ow7lhl` (`user_id`),
+  CONSTRAINT `FKj3ffkfbfbdoh9uon462ow7lhl` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 CREATE TABLE `user_profile` (
   `user_id` bigint NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('ADMIN','USER') NOT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `password_changed_at` datetime DEFAULT NULL,
+  `password_changed_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UK6dotkott2kjsp8vw4d0m25fb7` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

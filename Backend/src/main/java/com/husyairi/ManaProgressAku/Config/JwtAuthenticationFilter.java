@@ -38,7 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return "OPTIONS".equalsIgnoreCase(request.getMethod())
                 || path.startsWith("/auth")
                 || path.startsWith("/swagger-ui")
-                || path.startsWith("/v3");
+                || path.startsWith("/v3")
+                || path.equals("/actuator/health")
+                || path.startsWith("/actuator/health/");
     }
 
     @Override

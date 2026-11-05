@@ -28,9 +28,7 @@ const NewSessionHomePage = () => {
 		sessionID,
 		clearSession,
 		finishSession,
-		currentSessionDetails,
 		fetchSessionDetails,
-		isLoading,
 	} = useSessionStore();
 	const { currentUser, fetchCurrentUser } = useUserStore();
 

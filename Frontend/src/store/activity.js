@@ -5,7 +5,7 @@ import { useSessionStore } from "./session.js";
 
 export const useActivityStore = create(
 	persist(
-		(set, get) => ({
+		(set) => ({
 			// activityID: "",
 			activities: [],
 			isLoading: false,

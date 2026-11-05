@@ -8,14 +8,12 @@ import {
 	Button,
 } from "@chakra-ui/react";
 import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/auth";
 import { useSessionStore } from "../store/session";
 import { useActivityStore } from "../store/activity";
 
 const ConfirmLogoutDialog = ({ isOpen, onClose }) => {
 	const cancelRef = useRef();
-	const navigate = useNavigate();
 	const { clearSession } = useSessionStore();
 	const { clearActivities } = useActivityStore();
 

@@ -14,7 +14,6 @@ import {
 } from "@chakra-ui/react";
 import { CheckIcon, DeleteIcon, LockIcon } from "@chakra-ui/icons";
 import { React, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const SetComponent = ({
 	currentNumber,
@@ -28,7 +27,6 @@ const SetComponent = ({
 	bodyweightNoProfile = false,
 }) => {
 	const [weightError, setWeightError] = useState("");
-	const navigate = useNavigate();
 
 	const weightFieldDisabled = isDisabled || weightLocked;
 
