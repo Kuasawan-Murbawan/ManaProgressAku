@@ -316,7 +316,8 @@ API tests are a Postman collection run by Newman from the repository root.
 
 - `npm run test:api:local` runs the collection against the local environment file.
 - `npm run test:api:prod` runs it against the production environment file. It creates and deletes real rows, so run it deliberately.
-- `scripts/run-api-tests.js` reads `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` from `.env.local` (`.env.prod` for production, both gitignored) and injects them at run time, so no credentials sit in the committed collection or environment files.
+- `scripts/run-api-tests.js` reads `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` from `.env.local` (`.env.prod` for production, both gitignored) and injects them at run time.
+- The committed collection registers its own throwaway test account with typed-in values and then deletes it. No real credentials are committed, and the Postman vault stays on the developer's machine only.
 - The collection covers authentication, sessions, activities and sets, profile validation, bodyweight exercises, ExerciseDB enrichment, cross-user access and account deletion.
 
 ---
