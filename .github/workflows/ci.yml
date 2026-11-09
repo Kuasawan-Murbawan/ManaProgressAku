@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# cancels the older push is a new push to the same pr is run
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: Backend
+    env:
+      # fake values
+      # db is a burner container
+      # ascend api is never called
+      JWT_SECRET_KEY: OhHQpxR7jbddQrU5tEX6H3eXf240JdixAQxXYlEWKvY=
+      RAPIDAPI_KEY: not-a-real-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      # Surefire unit test and Failsafe db teste
+      # Docker is installed in the runner
+      - name: Verify
+        run: ./mvnw -B clean verify
+      - name: Keep the jar that passed
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          if-no-files-found: error
+          retention-days: 7
+      - name: Keep the coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: Backend/target/site/jacoco
+          if-no-files-found: ignore
+          retention-days: 7
+
+  frontend:
+    name: Frontend lint and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: Frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: Frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: Frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
