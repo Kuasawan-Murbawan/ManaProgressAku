@@ -106,7 +106,6 @@ jobs:
       # The app creates this admin at start-up (AdminBootstrap) and the Newman runner logs in with it.
       # Throwaway values for a throwaway database; nothing real is protected here.
       ADMIN_EMAIL: admin@ci.test
-      ADMIN_PW: ci-admin-password
       TEST_USER_EMAIL: user@ci.test
       TEST_USER_PW: ci-user-password
     steps:
