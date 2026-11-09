@@ -125,7 +125,7 @@ jobs:
       - name: Start WireMock (fake ExerciseDB)
         run: |
           docker run -d --name wiremock -p 8089:8080 -v "$GITHUB_WORKSPACE/Tests/wiremock:/home/wiremock" wiremock/wiremock:3.9.1
-          curl --retry 20 --retry-delay 1 --retry-connrefused -sf http://localhost:8089/__admin/mappings > /dev/null
+          curl --retry 30 --retry-delay 1 --retry-all-errors --retry-connrefused -sf http://localhost:8089/__admin/mappings > /dev/null
       - name: Start the backend
         run: |
           nohup java -jar jar/*.jar > app.log 2>&1 &
