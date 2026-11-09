@@ -1,0 +1,12 @@
+{
+	"priority": 10,
+	"request": {
+		"method": "GET",
+		"urlPathPattern": "/api/v1/exercises/[A-Za-z0-9_]+"
+	},
+	"response": {
+		"status": 404,
+		"headers": { "Content-Type": "application/json" },
+		"jsonBody": { "success": false, "message": "Exercise not found" }
+	}
+}

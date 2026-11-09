@@ -1,0 +1,25 @@
+{
+	"priority": 2,
+	"request": { "method": "GET", "urlPath": "/api/v1/exercises/exr_benchpress01" },
+	"response": {
+		"status": 200,
+		"headers": { "Content-Type": "application/json" },
+		"jsonBody": {
+			"success": true,
+			"data": {
+				"exerciseId": "exr_benchpress01",
+				"name": "Barbell Bench Press",
+				"imageUrl": "https://example.test/0025.png",
+				"videoUrl": "https://example.test/0025.mp4",
+				"overview": "A compound chest exercise.",
+				"targetMuscles": ["Pectoralis Major"],
+				"secondaryMuscles": ["Triceps", "Anterior Deltoid"],
+				"instructions": [
+					"Lie on the bench.",
+					"Lower the bar to your chest.",
+					"Press it back up."
+				]
+			}
+		}
+	}
+}

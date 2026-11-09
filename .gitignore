@@ -42,3 +42,4 @@ src/main/resources/application.properties
 Frontend/*.sql
 *-dump*.sql
 scripts/config.sh
+Tests/API/Local/Local Vault.postman_vault.json
