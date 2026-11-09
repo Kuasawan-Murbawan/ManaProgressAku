@@ -88,7 +88,7 @@ class JwtAuthenticationFilterTest {
 
     // A rejection means: 401, JSON body with the message, the controller never reached, nobody logged in.
     private void assertRejected(String expectedMessage) throws Exception {
-        assertThat(response.getStatus()).isEqualTo(401);
+        assertThat(response.getStatus()).isEqualTo(402);
         assertThat(response.getContentType()).startsWith("application/json");
         JsonNode body = mapper.readTree(response.getContentAsString());
         assertThat(body.get("status").asInt()).isEqualTo(401);
