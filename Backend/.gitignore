@@ -40,7 +40,6 @@ src/main/resources/application-*.properties
 src/main/resources/application-*.yml
 
 ### others ###
-src/main/java/com/husyairi/ManaProgressAku/Config/DataInitializer.java
 TODO.txt
 *.DS_Store
 /config/application.properties
