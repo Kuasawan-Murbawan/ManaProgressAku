@@ -17,12 +17,21 @@ All notable changes to ManaProgressAku will be here.
 - Flyway migrations on RDS. The schema lives in `Backend/src/main/resources/db/migration` and runs at start-up. An existing database is baselined at version 1.
 - A public `/actuator/health` endpoint. It needs no login and shows no details.
 - Deploy and rollback scripts: `scripts/deploy-backend.sh`, `scripts/deploy-frontend.sh` and `scripts/rollback-backend.sh`, with settings in a private `scripts/config.sh` copied from `scripts/config.example.sh`.
+- Pull request checks on GitHub Actions (`.github/workflows/ci.yml`): backend tests, frontend lint and build, and an API smoke test that runs the Newman collection against the built jar, a throwaway MySQL and a fake ExerciseDB (WireMock stubs in `Tests/wiremock`). `master` accepts changes only through a pull request with all three green.
+- `AdminBootstrap` replaces the local, never-committed `DataInitializer`. It creates the admin at start-up from `ADMIN_EMAIL` and `ADMIN_PW` when both are set and no user has that email, so no credential lives in the code. It logs only "created" or "skipped".
+- A CI-only exercise seed, `Backend/ci-seed/V1000__ci_exercises.sql`, with the 15 default exercises. It is outside the default Flyway path and never loaded in production.
+- Dependabot for GitHub Actions (`.github/dependabot.yml`), checked weekly.
 
 ### Changed
 
 - `ddl-auto` is now `validate`. Hibernate checks the schema and never changes it.
 - Integration tests run on MySQL 8.4.
 - Frontend lint passes, and Node is pinned to 22.
+
+### Fixed
+
+- `npm run test:api:local` and `npm run test:api:prod` now exit with code 1 when any Newman assertion fails. Before, a failed run still exited with 0.
+- The unused `deleteTestEmail` and `deleteTestPassword` variables are removed from both Postman environment files, and the Postman vault file is no longer tracked.
 
 ## [v1.7.0] - 2026-11-03
 

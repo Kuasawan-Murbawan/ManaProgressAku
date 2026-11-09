@@ -1,5 +1,7 @@
 # ManaProgressAku 🏋️
 
+![CI](https://github.com/Kuasawan-Murbawan/ManaProgressAku/actions/workflows/ci.yml/badge.svg)
+
 **ManaProgressAku** is a full-stack fitness progress tracking application designed to help users record, manage, and review their workout sessions in a clean and intuitive way.
 
 The project was built to simulate a real-world production application, covering not only frontend and backend development, but also authentication, deployment, cloud infrastructure, state management, API communication, and documentation.
@@ -187,7 +189,7 @@ Planned features for future releases include:
 - Workout analytics and insights, including profile data such as age and weight
 - Filtering the exercise library by equipment and muscle group
 - Wider exercise coverage beyond the ExerciseDB free plan
-- CI/CD that runs the API test suite on every push
+- Automated deploy from GitHub Actions (the checks already run on every pull request)
 
 ---
 
@@ -273,6 +275,55 @@ npm run test:api:local
 ```
 
 Put `ADMIN_EMAIL`, `ADMIN_PW`, `TEST_USER_EMAIL` and `TEST_USER_PW` in a gitignored `.env.local` file at the repository root. `npm run test:api:prod` reads the same variables from `.env.prod` and runs the same collection against production. It creates and deletes real rows, so run it deliberately.
+
+---
+
+# ✅ Continuous Integration
+
+Every pull request to `master` runs three checks in GitHub Actions (`.github/workflows/ci.yml`):
+
+| Check                   | What it does                                                                                                   |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Backend tests           | `./mvnw clean verify` in `Backend`: unit, web and database tests. The jar that passes is kept for the next job |
+| Frontend lint and build | `npm ci`, `npm run lint` and `npm run build` in `Frontend`                                                     |
+| API smoke (Newman)      | Starts that jar with a throwaway MySQL and a fake ExerciseDB, then runs the Postman collection                 |
+
+`master` is protected. Changes arrive only through a pull request, and all three checks must be green on a branch that is up to date with `master`. The rule has no bypass list.
+
+Dependabot opens a pull request each week when a GitHub Action used by the workflow has a new version.
+
+## Run the checks locally
+
+Newman, from the repository root, with the backend running on `localhost:8080`:
+
+```bash
+npm install
+npm run test:api:local
+```
+
+`.env.local` must hold `ADMIN_EMAIL` and `ADMIN_PW` for an admin account, and `TEST_USER_EMAIL` and `TEST_USER_PW` for a normal user that already exists in that database.
+
+Fake ExerciseDB (WireMock with the stubs in `Tests/wiremock`), from the repository root:
+
+```bash
+docker run -p 8089:8080 -v "$PWD/Tests/wiremock:/home/wiremock" wiremock/wiremock:3.9.1
+```
+
+Then start the backend with `RAPIDAPI_EXERCISEDB_BASE_URL=http://localhost:8089/api/v1` so it calls the stubs instead of RapidAPI.
+
+Fresh local database with the CI data, from the `Backend` folder against an empty database:
+
+```bash
+cd Backend
+export SPRING_FLYWAY_LOCATIONS=classpath:db/migration,filesystem:ci-seed
+export ADMIN_EMAIL=admin@example.test
+export ADMIN_PW=choose-a-password
+mvn spring-boot:run
+```
+
+When you stop the app, clear them with `unset SPRING_FLYWAY_LOCATIONS ADMIN_EMAIL ADMIN_PW`, so the next run in that terminal does not pick them up.
+
+Flyway adds the 15 default exercises from `Backend/ci-seed`, and `AdminBootstrap` creates the admin from `ADMIN_EMAIL` and `ADMIN_PW`. Use this only on a throwaway database. Flyway records the seed as version 1000, so that database fails Flyway validation if it later starts without `ci-seed`, and it refuses any later migration numbered below 1000 (V3, V4 and so on). Drop and recreate such a database when you are done. Never keep it.
 
 ---
 

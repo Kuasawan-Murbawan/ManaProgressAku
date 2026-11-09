@@ -322,6 +322,24 @@ API tests are a Postman collection run by Newman from the repository root.
 
 ---
 
+## Continuous Integration
+
+`.github/workflows/ci.yml` runs on every pull request to `master`, on every push to `master` and on manual dispatch. Its three jobs are required checks: `master` accepts changes only through a pull request that is up to date and has all three green.
+
+- **Backend tests**: `./mvnw clean verify` (unit, web and Testcontainers database tests). The jar that passes is kept for the next job.
+- **Frontend lint and build**: `npm ci`, `npm run lint` and `npm run build` on the Node version in `Frontend/.nvmrc`.
+- **API smoke (Newman)**: runs after Backend tests. It starts that jar with a MySQL 8.4 service container and WireMock as a fake ExerciseDB (`RAPIDAPI_EXERCISEDB_BASE_URL` points at it). Flyway runs the real migrations from the jar plus `Backend/ci-seed`, `AdminBootstrap` creates the admin, a test user is registered through `/auth/signup`, and `npm run test:api:local` runs the collection. The runner exits non-zero if any assertion fails.
+
+Every value in the workflow is a throwaway for a throwaway database, and no ExerciseDB quota is spent.
+
+`AdminBootstrap` creates an admin at start-up when `ADMIN_EMAIL` and `ADMIN_PW` are both set and no user has that email. Never set `ADMIN_EMAIL` or `ADMIN_PW` on the production environment. They would keep a plain-text admin password in the Elastic Beanstalk settings, and an email that differs from the existing admin's would create a second admin at the next start. `Backend/ci-seed` is not in the jar or on the default Flyway path, so production never loads it.
+
+A database that has applied the seed (version 1000) fails Flyway validation if it later starts without `ci-seed`, and it refuses any later migration numbered below 1000 (V3, V4 and so on). Such a database must be dropped and recreated, never kept. CI is safe because every run starts from an empty database.
+
+Dependabot (`.github/dependabot.yml`) checks the GitHub Actions versions weekly.
+
+---
+
 ## Deployment Architecture
 
 Frontend:
