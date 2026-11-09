@@ -39,9 +39,13 @@ newman.run(
 		],
 		reporters: "cli",
 	},
-	(err) => {
+	(err, summary) => {
 		if (err) {
 			throw err;
+		}
+		if (summary.run.failures.length > 0) {
+			console.error(summary.run.failures.length + " Newman assertion(s) failed");
+			process.exit(1);
 		}
 		console.log("Collection run complete.");
 	},
