@@ -9,6 +9,7 @@ import ActiveSessionDialog from "./components/Session/ActiveSessionDialog";
 function App() {
 	const { activeSession } = useSessionStore();
 	const location = useLocation();
+	const unusedOnPurpose = 123;
 
 	const {
 		isOpen: activeSessionIsOpen,
