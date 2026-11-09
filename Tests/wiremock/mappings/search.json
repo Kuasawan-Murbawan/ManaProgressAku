@@ -1,0 +1,18 @@
+{
+	"priority": 1,
+	"request": { "method": "GET", "urlPath": "/api/v1/exercises/search" },
+	"response": {
+		"status": 200,
+		"headers": { "Content-Type": "application/json" },
+		"jsonBody": {
+			"success": true,
+			"data": [
+				{
+					"exerciseId": "exr_benchpress01",
+					"name": "Barbell Bench Press",
+					"imageUrl": "https://example.test/0025.png"
+				}
+			]
+		}
+	}
+}
